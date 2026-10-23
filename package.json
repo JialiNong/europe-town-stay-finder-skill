@@ -1,0 +1,14 @@
+{
+  "name": "europe-town-stay-finder-skill",
+  "version": "1.0.0",
+  "description": "给 AI agent 用的欧洲小镇住宿 skill：核心小镇 + 公交 1 小时圈的村镇一起搜，比价 Booking/Airbnb，整理户外运动和 komoot 徒步路线，输出 JSON 并渲染成对比页。",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "render": "node europe-town-stay-finder/scripts/render.mjs",
+    "example": "node europe-town-stay-finder/scripts/render.mjs europe-town-stay-finder/examples/garmisch-2027-01.json",
+    "package": "cd europe-town-stay-finder && zip -r ../europe-town-stay-finder.zip . -x '*.DS_Store'"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}

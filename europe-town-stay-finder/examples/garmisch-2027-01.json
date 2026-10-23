@@ -1,0 +1,558 @@
+{
+  "title": "Garmisch 周边住宿",
+  "version": 1,
+  "town": "Garmisch-Partenkirchen",
+  "heading": "Garmisch 及周边住宿",
+  "dateLabel": "2027 年 1 月 15–18 日（周五–周一）",
+  "nights": 3,
+  "budget": {
+    "perNight": 50,
+    "currency": "€"
+  },
+  "queriedAt": "2026 年 10 月 23 日晚（柏林时间）",
+  "intro": "条件：每晚 50€（含所有费用），<b>必须有厨房</b>，房型不限；Booking ≥8.0、Airbnb ≥4.5，评价都 ≥15 条；周边村镇公交单程 ≤60 分钟、最多换乘 1 次。时刻按 2027 年 1 月 15 日（周五）查。",
+  "verdict": {
+    "items": [
+      "<b>没有一家同时满足全部条件。</b>整个 1 小时圈里，有厨房、评分达标的房源最低约 62€/晚（3 晚 186€），比预算高 24%。下面列的是最接近的几家，每家都标了差在哪里。",
+      "<b>最接近：1 · Murnau 的独立房间，62€/晚。</b>可以用房东的厨房和客厅。Murnau 坐 RB 24 分钟直达 Garmisch，末班车 23:07，Deutschlandticket 免费。",
+      "<b>想要整套公寓：3 · Klais 的 40 m² 公寓，65€/晚。</b>有完整厨房，到 Klais 站步行约 10 分钟，RB 13 分钟到 Garmisch，末班车 00:02。",
+      "<b>想住在 Garmisch 本镇：4 · Appartement im Hasental，65€/晚（Booking 公开价）。</b>你登录 Genius 后如果有 8% 以上的折扣，就能进到 60€ 以内。",
+      "<b>唯一在预算内的：Uffing 湖边小屋，42€/晚，有厨房。</b>评分 5.0，但只有 12 条评价，所以放在「差点入选」。Uffing 坐 RB 29 分钟直达 Garmisch。"
+    ],
+    "alerts": [
+      "已用第 3 步补充搜索：Hostelworld 和德国私人度假屋平台 traum-ferienwohnungen.de。后者在 Zugspitzland 最便宜的 Ferienwohnung 也是 195€/3 晚。",
+      "价格都不含城市税（Kurbeitrag）：Garmisch 3€/天，Grainau 3.50€/天，其他村子要到店确认。交了城市税会拿到游客卡，当地公交免费。"
+    ]
+  },
+  "towns": [
+    {
+      "name": "Garmisch-Partenkirchen",
+      "core": true,
+      "guestCard": "电子游客卡：当地公交免费",
+      "cityTax": "3€/天"
+    },
+    {
+      "name": "Farchant",
+      "mode": "RB 区域火车",
+      "time": "3 分钟",
+      "transfers": 0,
+      "freq": "约每小时 1 班",
+      "lastBack": "23:07",
+      "fare": "0€（D-Ticket）"
+    },
+    {
+      "name": "Oberau",
+      "mode": "RB 区域火车",
+      "time": "7 分钟",
+      "transfers": 0,
+      "freq": "约每小时 1 班",
+      "lastBack": "23:07",
+      "fare": "0€（D-Ticket）"
+    },
+    {
+      "name": "Grainau（Untergrainau）",
+      "mode": "Zugspitzbahn 齿轨火车",
+      "time": "7 分钟",
+      "transfers": 0,
+      "freq": "约每小时 1 班",
+      "lastBack": "20:04",
+      "fare": "游客卡免费",
+      "guestCard": "GaPa–Grainau–Eibsee 公交和齿轨火车免费",
+      "cityTax": "3.50€/天"
+    },
+    {
+      "name": "Eschenlohe",
+      "mode": "RB 区域火车",
+      "time": "13 分钟",
+      "transfers": 0,
+      "freq": "约每小时 1 班",
+      "lastBack": "23:07",
+      "fare": "0€（D-Ticket）"
+    },
+    {
+      "name": "Klais（Krün）",
+      "mode": "RB 区域火车",
+      "time": "13 分钟",
+      "transfers": 0,
+      "freq": "1–2 小时 1 班",
+      "lastBack": "00:02",
+      "fare": "0€（D-Ticket）",
+      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费"
+    },
+    {
+      "name": "Mittenwald",
+      "mode": "RB 区域火车",
+      "time": "21 分钟",
+      "transfers": 0,
+      "freq": "1–2 小时 1 班",
+      "lastBack": "00:02",
+      "fare": "0€（D-Ticket）",
+      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费"
+    },
+    {
+      "name": "Murnau",
+      "mode": "RB 区域火车",
+      "time": "24 分钟",
+      "transfers": 0,
+      "freq": "约每小时 1 班",
+      "lastBack": "23:07",
+      "fare": "0€（D-Ticket）"
+    },
+    {
+      "name": "Ehrwald（奥地利）",
+      "mode": "Außerfernbahn RB",
+      "time": "25 分钟",
+      "transfers": 0,
+      "freq": "1–2 小时 1 班",
+      "lastBack": "20:04",
+      "fare": "0€（D-Ticket 在这段有效）"
+    },
+    {
+      "name": "Uffing",
+      "mode": "RB 区域火车",
+      "time": "29 分钟",
+      "transfers": 0,
+      "freq": "约每小时 1 班",
+      "lastBack": "23:07",
+      "fare": "0€（D-Ticket）"
+    },
+    {
+      "name": "Lermoos（奥地利）",
+      "mode": "Außerfernbahn RB",
+      "time": "30 分钟",
+      "transfers": 0,
+      "freq": "1–2 小时 1 班",
+      "lastBack": "20:04",
+      "fare": "0€（D-Ticket 在这段有效）"
+    },
+    {
+      "name": "Wallgau",
+      "mode": "329 路公交",
+      "time": "33 分钟",
+      "transfers": 0,
+      "freq": "约每小时 1 班",
+      "lastBack": "20:35（328 路，53 分钟）",
+      "fare": "0€（D-Ticket）",
+      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费"
+    },
+    {
+      "name": "Oberammergau",
+      "mode": "公交",
+      "time": "42 分钟",
+      "transfers": 0,
+      "freq": "约每小时 1 班",
+      "lastBack": "未查",
+      "fare": "0€（D-Ticket）"
+    }
+  ],
+  "townsNote": "火车时刻来自 ÖBB 时刻表（含 DB 数据，已有 2027 年 1 月的班次）；公交时刻来自 Google 地图，页面提示「时刻表可能不是最新」，出发前到 RVO 或 DB 核实。班次频率是按白天几个时段抽查的大概值。",
+  "stays": [
+    {
+      "name": "Double room, quiet, central Murnau",
+      "town": "Murnau",
+      "type": "独立房间（共用浴室）",
+      "tag": "最接近",
+      "walk": "到 Murnau 站步行约 15 分钟",
+      "toCore": "RB 24 分钟",
+      "breakfast": "不含",
+      "cancel": "1 月 10 日前免费取消",
+      "summary": "房东 Diana 是做了 13 年的超赞房东。房间安静，可以用厨房和客厅，离步行街 5 分钟。",
+      "prices": [
+        {
+          "channel": "Airbnb",
+          "perNight": 62,
+          "total": 186,
+          "rating": "4.84 (116)",
+          "url": "https://www.airbnb.com/rooms/16659146",
+          "note": "已含所有费用"
+        }
+      ],
+      "notes": [
+        "同一位房东同价还有 <a href=\"https://www.airbnb.com/rooms/16659723\" target=\"_blank\" rel=\"noopener\">一间单人间</a>（4.9，126 条评价）。"
+      ]
+    },
+    {
+      "name": "Private room with garden in Murnau",
+      "town": "Murnau",
+      "type": "独立房间（共用浴室）",
+      "tag": "评价最多",
+      "walk": "到 Murnau 站步行约 15 分钟",
+      "toCore": "RB 24 分钟",
+      "breakfast": "不含",
+      "summary": "和第 1 家是同一位房东。可以用厨房、壁炉房、阳光房和花园，评价数最多（218 条）。",
+      "prices": [
+        {
+          "channel": "Airbnb",
+          "perNight": 62,
+          "total": 186,
+          "rating": "4.83 (218)",
+          "url": "https://www.airbnb.com/rooms/1477551",
+          "note": "已含所有费用"
+        }
+      ]
+    },
+    {
+      "name": "Kranzbach vacation home",
+      "town": "Klais（Krün）",
+      "type": "整套公寓 40 m²，带厨房",
+      "tag": "整套公寓",
+      "walk": "到 Klais 站步行约 7–10 分钟，公交站约 100 m",
+      "toCore": "RB 13 分钟",
+      "breakfast": "不含",
+      "cancel": "12 月 16 日前免费取消，1 月 8 日前部分退款",
+      "summary": "Klais 小村边上的独栋房子二楼，一室一厅带厨房。村里只有一家餐馆，加油站早上 7 点起能买面包和少量食品，买菜最好在 Garmisch 或 Mittenwald 买好带回来。",
+      "prices": [
+        {
+          "channel": "Airbnb",
+          "perNight": 65,
+          "total": 195,
+          "rating": "4.94 (69)",
+          "url": "https://www.airbnb.com/rooms/1495678204999021640",
+          "note": "城市税另付"
+        }
+      ]
+    },
+    {
+      "name": "Appartement im Hasental",
+      "town": "Garmisch-Partenkirchen",
+      "type": "小公寓 14 m²，带厨房角",
+      "tag": "住在本镇",
+      "walk": "到 Garmisch 站 1.5 km（约 20 分钟），凭游客卡可坐当地公交",
+      "toCore": "就在 Garmisch",
+      "breakfast": "不含",
+      "cancel": "2027 年 1 月 10 日前免费取消",
+      "summary": "有冰箱、烤箱、灶台和咖啡机，带露台和山景。房间很小，一个人住刚好。",
+      "prices": [
+        {
+          "channel": "Booking",
+          "perNight": 65,
+          "total": 195,
+          "rating": "9.2 (48)",
+          "url": "https://www.booking.com/hotel/de/schones-1-zimmer-appartement-mit-terrasse.html",
+          "note": "公开价，登录 Genius 后可能更低"
+        }
+      ]
+    },
+    {
+      "name": "griabighoch2 – Room for two",
+      "town": "Wallgau",
+      "type": "独立房间（独立浴室），带阳台",
+      "tag": "评分最高 · 厨房待确认",
+      "walk": "未写，预订前问房东",
+      "toCore": "329 路公交 33 分钟",
+      "breakfast": "不含",
+      "summary": "评分最高（4.97，91 条）。搜索时按「厨房」筛选出来的，但房源页的设施列表里没看到厨房，预订前问清楚。回 Wallgau 的末班车 20:35，晚上活动受限。",
+      "prices": [
+        {
+          "channel": "Airbnb",
+          "perNight": 63,
+          "total": 189,
+          "rating": "4.97 (91)",
+          "url": "https://www.airbnb.com/rooms/1389298012446120601",
+          "note": "已含所有费用"
+        }
+      ]
+    }
+  ],
+  "staysNote": "3 晚总价 ÷ 3 = 每晚价格。Airbnb 价格已含清洁费和服务费；Booking 价格写着「含税费」，但城市税通常到店另交。",
+  "nearMiss": [
+    {
+      "name": "Cottage on Staffelsee",
+      "town": "Uffing",
+      "price": "42€/晚（3 晚 125€）",
+      "url": "https://www.airbnb.com/rooms/1757111296700476532",
+      "why": "评分 5.0，有厨房，价格在预算内，但<b>只有 12 条评价</b>（要求 ≥15）。独立房间、共用浴室，1 月 14 日前免费取消。到 Uffing 站的距离房东没写，预订前问一下。"
+    },
+    {
+      "name": "moun10 Jugendherberge",
+      "town": "Garmisch-Partenkirchen",
+      "price": "60€/晚（3 晚 181€，男女混住上下铺）",
+      "url": "https://www.booking.com/hotel/de/moun10.html",
+      "why": "Booking 8.8（1,299 条）、Hostelworld 9.4，就在火车站对面，含早餐，但<b>没有客用厨房</b>。要有 DJH 青旅会员卡。"
+    },
+    {
+      "name": "Panoramic room「zur Sissi」",
+      "town": "Uffing",
+      "price": "67€/晚（3 晚 201€）",
+      "url": "https://www.airbnb.com/rooms/42325738",
+      "why": "Airbnb 4.86（202 条），有厨房，但比预算高 34%。"
+    }
+  ],
+  "activities": [
+    {
+      "sport": "滑雪",
+      "note": "Garmisch-Classic 雪场（Hausberg、Kreuzeck、Alpspitze）从 Garmisch 坐公交就到；1 月是滑雪季。",
+      "items": [
+        {
+          "name": "Skischule Sprenzel",
+          "kind": "成人团体课",
+          "where": "Garmisch",
+          "price": "约 46€/天起（3 小时）",
+          "how": "CheckYeti 4.9（127 条评价）",
+          "url": "https://www.checkyeti.com/de/d/231/1112"
+        },
+        {
+          "name": "Skischule Zugspitze-Grainau",
+          "kind": "成人团体课 / 私教",
+          "where": "Garmisch-Classic",
+          "price": "约 51€/天起（3 小时）",
+          "lang": "私教有德语、英语",
+          "how": "CheckYeti 5.0（44 条评价）",
+          "url": "https://www.checkyeti.com/de/d/231/1112"
+        },
+        {
+          "name": "Skischule Garmisch-Partenkirchen",
+          "kind": "团体课 / 私教",
+          "where": "Hausberg 4b（Hausbergbahn 旁）",
+          "how": "开了 75 年的老牌滑雪学校；Google 4.6（751 条）",
+          "url": "https://www.skischule-gap.de"
+        }
+      ]
+    },
+    {
+      "sport": "滑雪登山（Skitour）",
+      "items": [
+        {
+          "name": "Alpinschule Garmisch",
+          "kind": "雪道上的入门课（1 天）",
+          "where": "Hausbergbahn 山下集合 08:30",
+          "level": "入门",
+          "price": "95€",
+          "how": "至少 5 人成团；还有 2 天的 Kreuzeck 入门课 249€",
+          "url": "https://www.alpinschule-garmisch.de"
+        },
+        {
+          "name": "Bergsteigerschule Zugspitze",
+          "kind": "周末 2 天入门课",
+          "where": "Kreuzeck，住 Kreuzeckhaus 山屋",
+          "level": "入门",
+          "how": "含雪崩搜救装备和山屋住宿半膳，价格看官网",
+          "url": "https://www.bergsteigerschule-zugspitze.de"
+        }
+      ]
+    },
+    {
+      "sport": "越野滑雪（Langlauf）",
+      "note": "住 Klais、Mittenwald、Wallgau 的话，Alpenwelt Karwendel 游客卡可以免费用越野滑雪道。",
+      "items": [
+        {
+          "name": "Skischule Krün-Wallgau",
+          "kind": "小班课 / 私教",
+          "where": "Krün、Wallgau",
+          "how": "只开小班和私教",
+          "url": "https://www.skischule-kruen-wallgau.de"
+        },
+        {
+          "name": "Skilanglaufschule Isartal",
+          "kind": "课程 + 租板",
+          "where": "Alpenwelt Karwendel",
+          "level": "入门 / 进阶",
+          "url": "https://www.alpenwelt-karwendel.de"
+        }
+      ]
+    },
+    {
+      "sport": "雪鞋徒步（Schneeschuh）",
+      "items": [
+        {
+          "name": "Alpinschule Garmisch",
+          "kind": "入门雪鞋徒步，上 Eckbauer",
+          "level": "能连续上坡 1–2 小时",
+          "price": "69€",
+          "url": "https://www.alpinschule-garmisch.de"
+        },
+        {
+          "name": "Vivalpin Berg- und Skiführer",
+          "kind": "向导带队，含装备",
+          "where": "Garmisch",
+          "price": "79€ 起",
+          "how": "Google 4.9（379 条）；Grainau 游客卡在部分行程有 9 折",
+          "url": "https://www.vivalpin.com"
+        },
+        {
+          "name": "Die Bergführer",
+          "kind": "一日团，含雪鞋和杖",
+          "where": "Garmisch、Oberammergau 一带",
+          "price": "65€",
+          "url": "https://www.die-bergfuehrer.de"
+        }
+      ]
+    },
+    {
+      "sport": "攀岩 / 抱石",
+      "items": [
+        {
+          "name": "DAV Boulderhalle Garmisch-Partenkirchen",
+          "kind": "抱石馆（DAV 当地分会）",
+          "where": "Hausberg 5",
+          "season": "周一–五 10–22 点，周末 10–20 点",
+          "how": "Google 4.4（96 条）",
+          "url": "https://boulderhalle-gapa.de"
+        },
+        {
+          "name": "Kletterhalle Ehrwald",
+          "kind": "攀岩馆，有课程",
+          "where": "Ehrwald（RB 25 分钟）",
+          "url": "https://zugspitzarena.com"
+        }
+      ]
+    },
+    {
+      "sport": "滑翔伞（双人飞行）",
+      "note": "从 Kreuzeck、Osterfelderkopf、Wank 起飞，冬天能不能飞看天气和缆车，预约时确认。",
+      "items": [
+        {
+          "name": "Aerotaxi",
+          "kind": "全景双人飞行",
+          "price": "164€ 起",
+          "how": "CheckYeti 5.0（36 条）",
+          "url": "https://www.aerotaxi.de"
+        },
+        {
+          "name": "flyandchill GAP",
+          "kind": "双人飞行",
+          "price": "125€ 起",
+          "where": "Kreuzeck、Osterfelder、Wank",
+          "url": "https://www.tandemfliegen-flyandchillgap.de"
+        }
+      ]
+    },
+    {
+      "sport": "团体活动",
+      "items": [
+        {
+          "name": "游客卡免费活动",
+          "kind": "导览徒步、冬季徒步",
+          "where": "Garmisch、Grainau、Alpenwelt Karwendel",
+          "how": "住宿交了城市税就有游客卡，活动表在各地旅游局官网"
+        },
+        {
+          "name": "DAV Sektion Garmisch-Partenkirchen",
+          "kind": "当地阿尔卑斯协会分会",
+          "how": "团体活动大多要求是会员；抱石馆是他们开的"
+        }
+      ]
+    }
+  ],
+  "hikes": [
+    {
+      "name": "Eibsee Loop Trail",
+      "area": "Grainau",
+      "rating": "4.8",
+      "count": "7857",
+      "difficulty": "easy",
+      "distance": "7.1 km",
+      "duration": "1:54",
+      "ascent": "84 m",
+      "start": "环线，起点在 Eibsee 站（齿轨火车 / 公交，凭 Grainau 游客卡免费）",
+      "season": "冬季环湖路一般能走，可能结冰，带简易冰爪",
+      "url": "https://www.komoot.com/smarttour/e1805113668/eibsee-loop-trail"
+    },
+    {
+      "name": "Partnach Gorge and Graseck Loop Trail",
+      "area": "Garmisch",
+      "rating": "4.7",
+      "count": "3081",
+      "difficulty": "moderate",
+      "distance": "6.4 km",
+      "duration": "1:56",
+      "ascent": "190 m",
+      "start": "环线，起点在 Olympia 滑雪场，从 Garmisch 站坐当地公交或步行",
+      "season": "峡谷全年开放（10–5 月 8:00–18:00），冬天有冰挂；峡谷后往 Vordergraseck 的路施工封闭到 2026-11-20",
+      "url": "https://www.komoot.com/smarttour/e1800818328/partnach-gorge-and-graseck-loop-trail"
+    },
+    {
+      "name": "The Isar Nature Adventure Trail near Krün",
+      "area": "Krün",
+      "rating": "4.7",
+      "count": "598",
+      "difficulty": "easy",
+      "distance": "7.4 km",
+      "duration": "1:59",
+      "ascent": "91 m",
+      "start": "Krün，坐去 Wallgau 的 329 路公交",
+      "season": "低海拔，冬天可走，有雪时更慢",
+      "url": "https://www.komoot.com/smarttour/e343831333/the-isar-nature-adventure-trail-near-kruen-alpenwelt-karwendel"
+    },
+    {
+      "name": "Three Lakes Hike from Krün",
+      "area": "Krün",
+      "rating": "4.6",
+      "count": "655",
+      "difficulty": "moderate",
+      "distance": "14.4 km",
+      "duration": "3:50",
+      "ascent": "145 m",
+      "start": "Krün，坐 329 路公交；住 Klais 的话离几个湖更近",
+      "season": "低海拔，冬天可走",
+      "url": "https://www.komoot.com/smarttour/e45205244/three-lakes-hike-from-kruen"
+    },
+    {
+      "name": "Große Ammer Loop",
+      "area": "Ammergauer Alpen",
+      "rating": "4.7",
+      "count": "393",
+      "difficulty": "moderate",
+      "distance": "11.8 km",
+      "duration": "3:27",
+      "ascent": "267 m",
+      "start": "起点在 Ammer 河谷，公交怎么到没查",
+      "season": "冬天河谷路段可能结冰",
+      "url": "https://www.komoot.com/smarttour/e1521737863/grosse-ammer-loop"
+    },
+    {
+      "name": "Höllentalklamm 到 Höllentalangerhütte 往返",
+      "area": "Grainau",
+      "rating": "4.8",
+      "count": "3649",
+      "difficulty": "moderate",
+      "distance": "11.8 km",
+      "duration": "4:43",
+      "ascent": "625 m",
+      "start": "Hammersbach（齿轨火车站）",
+      "season": "<b>冬季关闭</b>，桥会拆掉，约 5 月底重开。夏天再来时的首选",
+      "url": "https://www.komoot.com/smarttour/e1805146480/durch-die-hoellentalklamm-zur-hoellentalangerhuette-und-zurueck"
+    }
+  ],
+  "hikesNote": "来自 komoot「Garmisch-Partenkirchen 县最受欢迎的徒步路线」。同一页上评分很高的 Leutascher Geisterklamm（4.7，1,843 条）冬季整段封闭；Kofel、Notkarspitze 是需要高山经验的困难路线，1 月不推荐，所以都没列。",
+  "excluded": [],
+  "footer": {
+    "paragraphs": [
+      "假设：预算是每晚总价（含清洁费和服务费），城市税单独算；「有厨房」包括可以用房东厨房的独立房间。预算内 45–55€，浮动区间 40–60€。",
+      "Booking 用了「评分 8+」和「厨房」筛选并按价格排序，每个村镇单独搜：Garmisch、Grainau、Farchant、Mittenwald、Krün、Murnau、Oberammergau、Ehrwald。Booking 把「Oberau」识别成了 Oberaudorf（另一个地方），Oberau 的 Booking 结果没查到。",
+      "Airbnb 用了「厨房」筛选、3 晚总价 ≤200€，按 Garmisch、Mittenwald、Murnau 搜；Airbnb 的搜索范围很大，结果里一半是 1 小时圈外的房源（Füssen、Schongau、Penzberg 等），都排除了。",
+      "补充搜索：Hostelworld（moun10 没有客用厨房）、traum-ferienwohnungen.de（Zugspitzland 最便宜 195€/3 晚）。Google 酒店价格没查。",
+      "Booking 的价格是未登录的公开价，你登录 Genius 后可能更低，Garmisch 的 Hasental 小公寓最有可能因此进入 60€ 以内。"
+    ],
+    "links": [
+      [
+        {
+          "text": "Garmisch 游客卡",
+          "url": "https://gapa-tourismus.de/guest-card"
+        },
+        {
+          "text": "Grainau 游客卡",
+          "url": "https://grainau.de/en/guestcard-en"
+        },
+        {
+          "text": "Alpenwelt Karwendel 游客卡",
+          "url": "https://www.alpenwelt-karwendel.de/en/alpenweltcard-guest-card"
+        }
+      ],
+      [
+        {
+          "text": "ÖBB 时刻表",
+          "url": "https://fahrplan.oebb.at"
+        },
+        {
+          "text": "komoot：Garmisch 一带徒步",
+          "url": "https://www.komoot.com/guide/845/hiking-around-garmisch-partenkirchen"
+        },
+        {
+          "text": "Partnachklamm",
+          "url": "https://www.partnachklamm.de"
+        }
+      ]
+    ]
+  }
+}

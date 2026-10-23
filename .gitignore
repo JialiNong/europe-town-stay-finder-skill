@@ -1,0 +1,5 @@
+node_modules/
+.DS_Store
+# 你自己的查询结果（可能包含个人信息），默认不提交
+stays/
+europe-town-stay-finder.zip

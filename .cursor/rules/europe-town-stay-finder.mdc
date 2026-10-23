@@ -1,0 +1,11 @@
+---
+description: 在欧洲给一个小镇找住宿（连同公交 1 小时内的周边村镇）、比价 Booking/Airbnb、整理周边户外运动和 komoot 徒步路线时使用
+globs:
+alwaysApply: false
+---
+
+按仓库根目录的 `AGENTS.md` 工作：
+
+- 先读 `europe-town-stay-finder/SKILL.md`（流程）和 `europe-town-stay-finder/profile.md`（用户的固定情况）。
+- 查完写 `stays/<小镇>-<日期>.json`，格式见 `europe-town-stay-finder/schema/stay.schema.json`，示例见 `europe-town-stay-finder/examples/garmisch-2027-01.json`。
+- 用 `node europe-town-stay-finder/scripts/render.mjs stays/<文件名>.json` 渲染成 HTML，不要手写 HTML。

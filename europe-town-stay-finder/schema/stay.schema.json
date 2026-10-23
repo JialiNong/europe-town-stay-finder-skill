@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/JialiNong/europe-town-stay-finder-skill/europe-town-stay-finder/schema/stay.schema.json",
+  "title": "小镇住宿对比页数据",
+  "description": "europe-town-stay-finder 输出的数据。住宿编号按 stays 的顺序自动生成 1、2、3…；预算区间、每家最低价渠道、最低价标绿都由模板自动计算。标注 html 的字段允许 <b> <a> <br> 等行内标签。",
+  "type": "object",
+  "required": ["title", "town", "queriedAt", "stays"],
+  "properties": {
+    "title": { "type": "string", "description": "页面标题，两到四个词，例如「Garmisch 周边住宿」" },
+    "version": { "type": "integer", "minimum": 1, "description": "版本号，每次改版加 1" },
+    "town": { "type": "string", "description": "核心小镇" },
+    "dateLabel": { "type": "string", "description": "例如「2027 年 1 月 15–18 日（周五–周一）」" },
+    "nights": { "type": "integer", "minimum": 1 },
+    "eyebrow": { "type": "string", "description": "可选，覆盖页头小字" },
+    "heading": { "type": "string", "description": "可选，覆盖大标题" },
+    "budget": {
+      "type": "object",
+      "required": ["perNight"],
+      "properties": {
+        "perNight": { "type": "number", "description": "每晚预算（含所有费用）" },
+        "currency": { "type": "string", "default": "€" }
+      }
+    },
+    "queriedAt": { "type": "string", "description": "查询时间；页脚自动加「价格是查询时的快照，以平台为准」" },
+    "intro": { "type": "string", "description": "html：条件和思路" },
+    "verdict": {
+      "type": "object",
+      "properties": {
+        "items": { "type": "array", "items": { "type": "string" }, "description": "html：顶部结论" },
+        "alert": { "type": "string", "description": "html：单个提示框" },
+        "alerts": { "type": "array", "items": { "type": "string" }, "description": "html：多个提示框" }
+      }
+    },
+    "towns": {
+      "type": "array",
+      "description": "公交 1 小时圈",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "core": { "type": "boolean", "description": "核心小镇写 true" },
+          "mode": { "type": "string", "description": "车型，例如「RB 区域火车」「329 路公交」" },
+          "time": { "type": "string", "description": "单程时长" },
+          "transfers": { "type": ["integer", "string"] },
+          "freq": { "type": "string" },
+          "lastBack": { "type": "string", "description": "晚上从核心小镇回村的末班车" },
+          "fare": { "type": "string" },
+          "guestCard": { "type": "string", "description": "html：游客卡包含的交通和活动" },
+          "cityTax": { "type": "string" }
+        }
+      }
+    },
+    "townsNote": { "type": "string", "description": "html" },
+    "stays": {
+      "type": "array",
+      "description": "住宿，按推荐顺序排",
+      "items": {
+        "type": "object",
+        "required": ["name", "town"],
+        "properties": {
+          "name": { "type": "string" },
+          "town": { "type": "string" },
+          "type": { "type": "string", "description": "房型" },
+          "tag": { "type": "string", "description": "卡片小标签，例如「最接近」「整套公寓」" },
+          "walk": { "type": "string", "description": "到车站的步行距离" },
+          "toCore": { "type": "string", "description": "到核心小镇的时间" },
+          "breakfast": { "type": "string" },
+          "cancel": { "type": "string" },
+          "summary": { "type": "string", "description": "html" },
+          "prices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["channel", "perNight"],
+              "properties": {
+                "channel": { "type": "string", "description": "Booking / Airbnb / 官网 / …" },
+                "perNight": { "type": "number", "description": "全程总价 ÷ 晚数" },
+                "total": { "type": "number" },
+                "rating": { "type": "string", "description": "例如「8.9 (212)」" },
+                "url": { "type": "string" },
+                "note": { "type": "string", "description": "html" }
+              }
+            }
+          },
+          "notes": { "type": "array", "items": { "type": "string" }, "description": "html" }
+        }
+      }
+    },
+    "staysNote": { "type": "string", "description": "html" },
+    "nearMiss": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "why"],
+        "properties": {
+          "name": { "type": "string" },
+          "town": { "type": "string" },
+          "price": { "type": "string" },
+          "url": { "type": "string" },
+          "why": { "type": "string", "description": "html：差在哪一条" }
+        }
+      }
+    },
+    "activities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sport"],
+        "properties": {
+          "sport": { "type": "string" },
+          "note": { "type": "string", "description": "html" },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name"],
+              "properties": {
+                "name": { "type": "string" },
+                "kind": { "type": "string" },
+                "where": { "type": "string" },
+                "level": { "type": "string" },
+                "price": { "type": "string" },
+                "season": { "type": "string" },
+                "lang": { "type": "string" },
+                "how": { "type": "string", "description": "html" },
+                "url": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "hikes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "area": { "type": "string" },
+          "rating": { "type": "string" },
+          "count": { "type": "string" },
+          "difficulty": { "enum": ["easy", "moderate", "hard"] },
+          "distance": { "type": "string" },
+          "duration": { "type": "string" },
+          "ascent": { "type": "string" },
+          "start": { "type": "string", "description": "html：起点和公交怎么去" },
+          "season": { "type": "string", "description": "html" },
+          "url": { "type": "string" }
+        }
+      }
+    },
+    "hikesNote": { "type": "string", "description": "html" },
+    "excluded": {
+      "type": "array",
+      "items": { "type": "object", "required": ["name", "why"], "properties": { "name": { "type": "string" }, "why": { "type": "string" } } }
+    },
+    "footer": {
+      "type": "object",
+      "properties": {
+        "paragraphs": { "type": "array", "items": { "type": "string" } },
+        "links": {
+          "type": "array",
+          "items": { "type": "array", "items": { "type": "object", "required": ["text", "url"], "properties": { "text": { "type": "string" }, "url": { "type": "string" } } } }
+        }
+      }
+    }
+  }
+}
