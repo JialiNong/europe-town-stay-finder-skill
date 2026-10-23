@@ -1,0 +1,90 @@
+{
+  "title": "Chamonix 周边住宿（演示数据）",
+  "version": 1,
+  "town": "Chamonix-Mont-Blanc",
+  "dateLabel": "模拟示例・非真实查询",
+  "nights": 4,
+  "eyebrow": "模拟数据 · 演示「最多 7 村镇 / 每村最多 7 家 / 最多 7 条徒步路线」新规则与 SVG 地图，不是真实查询结果",
+  "budget": { "perNight": 70, "currency": "€" },
+  "queriedAt": "（本页为演示用模拟数据，非实时查询，不代表真实价格）",
+  "intro": "这是一份<b>模拟数据</b>，用来演示三条新规则：核心小镇外最多推荐 <b>7 个周边村镇</b>（按交通便利排序）、单个村镇住宿结果多时最多列 <b>7 家</b>、komoot 徒步路线最多 <b>7 条</b>（优先热门知名、风景好的）；同时演示改成纯 SVG 代码画图后的「住宿地图」「户外运动地图」「komoot 路线地图」，不再依赖 Leaflet 等外部地图库，离线也能看。所有数字、价格、评分、坐标均为虚构，不代表真实查询结果。",
+  "verdict": {
+    "items": [
+      "本页是 UI/规则演示，不是真实住宿建议——请忽略具体价格和评分数字。",
+      "周边村镇候选原本多于 7 个（示例里还有 Vallorcine、Montroc 等），按单程时长、换乘次数、班次密度排序后只取前 7 个，其余写进「排除」。",
+      "Les Houches 这个村镇模拟出的住宿结果较多，按规则只列排名前 7 家，其余不再展示。",
+      "komoot 路线候选原本更多，按评分、人数和风景知名度只保留 7 条，覆盖简单到困难。"
+    ],
+    "alerts": ["本页全部内容均为演示用虚构数据。"]
+  },
+  "towns": [
+    { "name": "Chamonix-Mont-Blanc", "core": true, "lat": 45.9237, "lng": 6.8694 },
+    { "name": "Les Houches", "mode": "公交（模拟）", "time": "12 分钟", "transfers": 0, "freq": "约每 15 分钟 1 班", "lastBack": "23:50", "fare": "游客卡免费（模拟）", "guestCard": "游客卡覆盖山谷内公交（模拟）", "lat": 45.8917, "lng": 6.7989 },
+    { "name": "Argentière", "mode": "火车（模拟）", "time": "16 分钟", "transfers": 0, "freq": "约每 20 分钟 1 班", "lastBack": "23:30", "fare": "游客卡免费（模拟）", "lat": 45.9814, "lng": 6.9267 },
+    { "name": "Les Praz", "mode": "火车（模拟）", "time": "8 分钟", "transfers": 0, "freq": "约每 20 分钟 1 班", "lastBack": "23:30", "fare": "游客卡免费（模拟）", "lat": 45.9375, "lng": 6.8833 },
+    { "name": "Vallorcine", "mode": "火车（模拟）", "time": "35 分钟", "transfers": 0, "freq": "约每小时 1 班", "lastBack": "22:40", "fare": "游客卡免费（模拟）", "lat": 46.0292, "lng": 6.9231 },
+    { "name": "Servoz", "mode": "火车（模拟）", "time": "22 分钟", "transfers": 0, "freq": "约每小时 1 班", "lastBack": "22:10", "fare": "3€（模拟）", "lat": 45.9031, "lng": 6.7256 },
+    { "name": "Saint-Gervais-les-Bains", "mode": "公交转火车（模拟）", "time": "48 分钟", "transfers": 1, "freq": "约每小时 1 班", "lastBack": "21:45", "fare": "6€（模拟）", "lat": 45.8917, "lng": 6.7094 },
+    { "name": "Le Fayet", "mode": "火车（模拟）", "time": "52 分钟", "transfers": 1, "freq": "约每小时 1 班", "lastBack": "21:30", "fare": "6€（模拟）", "lat": 45.8767, "lng": 6.7036 }
+  ],
+  "townsNote": "以上 7 个周边村镇已按交通便利程度（时长、换乘、班次）排序；Vallorcine 虽然单程较长，但是直达且末班车较晚，仍优于需要换乘的村镇。",
+  "stays": [
+    { "name": "Chalet Vue Glacier", "town": "Les Houches", "type": "整套公寓", "tag": "最接近预算", "walk": "6 分钟", "toCore": "12 分钟", "breakfast": "不含", "cancel": "入住前 3 天免费取消", "summary": "模拟示例房源，带开放式厨房，阳台正对勃朗峰方向。", "prices": [
+        { "channel": "Booking", "perNight": 68, "total": 272, "rating": "8.9 (142)", "note": "公开价，登录会员后可能更低" },
+        { "channel": "Airbnb", "perNight": 71, "total": 284, "rating": "4.8 (56)", "note": "已含清洁费和服务费" }
+      ], "notes": ["示例数据，非真实房源"], "lat": 45.8921, "lng": 6.7995 },
+    { "name": "Studio Bellevue", "town": "Les Houches", "type": "独立房间（含房东厨房）", "tag": "预算内", "walk": "9 分钟", "toCore": "12 分钟", "breakfast": "可加购", "cancel": "入住前 7 天免费取消", "summary": "模拟示例房源。", "prices": [
+        { "channel": "Booking", "perNight": 64, "total": 256, "rating": "8.6 (98)" }
+      ], "lat": 45.8905, "lng": 6.7978 },
+    { "name": "Les Houches 山景小屋", "town": "Les Houches", "type": "整套公寓", "tag": "评分最高", "walk": "11 分钟", "toCore": "12 分钟", "breakfast": "不含", "cancel": "入住前 5 天免费取消", "summary": "模拟示例房源。", "prices": [
+        { "channel": "Airbnb", "perNight": 73, "total": 292, "rating": "4.95 (210)" },
+        { "channel": "官网", "perNight": 70, "total": 280, "note": "官网直订含早餐（模拟）" }
+      ], "lat": 45.893, "lng": 6.801 },
+    { "name": "Résidence Prarion", "town": "Les Houches", "type": "整套公寓", "walk": "14 分钟", "toCore": "12 分钟", "breakfast": "不含", "cancel": "入住前 3 天免费取消", "summary": "模拟示例房源，靠近缆车站。", "prices": [
+        { "channel": "Booking", "perNight": 69, "total": 276, "rating": "8.3 (64)" }
+      ], "lat": 45.8945, "lng": 6.796 },
+    { "name": "Gîte des Houches", "town": "Les Houches", "type": "独立房间", "walk": "7 分钟", "toCore": "12 分钟", "breakfast": "含", "cancel": "入住前 2 天免费取消", "summary": "模拟示例房源，家庭经营。", "prices": [
+        { "channel": "Booking", "perNight": 66, "total": 264, "rating": "9.1 (77)" }
+      ], "lat": 45.891, "lng": 6.8 },
+    { "name": "Appartement Mont-Blanc View", "town": "Les Houches", "type": "整套公寓", "walk": "18 分钟", "toCore": "12 分钟", "breakfast": "不含", "cancel": "入住前 7 天免费取消", "summary": "模拟示例房源。", "prices": [
+        { "channel": "Airbnb", "perNight": 75, "total": 300, "rating": "4.7 (31)" }
+      ], "lat": 45.8888, "lng": 6.795 },
+    { "name": "Le Petit Chalet", "town": "Les Houches", "type": "整套公寓", "walk": "10 分钟", "toCore": "12 分钟", "breakfast": "不含", "cancel": "入住前 5 天免费取消", "summary": "模拟示例房源（第 7 家，达到每村上限，其余结果不再列出）。", "prices": [
+        { "channel": "Booking", "perNight": 67, "total": 268, "rating": "8.7 (119)" }
+      ], "lat": 45.8915, "lng": 6.803 }
+  ],
+  "staysNote": "Les Houches 的模拟候选结果超过 7 家，已按「预算内优先、评分高优先、离车站近优先」排序，只列前 7 家。",
+  "nearMiss": [
+    { "name": "Studio Argentière Nord", "town": "Argentière", "price": "约 82€/晚（模拟）", "why": "超预算 17%，评分 4.6（模拟）" }
+  ],
+  "activities": [
+    { "sport": "攀岩", "note": "示例数据", "items": [
+        { "name": "Chamonix 攀岩学校（模拟）", "where": "Les Praz", "level": "入门/进阶", "price": "约 60€/半天（模拟）", "season": "6–9 月", "lang": "法语/英语", "url": "", "lat": 45.938, "lng": 6.884 }
+      ] },
+    { "sport": "滑翔伞", "note": "示例数据", "items": [
+        { "name": "Mont-Blanc 滑翔伞双人飞行（模拟）", "where": "Les Houches 缆车站", "level": "无需经验", "price": "约 120€（模拟）", "season": "全年（视天气）", "lang": "法语/英语", "url": "", "lat": 45.893, "lng": 6.799 }
+      ] },
+    { "sport": "徒步团体", "note": "示例数据", "items": [
+        { "name": "CAF Chamonix 徒步团（模拟）", "where": "Chamonix", "level": "多级别", "price": "会员制（模拟）", "season": "6–10 月", "lang": "法语", "url": "", "lat": 45.9237, "lng": 6.8694 }
+      ] }
+  ],
+  "hikes": [
+    { "name": "Lac Blanc（模拟）", "area": "Chamonix", "rating": "4.9", "count": "9200", "difficulty": "moderate", "distance": "10.5 km", "duration": "5–6 h", "ascent": "900 m", "start": "La Flégère 缆车站，Les Praz 公交可达（模拟）", "season": "6–10 月，其余积雪", "url": "", "lat": 45.9633, "lng": 6.9153 },
+    { "name": "Grand Balcon Sud（模拟）", "area": "Chamonix", "rating": "4.8", "count": "6100", "difficulty": "moderate", "distance": "14 km", "duration": "6 h", "ascent": "600 m", "start": "Planpraz 缆车站（模拟）", "season": "6–10 月", "url": "", "lat": 45.9375, "lng": 6.8694 },
+    { "name": "Aiguillette des Posettes（模拟）", "area": "Vallorcine", "rating": "4.8", "count": "3400", "difficulty": "moderate", "distance": "9 km", "duration": "4 h", "ascent": "750 m", "start": "Col des Montets，Vallorcine 火车可达（模拟）", "season": "6–10 月", "url": "", "lat": 46.0128, "lng": 6.9358 },
+    { "name": "Lac des Chéserys（模拟）", "area": "Chamonix", "rating": "4.9", "count": "5200", "difficulty": "moderate", "distance": "11 km", "duration": "5 h", "ascent": "850 m", "start": "La Flégère 缆车站（模拟）", "season": "6–10 月", "url": "", "lat": 45.9694, "lng": 6.9094 },
+    { "name": "Le Brévent 环线（模拟）", "area": "Chamonix", "rating": "4.7", "count": "4100", "difficulty": "hard", "distance": "13 km", "duration": "6–7 h", "ascent": "1250 m", "start": "Planpraz 缆车站（模拟）", "season": "7–9 月", "url": "", "lat": 45.9394, "lng": 6.8594 },
+    { "name": "Cascade de Bérard（模拟）", "area": "Vallorcine", "rating": "4.6", "count": "2100", "difficulty": "easy", "distance": "6 km", "duration": "2.5 h", "ascent": "250 m", "start": "Le Buet 火车站（模拟）", "season": "6–10 月", "url": "", "lat": 46.0128, "lng": 6.9519 },
+    { "name": "Petit Balcon Sud · Les Houches（模拟）", "area": "Les Houches", "rating": "4.6", "count": "1800", "difficulty": "easy", "distance": "7 km", "duration": "3 h", "ascent": "300 m", "start": "Les Houches 村内，步行可达（模拟）", "season": "5–10 月", "url": "", "lat": 45.888, "lng": 6.796 }
+  ],
+  "hikesNote": "候选路线原本更多（例如 Mer de Glace、Aiguille du Midi 周边步道等，模拟），按评分、人数和知名度排序后只保留 7 条，覆盖简单到困难三个级别。",
+  "excluded": [
+    { "name": "Montroc（模拟）", "why": "与 Vallorcine 共用车站，为避免重复且名额已满（已有 7 个村镇），未单独列出。" },
+    { "name": "Passy（模拟）", "why": "需换乘 2 次，排除。" }
+  ],
+  "footer": {
+    "paragraphs": [
+      "本页全部数据均为虚构示例，用于演示「最多 7 村镇／每村最多 7 家／最多 7 条徒步路线」的新规则，以及改为纯 SVG 代码绘制地图（不依赖 Leaflet 等外部库，无需联网）后的效果。实际查询时请按 SKILL.md 的步骤重新搜索真实数据。"
+    ]
+  }
+}

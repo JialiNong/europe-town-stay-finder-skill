@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Chamonix 周边住宿（演示数据）</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700;900&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: one reading column, departure-board time rows, piste-colour difficulty tags */
+:root{
+  --bg:#f2f5f7; --surface:#ffffff; --ink:#15212b; --muted:#5a6a77; --line:#d6dee4;
+  --glacier:#1f5f8f; --glacier-soft:#e3eef6;
+  --piste-green:#2e7d4f; --piste-blue:#1f5f8f; --piste-red:#c0392b;
+  --bad:#b03a2e;
+  --f-display:"Noto Serif SC","Songti SC",serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f161c; --surface:#16212a; --ink:#e6edf2; --muted:#93a4b2; --line:#2a3946;
+  --glacier:#7cb6e3; --glacier-soft:#1b2d3c;
+  --piste-green:#5cc58a; --piste-blue:#7cb6e3; --piste-red:#ef7a6c;
+  --bad:#ef7a6c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f161c; --surface:#16212a; --ink:#e6edf2; --muted:#93a4b2; --line:#2a3946;
+  --glacier:#7cb6e3; --glacier-soft:#1b2d3c;
+  --piste-green:#5cc58a; --piste-blue:#7cb6e3; --piste-red:#ef7a6c;
+  --bad:#ef7a6c; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.7}
+.wrap{max-width:760px;margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.3}
+h1{font-size:clamp(26px,6vw,36px);font-weight:900}
+h2{font-size:21px}
+h3{font-size:18px}
+p{margin:0}
+a{color:var(--glacier)}
+.eyebrow{font-size:12px;letter-spacing:.12em;color:var(--muted);font-weight:500}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+
+header{display:flex;flex-direction:column;gap:10px}
+.route-line{font-size:14px;color:var(--muted)}
+.route-line b{color:var(--ink)}
+
+.verdict{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.verdict ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:8px}
+.alert{background:var(--glacier-soft);color:var(--ink);border-radius:8px;padding:12px 14px;font-size:14px}
+
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--muted);font-size:12px;letter-spacing:.06em}
+td.num{font-family:var(--f-data);font-variant-numeric:tabular-nums;white-space:nowrap}
+td.best{color:var(--piste-green);font-weight:600}
+
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;white-space:nowrap}
+.tag i{width:10px;height:10px;display:inline-block;transform:rotate(45deg)}
+.tag.green i{background:var(--piste-green);border-radius:50%;transform:none}
+.tag.blue i{background:var(--piste-blue)}
+
+section.route{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.route-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;align-items:baseline}
+.route-head .total{font-family:var(--f-data);font-size:20px;font-weight:600;white-space:nowrap}
+.pick{font-size:12px;background:var(--glacier-soft);color:var(--glacier);border-radius:999px;padding:2px 10px;font-weight:500;align-self:flex-start}
+
+.legs{display:flex;flex-direction:column;border-left:2px solid var(--line);margin-left:6px}
+.leg{position:relative;padding:0 0 14px 18px;display:flex;flex-direction:column;gap:2px}
+.leg::before{content:"";position:absolute;left:-6px;top:7px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--glacier)}
+.leg.stay::before{border-color:var(--muted);background:var(--muted)}
+.leg:last-child{padding-bottom:0}
+.leg .t{font-family:var(--f-data);font-weight:600;font-variant-numeric:tabular-nums}
+.leg .what{font-size:13px;color:var(--muted)}
+
+.buy{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;font-size:14px;align-items:baseline}
+.buy .p{font-family:var(--f-data);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.buy .where{font-size:13px;color:var(--muted)}
+.buy .total-row{border-top:1px solid var(--line);padding-top:6px;font-weight:700}
+
+.notes{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.notes li.risk::marker{color:var(--bad)}
+.block-title{font-size:12px;letter-spacing:.08em;color:var(--muted);font-weight:500;margin-bottom:6px}
+
+.excluded{display:flex;flex-direction:column;gap:12px}
+.ex{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:4px}
+
+footer{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:16px}
+footer ul{margin:0;padding-left:1.2em}
+.tag.red i{background:var(--piste-red)}
+.render-error{background:var(--surface);border:1px solid var(--bad);color:var(--bad);border-radius:10px;padding:16px;font-family:var(--f-data);font-size:13px;white-space:pre-wrap}
+
+/* ---- europe-town-stay-finder additions ---- */
+.budget{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.budget b{font-family:var(--f-data);color:var(--ink);font-weight:600}
+h2.sec{margin-bottom:10px}
+.core-row td:first-child{font-weight:700}
+.core-mark{font-size:11px;color:var(--glacier);background:var(--glacier-soft);border-radius:999px;padding:1px 8px;margin-left:6px;font-weight:500;white-space:nowrap}
+.band{font-size:11px;border-radius:999px;padding:1px 8px;font-weight:500;white-space:nowrap;border:1px solid var(--line);color:var(--muted)}
+.band.in{border-color:var(--piste-green);color:var(--piste-green)}
+.band.float{border-style:dashed}
+.stay-meta{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--muted)}
+.stay-meta b{color:var(--ink);font-weight:500}
+.channels{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px 14px;font-size:14px;align-items:baseline}
+.channels .h{font-size:12px;letter-spacing:.06em;color:var(--muted)}
+.channels .num{font-family:var(--f-data);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.channels .best{color:var(--piste-green);font-weight:600}
+.sport{display:flex;flex-direction:column;gap:10px}
+.sport + .sport{border-top:1px solid var(--line);padding-top:16px}
+.act{display:flex;flex-direction:column;gap:3px}
+.act .name{font-weight:700}
+.act .meta{font-size:13px;color:var(--muted)}
+.diff{display:inline-flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap}
+.diff i{width:10px;height:10px;display:inline-block}
+.diff.easy i{background:var(--piste-green);border-radius:50%}
+.diff.moderate i{background:var(--piste-blue)}
+.diff.hard i{background:var(--piste-red);transform:rotate(45deg)}
+.hike-rating{font-family:var(--f-data);font-variant-numeric:tabular-nums;white-space:nowrap}
+.hike-rating small{color:var(--muted);font-weight:400}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px}
+
+table.wide{min-width:780px}
+table.wide td:first-child{min-width:120px}
+
+
+/* ---- maps (自绘 SVG，无外部依赖) + print ---- */
+.toolbar{display:flex;justify-content:flex-end}
+.toolbar button{font:inherit;font-size:13px;font-weight:600;color:var(--glacier);background:var(--glacier-soft);border:none;border-radius:999px;padding:8px 18px;cursor:pointer}
+.toolbar button:hover{filter:brightness(0.94)}
+.toolbar button:active{filter:brightness(0.88)}
+.mapbox{border-radius:10px;overflow:hidden;margin-top:12px;border:1px solid var(--line);background:var(--surface)}
+.mapbox svg{width:100%;height:auto;display:block}
+.map-bg{fill:var(--surface)}
+.map-grid{stroke:var(--line);stroke-width:1;stroke-dasharray:3 4}
+.map-dot{fill:var(--piste-green);stroke:var(--surface);stroke-width:2}
+.map-dot.core{fill:var(--piste-red)}
+.map-dot.stay{fill:var(--piste-blue)}
+.map-label{font-family:var(--f-body);font-size:11px;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:3px;stroke-linejoin:round}
+.map-compass line,.map-compass polygon{stroke:var(--muted);fill:var(--muted)}
+.map-compass text{font-family:var(--f-body);font-size:11px;fill:var(--muted)}
+.map-scale line{stroke:var(--muted);stroke-width:1}
+.map-scale text{font-family:var(--f-data);font-size:11px;fill:var(--muted)}
+.map-legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12px;color:var(--muted);margin-top:8px}
+.map-legend span{display:inline-flex;align-items:center;gap:6px}
+.map-legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+@media print{
+  .toolbar{display:none !important}
+  body{background:#fff}
+  .wrap{max-width:100%}
+  a{color:inherit}
+  section.route,.verdict,.panel,.mapbox{break-inside:avoid}
+}
+
+</style>
+</head>
+<body>
+<div id="app" class="wrap"></div>
+<script type="application/json" id="stay-data">
+{
+  "title": "Chamonix 周边住宿（演示数据）",
+  "version": 1,
+  "town": "Chamonix-Mont-Blanc",
+  "dateLabel": "模拟示例・非真实查询",
+  "nights": 4,
+  "eyebrow": "模拟数据 · 演示「最多 7 村镇 / 每村最多 7 家 / 最多 7 条徒步路线」新规则与 SVG 地图，不是真实查询结果",
+  "budget": {
+    "perNight": 70,
+    "currency": "€"
+  },
+  "queriedAt": "（本页为演示用模拟数据，非实时查询，不代表真实价格）",
+  "intro": "这是一份<b>模拟数据<\/b>，用来演示三条新规则：核心小镇外最多推荐 <b>7 个周边村镇<\/b>（按交通便利排序）、单个村镇住宿结果多时最多列 <b>7 家<\/b>、komoot 徒步路线最多 <b>7 条<\/b>（优先热门知名、风景好的）；同时演示改成纯 SVG 代码画图后的「住宿地图」「户外运动地图」「komoot 路线地图」，不再依赖 Leaflet 等外部地图库，离线也能看。所有数字、价格、评分、坐标均为虚构，不代表真实查询结果。",
+  "verdict": {
+    "items": [
+      "本页是 UI/规则演示，不是真实住宿建议——请忽略具体价格和评分数字。",
+      "周边村镇候选原本多于 7 个（示例里还有 Vallorcine、Montroc 等），按单程时长、换乘次数、班次密度排序后只取前 7 个，其余写进「排除」。",
+      "Les Houches 这个村镇模拟出的住宿结果较多，按规则只列排名前 7 家，其余不再展示。",
+      "komoot 路线候选原本更多，按评分、人数和风景知名度只保留 7 条，覆盖简单到困难。"
+    ],
+    "alerts": [
+      "本页全部内容均为演示用虚构数据。"
+    ]
+  },
+  "towns": [
+    {
+      "name": "Chamonix-Mont-Blanc",
+      "core": true,
+      "lat": 45.9237,
+      "lng": 6.8694
+    },
+    {
+      "name": "Les Houches",
+      "mode": "公交（模拟）",
+      "time": "12 分钟",
+      "transfers": 0,
+      "freq": "约每 15 分钟 1 班",
+      "lastBack": "23:50",
+      "fare": "游客卡免费（模拟）",
+      "guestCard": "游客卡覆盖山谷内公交（模拟）",
+      "lat": 45.8917,
+      "lng": 6.7989
+    },
+    {
+      "name": "Argentière",
+      "mode": "火车（模拟）",
+      "time": "16 分钟",
+      "transfers": 0,
+      "freq": "约每 20 分钟 1 班",
+      "lastBack": "23:30",
+      "fare": "游客卡免费（模拟）",
+      "lat": 45.9814,
+      "lng": 6.9267
+    },
+    {
+      "name": "Les Praz",
+      "mode": "火车（模拟）",
+      "time": "8 分钟",
+      "transfers": 0,
+      "freq": "约每 20 分钟 1 班",
+      "lastBack": "23:30",
+      "fare": "游客卡免费（模拟）",
+      "lat": 45.9375,
+      "lng": 6.8833
+    },
+    {
+      "name": "Vallorcine",
+      "mode": "火车（模拟）",
+      "time": "35 分钟",
+      "transfers": 0,
+      "freq": "约每小时 1 班",
+      "lastBack": "22:40",
+      "fare": "游客卡免费（模拟）",
+      "lat": 46.0292,
+      "lng": 6.9231
+    },
+    {
+      "name": "Servoz",
+      "mode": "火车（模拟）",
+      "time": "22 分钟",
+      "transfers": 0,
+      "freq": "约每小时 1 班",
+      "lastBack": "22:10",
+      "fare": "3€（模拟）",
+      "lat": 45.9031,
+      "lng": 6.7256
+    },
+    {
+      "name": "Saint-Gervais-les-Bains",
+      "mode": "公交转火车（模拟）",
+      "time": "48 分钟",
+      "transfers": 1,
+      "freq": "约每小时 1 班",
+      "lastBack": "21:45",
+      "fare": "6€（模拟）",
+      "lat": 45.8917,
+      "lng": 6.7094
+    },
+    {
+      "name": "Le Fayet",
+      "mode": "火车（模拟）",
+      "time": "52 分钟",
+      "transfers": 1,
+      "freq": "约每小时 1 班",
+      "lastBack": "21:30",
+      "fare": "6€（模拟）",
+      "lat": 45.8767,
+      "lng": 6.7036
+    }
+  ],
+  "townsNote": "以上 7 个周边村镇已按交通便利程度（时长、换乘、班次）排序；Vallorcine 虽然单程较长，但是直达且末班车较晚，仍优于需要换乘的村镇。",
+  "stays": [
+    {
+      "name": "Chalet Vue Glacier",
+      "town": "Les Houches",
+      "type": "整套公寓",
+      "tag": "最接近预算",
+      "walk": "6 分钟",
+      "toCore": "12 分钟",
+      "breakfast": "不含",
+      "cancel": "入住前 3 天免费取消",
+      "summary": "模拟示例房源，带开放式厨房，阳台正对勃朗峰方向。",
+      "prices": [
+        {
+          "channel": "Booking",
+          "perNight": 68,
+          "total": 272,
+          "rating": "8.9 (142)",
+          "note": "公开价，登录会员后可能更低"
+        },
+        {
+          "channel": "Airbnb",
+          "perNight": 71,
+          "total": 284,
+          "rating": "4.8 (56)",
+          "note": "已含清洁费和服务费"
+        }
+      ],
+      "notes": [
+        "示例数据，非真实房源"
+      ],
+      "lat": 45.8921,
+      "lng": 6.7995
+    },
+    {
+      "name": "Studio Bellevue",
+      "town": "Les Houches",
+      "type": "独立房间（含房东厨房）",
+      "tag": "预算内",
+      "walk": "9 分钟",
+      "toCore": "12 分钟",
+      "breakfast": "可加购",
+      "cancel": "入住前 7 天免费取消",
+      "summary": "模拟示例房源。",
+      "prices": [
+        {
+          "channel": "Booking",
+          "perNight": 64,
+          "total": 256,
+          "rating": "8.6 (98)"
+        }
+      ],
+      "lat": 45.8905,
+      "lng": 6.7978
+    },
+    {
+      "name": "Les Houches 山景小屋",
+      "town": "Les Houches",
+      "type": "整套公寓",
+      "tag": "评分最高",
+      "walk": "11 分钟",
+      "toCore": "12 分钟",
+      "breakfast": "不含",
+      "cancel": "入住前 5 天免费取消",
+      "summary": "模拟示例房源。",
+      "prices": [
+        {
+          "channel": "Airbnb",
+          "perNight": 73,
+          "total": 292,
+          "rating": "4.95 (210)"
+        },
+        {
+          "channel": "官网",
+          "perNight": 70,
+          "total": 280,
+          "note": "官网直订含早餐（模拟）"
+        }
+      ],
+      "lat": 45.893,
+      "lng": 6.801
+    },
+    {
+      "name": "Résidence Prarion",
+      "town": "Les Houches",
+      "type": "整套公寓",
+      "walk": "14 分钟",
+      "toCore": "12 分钟",
+      "breakfast": "不含",
+      "cancel": "入住前 3 天免费取消",
+      "summary": "模拟示例房源，靠近缆车站。",
+      "prices": [
+        {
+          "channel": "Booking",
+          "perNight": 69,
+          "total": 276,
+          "rating": "8.3 (64)"
+        }
+      ],
+      "lat": 45.8945,
+      "lng": 6.796
+    },
+    {
+      "name": "Gîte des Houches",
+      "town": "Les Houches",
+      "type": "独立房间",
+      "walk": "7 分钟",
+      "toCore": "12 分钟",
+      "breakfast": "含",
+      "cancel": "入住前 2 天免费取消",
+      "summary": "模拟示例房源，家庭经营。",
+      "prices": [
+        {
+          "channel": "Booking",
+          "perNight": 66,
+          "total": 264,
+          "rating": "9.1 (77)"
+        }
+      ],
+      "lat": 45.891,
+      "lng": 6.8
+    },
+    {
+      "name": "Appartement Mont-Blanc View",
+      "town": "Les Houches",
+      "type": "整套公寓",
+      "walk": "18 分钟",
+      "toCore": "12 分钟",
+      "breakfast": "不含",
+      "cancel": "入住前 7 天免费取消",
+      "summary": "模拟示例房源。",
+      "prices": [
+        {
+          "channel": "Airbnb",
+          "perNight": 75,
+          "total": 300,
+          "rating": "4.7 (31)"
+        }
+      ],
+      "lat": 45.8888,
+      "lng": 6.795
+    },
+    {
+      "name": "Le Petit Chalet",
+      "town": "Les Houches",
+      "type": "整套公寓",
+      "walk": "10 分钟",
+      "toCore": "12 分钟",
+      "breakfast": "不含",
+      "cancel": "入住前 5 天免费取消",
+      "summary": "模拟示例房源（第 7 家，达到每村上限，其余结果不再列出）。",
+      "prices": [
+        {
+          "channel": "Booking",
+          "perNight": 67,
+          "total": 268,
+          "rating": "8.7 (119)"
+        }
+      ],
+      "lat": 45.8915,
+      "lng": 6.803
+    }
+  ],
+  "staysNote": "Les Houches 的模拟候选结果超过 7 家，已按「预算内优先、评分高优先、离车站近优先」排序，只列前 7 家。",
+  "nearMiss": [
+    {
+      "name": "Studio Argentière Nord",
+      "town": "Argentière",
+      "price": "约 82€/晚（模拟）",
+      "why": "超预算 17%，评分 4.6（模拟）"
+    }
+  ],
+  "activities": [
+    {
+      "sport": "攀岩",
+      "note": "示例数据",
+      "items": [
+        {
+          "name": "Chamonix 攀岩学校（模拟）",
+          "where": "Les Praz",
+          "level": "入门/进阶",
+          "price": "约 60€/半天（模拟）",
+          "season": "6–9 月",
+          "lang": "法语/英语",
+          "url": "",
+          "lat": 45.938,
+          "lng": 6.884
+        }
+      ]
+    },
+    {
+      "sport": "滑翔伞",
+      "note": "示例数据",
+      "items": [
+        {
+          "name": "Mont-Blanc 滑翔伞双人飞行（模拟）",
+          "where": "Les Houches 缆车站",
+          "level": "无需经验",
+          "price": "约 120€（模拟）",
+          "season": "全年（视天气）",
+          "lang": "法语/英语",
+          "url": "",
+          "lat": 45.893,
+          "lng": 6.799
+        }
+      ]
+    },
+    {
+      "sport": "徒步团体",
+      "note": "示例数据",
+      "items": [
+        {
+          "name": "CAF Chamonix 徒步团（模拟）",
+          "where": "Chamonix",
+          "level": "多级别",
+          "price": "会员制（模拟）",
+          "season": "6–10 月",
+          "lang": "法语",
+          "url": "",
+          "lat": 45.9237,
+          "lng": 6.8694
+        }
+      ]
+    }
+  ],
+  "hikes": [
+    {
+      "name": "Lac Blanc（模拟）",
+      "area": "Chamonix",
+      "rating": "4.9",
+      "count": "9200",
+      "difficulty": "moderate",
+      "distance": "10.5 km",
+      "duration": "5–6 h",
+      "ascent": "900 m",
+      "start": "La Flégère 缆车站，Les Praz 公交可达（模拟）",
+      "season": "6–10 月，其余积雪",
+      "url": "",
+      "lat": 45.9633,
+      "lng": 6.9153
+    },
+    {
+      "name": "Grand Balcon Sud（模拟）",
+      "area": "Chamonix",
+      "rating": "4.8",
+      "count": "6100",
+      "difficulty": "moderate",
+      "distance": "14 km",
+      "duration": "6 h",
+      "ascent": "600 m",
+      "start": "Planpraz 缆车站（模拟）",
+      "season": "6–10 月",
+      "url": "",
+      "lat": 45.9375,
+      "lng": 6.8694
+    },
+    {
+      "name": "Aiguillette des Posettes（模拟）",
+      "area": "Vallorcine",
+      "rating": "4.8",
+      "count": "3400",
+      "difficulty": "moderate",
+      "distance": "9 km",
+      "duration": "4 h",
+      "ascent": "750 m",
+      "start": "Col des Montets，Vallorcine 火车可达（模拟）",
+      "season": "6–10 月",
+      "url": "",
+      "lat": 46.0128,
+      "lng": 6.9358
+    },
+    {
+      "name": "Lac des Chéserys（模拟）",
+      "area": "Chamonix",
+      "rating": "4.9",
+      "count": "5200",
+      "difficulty": "moderate",
+      "distance": "11 km",
+      "duration": "5 h",
+      "ascent": "850 m",
+      "start": "La Flégère 缆车站（模拟）",
+      "season": "6–10 月",
+      "url": "",
+      "lat": 45.9694,
+      "lng": 6.9094
+    },
+    {
+      "name": "Le Brévent 环线（模拟）",
+      "area": "Chamonix",
+      "rating": "4.7",
+      "count": "4100",
+      "difficulty": "hard",
+      "distance": "13 km",
+      "duration": "6–7 h",
+      "ascent": "1250 m",
+      "start": "Planpraz 缆车站（模拟）",
+      "season": "7–9 月",
+      "url": "",
+      "lat": 45.9394,
+      "lng": 6.8594
+    },
+    {
+      "name": "Cascade de Bérard（模拟）",
+      "area": "Vallorcine",
+      "rating": "4.6",
+      "count": "2100",
+      "difficulty": "easy",
+      "distance": "6 km",
+      "duration": "2.5 h",
+      "ascent": "250 m",
+      "start": "Le Buet 火车站（模拟）",
+      "season": "6–10 月",
+      "url": "",
+      "lat": 46.0128,
+      "lng": 6.9519
+    },
+    {
+      "name": "Petit Balcon Sud · Les Houches（模拟）",
+      "area": "Les Houches",
+      "rating": "4.6",
+      "count": "1800",
+      "difficulty": "easy",
+      "distance": "7 km",
+      "duration": "3 h",
+      "ascent": "300 m",
+      "start": "Les Houches 村内，步行可达（模拟）",
+      "season": "5–10 月",
+      "url": "",
+      "lat": 45.888,
+      "lng": 6.796
+    }
+  ],
+  "hikesNote": "候选路线原本更多（例如 Mer de Glace、Aiguille du Midi 周边步道等，模拟），按评分、人数和知名度排序后只保留 7 条，覆盖简单到困难三个级别。",
+  "excluded": [
+    {
+      "name": "Montroc（模拟）",
+      "why": "与 Vallorcine 共用车站，为避免重复且名额已满（已有 7 个村镇），未单独列出。"
+    },
+    {
+      "name": "Passy（模拟）",
+      "why": "需换乘 2 次，排除。"
+    }
+  ],
+  "footer": {
+    "paragraphs": [
+      "本页全部数据均为虚构示例，用于演示「最多 7 村镇／每村最多 7 家／最多 7 条徒步路线」的新规则，以及改为纯 SVG 代码绘制地图（不依赖 Leaflet 等外部库，无需联网）后的效果。实际查询时请按 SKILL.md 的步骤重新搜索真实数据。"
+    ]
+  }
+}
+</script>
+<script>
+/* europe-town-stay-finder 住宿对比页渲染器 v1
+ * 读取页面里 <script type="application/json" id="stay-data"> 的 JSON，渲染成对比页。
+ * 预算区间、每家的最低价渠道、表格里的最低价都自动计算。
+ * 标了「html」的字段允许 <b> <a> <br> 等行内标签，其余字段按纯文本处理。
+ */
+(function () {
+  "use strict";
+  var app = document.getElementById("app") || document.body.appendChild(document.createElement("div"));
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+  function html(s) { return s == null ? "" : String(s); }
+  function num(s) {
+    if (typeof s === "number") return s;
+    var m = String(s == null ? "" : s).replace(/,/g, ".").match(/\d+(\.\d+)?/);
+    return m ? parseFloat(m[0]) : NaN;
+  }
+  function a(url, text) {
+    return url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(text) + "</a>" : esc(text);
+  }
+  function list(items) {
+    return items && items.length ? '<ul class="notes">' + items.map(function (x) { return "<li>" + html(x) + "</li>"; }).join("") + "</ul>" : "";
+  }
+  function fmt(v, cur) { return isNaN(v) ? "—" : (Math.round(v * 100) / 100) + cur; }
+
+  function isNum(v) { return typeof v === "number" && !isNaN(v); }
+
+  function render(d) {
+    var cur = (d.budget && d.budget.currency) || "€";
+    var B = d.budget ? num(d.budget.perNight) : NaN;
+    var out = [];
+
+    out.push('<div class="toolbar no-print"><button type="button" onclick="window.print()">导出 / 打印 PDF</button></div>');
+
+    // 地图用的点：住宿（村镇 + 住宿自己的坐标）、户外运动、komoot 路线
+    var mapStays = [];
+    (d.towns || []).forEach(function (t) {
+      if (isNum(t.lat) && isNum(t.lng)) mapStays.push({ lat: t.lat, lng: t.lng, core: !!t.core, label: t.name + (t.core ? "（核心小镇）" : "") });
+    });
+    (d.stays || []).forEach(function (s, i) {
+      if (!isNum(s.lat) || !isNum(s.lng)) return;
+      // 同一村镇的几家住宿坐标常常完全一样（退回村镇坐标），加一点点固定偏移避免点完全重叠
+      var dupes = (d.stays || []).filter(function (o) { return isNum(o.lat) && o.lat === s.lat && o.lng === s.lng; });
+      var j = dupes.length > 1 ? dupes.indexOf(s) : 0;
+      var jitter = j ? (j % 2 ? 1 : -1) * Math.ceil(j / 2) * 0.0009 : 0;
+      mapStays.push({ lat: s.lat + jitter, lng: s.lng + jitter, kind: "stay", label: "#" + (i + 1) + " " + s.name });
+    });
+    var mapActivities = [];
+    (d.activities || []).forEach(function (g) {
+      (g.items || []).forEach(function (it) {
+        if (isNum(it.lat) && isNum(it.lng)) mapActivities.push({ lat: it.lat, lng: it.lng, label: g.sport + "：" + it.name });
+      });
+    });
+    var mapHikes = (d.hikes || []).filter(function (h) { return isNum(h.lat) && isNum(h.lng); }).map(function (h) {
+      return { lat: h.lat, lng: h.lng, label: h.name + (h.rating ? "（" + h.rating + "★）" : "") };
+    });
+
+    // 预算区间：×0.9–1.1 预算内；×0.8–0.9 / ×1.1–1.2 浮动
+    function band(p) {
+      if (isNaN(B) || isNaN(p)) return "";
+      var r = p / B;
+      if (r >= 0.9 && r <= 1.1) return '<span class="band in">预算内</span>';
+      if (r >= 0.8 && r < 0.9) return '<span class="band float">低于预算 ' + Math.round((1 - r) * 100) + "%</span>";
+      if (r > 1.1 && r <= 1.2) return '<span class="band float">超预算 ' + Math.round((r - 1) * 100) + "%</span>";
+      if (r < 0.8) return '<span class="band">远低于预算</span>';
+      return '<span class="band">超预算 ' + Math.round((r - 1) * 100) + "%</span>";
+    }
+    // 每家住宿：最低价渠道
+    function cheapest(s) {
+      var best = null;
+      (s.prices || []).forEach(function (p) {
+        var v = num(p.perNight);
+        if (!isNaN(v) && (best === null || v < best.v)) best = { v: v, p: p };
+      });
+      return best;
+    }
+
+    // 页头
+    var eyebrow = d.eyebrow || [d.town, d.dateLabel, d.nights ? d.nights + " 晚" : "", "第 " + (d.version || 1) + " 版"].filter(Boolean).join(" · ");
+    out.push('<header><div class="eyebrow">' + esc(eyebrow) + "</div>");
+    out.push("<h1>" + esc(d.heading || (d.town + " 及周边住宿")) + "</h1>");
+    if (!isNaN(B)) {
+      out.push('<div class="budget"><span>每晚预算 <b>' + fmt(B, cur) + "</b></span><span>预算内 <b>" + fmt(B * 0.9, cur) + "–" + fmt(B * 1.1, cur) +
+        "</b></span><span>浮动区间 <b>" + fmt(B * 0.8, cur) + "–" + fmt(B * 1.2, cur) + "</b></span></div>");
+    }
+    if (d.intro) out.push('<p class="route-line">' + html(d.intro) + "</p>");
+    out.push("</header>");
+
+    // 结论
+    if (d.verdict) {
+      out.push('<div class="verdict"><h2>结论</h2>' + (d.verdict.items ? "<ul>" + d.verdict.items.map(function (x) { return "<li>" + html(x) + "</li>"; }).join("") + "</ul>" : ""));
+      (d.verdict.alerts || (d.verdict.alert ? [d.verdict.alert] : [])).forEach(function (x) { out.push('<p class="alert">' + html(x) + "</p>"); });
+      out.push("</div>");
+    }
+
+    // 公交 1 小时圈
+    var towns = d.towns || [];
+    if (towns.length) {
+      out.push('<section><h2 class="sec">' + esc(d.townsTitle || "公交 1 小时圈") + '</h2><div class="scroll"><table class="wide"><thead><tr><th>村镇</th><th>到核心小镇</th><th>换乘</th><th>班次</th><th>末班回村</th><th>单程票价</th><th>游客卡 / 城市税</th></tr></thead><tbody>');
+      towns.forEach(function (t) {
+        out.push('<tr class="' + (t.core ? "core-row" : "") + '"><td>' + esc(t.name) + (t.core ? '<span class="core-mark">核心小镇</span>' : "") + "</td>" +
+          '<td class="num">' + esc(t.core ? "—" : (t.time || "—")) + (t.mode && !t.core ? '<br><span class="small muted">' + esc(t.mode) + "</span>" : "") + "</td>" +
+          '<td class="num">' + esc(t.core ? "—" : (t.transfers == null ? "—" : t.transfers)) + "</td>" +
+          '<td style="white-space:nowrap">' + esc(t.freq || "—") + '</td><td class="num">' + esc(t.lastBack || "—") + '</td><td class="num">' + esc(t.fare || "—") + "</td>" +
+          "<td>" + html(t.guestCard || "—") + (t.cityTax ? '<br><span class="small muted">城市税 ' + esc(t.cityTax) + "</span>" : "") + "</td></tr>");
+      });
+      out.push("</tbody></table></div>");
+      if (d.townsNote) out.push('<p class="small muted" style="margin-top:8px">' + html(d.townsNote) + "</p>");
+      if (mapStays.length) {
+        out.push('<div id="map-stays" class="mapbox"></div><div class="map-legend"><span><i style="background:#c0392b"></i>核心小镇</span><span><i style="background:#2e7d4f"></i>周边村镇</span><span><i style="background:#1f5f8f"></i>推荐住宿</span></div>' +
+          '<p class="small muted" style="margin-top:6px">示意位置图，不是精确地理底图；鼠标悬停或点开看名字。</p>');
+      }
+      out.push("</section>");
+    }
+
+    // 住宿总览表
+    var stays = d.stays || [];
+    if (stays.length) {
+      var mins = stays.map(function (s) { var c = cheapest(s); return c ? c.v : NaN; });
+      var lowest = Math.min.apply(null, mins.filter(function (v) { return !isNaN(v); }));
+      out.push('<section><h2 class="sec">' + esc(d.staysTitle || "住宿总览") + '</h2><div class="scroll"><table class="wide"><thead><tr><th>#</th><th>住宿</th><th>村镇</th><th>房型</th><th>评分</th><th>到车站</th><th>每晚最低</th><th>在哪订</th></tr></thead><tbody>');
+      stays.forEach(function (s, i) {
+        var c = cheapest(s);
+        var ratings = (s.prices || []).filter(function (p) { return p.rating; }).map(function (p) { return p.channel + " " + p.rating; });
+        out.push('<tr><td class="num">' + (i + 1) + "</td><td>" + esc(s.name) + "</td><td>" + esc(s.town) + "</td><td>" + esc(s.type || "—") + '</td><td class="num">' + esc(ratings.join(" / ") || "—") +
+          "</td><td>" + esc(s.walk || "—") + '</td><td class="num' + (c && c.v === lowest ? " best" : "") + '">' + (c ? fmt(c.v, cur) : "—") + "<br>" + (c ? band(c.v) : "") +
+          "</td><td>" + (c ? esc(c.p.channel) : "—") + "</td></tr>");
+      });
+      out.push("</tbody></table></div>");
+      if (d.staysNote) out.push('<p class="small muted" style="margin-top:8px">' + html(d.staysNote) + "</p>");
+      out.push("</section>");
+
+      // 每家住宿的卡片
+      stays.forEach(function (s, i) {
+        var c = cheapest(s);
+        out.push('<section class="route" id="stay-' + (i + 1) + '"><div class="route-head"><div style="display:flex;flex-direction:column;gap:4px">' +
+          (s.tag ? '<span class="pick">' + esc(s.tag) + "</span>" : "") + "<h3>" + (i + 1) + " · " + esc(s.name) + '</h3></div><div class="total">' +
+          (c ? fmt(c.v, cur) + '<span class="small muted" style="font-family:var(--f-body);font-weight:400"> /晚</span>' : "—") + "</div></div>");
+        var meta = [["村镇", s.town], ["房型", s.type], ["到车站", s.walk], ["到核心小镇", s.toCore], ["早餐", s.breakfast], ["取消", s.cancel]]
+          .filter(function (m) { return m[1]; }).map(function (m) { return "<span>" + m[0] + " <b>" + esc(m[1]) + "</b></span>"; });
+        if (meta.length) out.push('<div class="stay-meta">' + meta.join("") + "</div>");
+        if (s.summary) out.push("<p>" + html(s.summary) + "</p>");
+        if (s.prices && s.prices.length) {
+          out.push('<div><div class="block-title">各渠道价格</div><div class="channels"><span class="h">渠道</span><span class="h num">评分</span><span class="h num">每晚 / 全程</span>');
+          s.prices.forEach(function (p) {
+            var v = num(p.perNight), isBest = c && v === c.v;
+            out.push("<span>" + a(p.url, p.channel) + (p.note ? '<br><span class="small muted">' + html(p.note) + "</span>" : "") + '</span><span class="num">' + esc(p.rating || "—") +
+              '</span><span class="num' + (isBest ? " best" : "") + '">' + fmt(v, cur) + (p.total != null ? " / " + fmt(num(p.total), cur) : "") + "</span>");
+          });
+          out.push("</div></div>");
+        }
+        out.push(list(s.notes));
+        out.push("</section>");
+      });
+    }
+
+    // 差点入选
+    if (d.nearMiss && d.nearMiss.length) {
+      out.push('<section class="excluded"><h2>差点入选</h2>' + d.nearMiss.map(function (n) {
+        return '<div class="ex"><b>' + a(n.url, n.name) + (n.town ? '<span class="muted" style="font-weight:400"> · ' + esc(n.town) + "</span>" : "") +
+          (n.price ? '<span class="muted" style="font-weight:400;font-family:var(--f-data)"> · ' + esc(n.price) + "</span>" : "") + "</b><span>" + html(n.why) + "</span></div>";
+      }).join("") + "</section>");
+    }
+
+    // 户外运动与教练/团体
+    if (d.activities && d.activities.length) {
+      out.push('<section class="panel"><h2>' + esc(d.activitiesTitle || "户外运动与教练、团体") + "</h2>");
+      d.activities.forEach(function (g) {
+        out.push('<div class="sport"><h3>' + esc(g.sport) + "</h3>" + (g.note ? '<p class="small muted">' + html(g.note) + "</p>" : ""));
+        (g.items || []).forEach(function (it) {
+          var meta = [it.where, it.level, it.price, it.season, it.lang].filter(Boolean).map(esc).join(" · ");
+          out.push('<div class="act"><span class="name">' + a(it.url, it.name) + (it.kind ? '<span class="muted" style="font-weight:400"> · ' + esc(it.kind) + "</span>" : "") + "</span>" +
+            (meta ? '<span class="meta">' + meta + "</span>" : "") + (it.how ? '<span class="meta">' + html(it.how) + "</span>" : "") + "</div>");
+        });
+        out.push("</div>");
+      });
+      if (mapActivities.length) out.push('<div id="map-activities" class="mapbox"></div><p class="small muted" style="margin-top:6px">示意位置图，不是精确地理底图；鼠标悬停或点开看名字。</p>');
+      out.push("</section>");
+    }
+
+    // komoot 徒步路线
+    if (d.hikes && d.hikes.length) {
+      var dmap = { easy: "简单", moderate: "中等", hard: "困难" };
+      out.push('<section><h2 class="sec">' + esc(d.hikesTitle || "komoot 高分徒步路线") + '</h2><div class="scroll"><table class="wide"><thead><tr><th>路线</th><th>评分（人数）</th><th>难度</th><th>距离 · 时长 · 爬升</th><th>起点和公交</th><th>季节</th></tr></thead><tbody>');
+      d.hikes.forEach(function (h) {
+        var dk = dmap[h.difficulty] ? h.difficulty : "moderate";
+        out.push("<tr><td>" + a(h.url, h.name) + (h.area ? '<br><span class="small muted">' + esc(h.area) + "</span>" : "") + "</td>" +
+          '<td class="hike-rating">' + esc(h.rating) + " <small>(" + esc(h.count) + ")</small></td>" +
+          '<td><span class="diff ' + dk + '"><i></i>' + dmap[dk] + "</span></td>" +
+          '<td class="num">' + [h.distance, h.duration, h.ascent ? "↑" + h.ascent : ""].filter(Boolean).map(esc).join(" · ") + "</td>" +
+          "<td>" + html(h.start || "—") + "</td><td>" + html(h.season || "—") + "</td></tr>");
+      });
+      out.push("</tbody></table></div>");
+      if (d.hikesNote) out.push('<p class="small muted" style="margin-top:8px">' + html(d.hikesNote) + "</p>");
+      if (mapHikes.length) out.push('<div id="map-hikes" class="mapbox"></div><p class="small muted" style="margin-top:6px">示意位置图，不是精确地理底图；鼠标悬停或点开看名字。</p>');
+      out.push("</section>");
+    }
+
+    // 排除的村镇 / 其他
+    if (d.excluded && d.excluded.length) {
+      out.push('<section class="excluded"><h2>' + esc(d.excludedTitle || "排除的村镇") + "</h2>" + d.excluded.map(function (e) {
+        return '<div class="ex"><b>' + esc(e.name) + "</b><span>" + html(e.why) + "</span></div>";
+      }).join("") + "</section>");
+    }
+
+    // 页脚
+    var f = d.footer || {};
+    out.push("<footer><p>查询时间：" + esc(d.queriedAt || "") + "。价格是查询时的快照，以平台为准。</p>");
+    (f.paragraphs || []).forEach(function (p) { out.push("<p>" + html(p) + "</p>"); });
+    if (f.links && f.links.length) {
+      out.push("<ul>" + f.links.map(function (row) {
+        return "<li>" + (Array.isArray(row) ? row : [row]).map(function (l) { return a(l.url, l.text); }).join(" · ") + "</li>";
+      }).join("") + "</ul>");
+    }
+    out.push("</footer>");
+
+    app.className = "wrap";
+    app.innerHTML = out.join("");
+    if (d.title) document.title = d.title;
+
+    buildMap("map-stays", mapStays);
+    buildMap("map-activities", mapActivities);
+    buildMap("map-hikes", mapHikes);
+  }
+
+  // 自绘的示意地图：没有任何外部依赖（不用联网、不用地图库），直接用坐标按等距投影画成 SVG。
+  // 不是精确地理底图，只表示几个点之间的相对位置、方向和大致距离，小范围（同一个山谷/小镇圈）足够看懂。
+  function buildMap(id, points) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var pts = (points || []).filter(function (p) { return isNum(p.lat) && isNum(p.lng); });
+    if (!pts.length) { el.parentNode && el.parentNode.removeChild(el); return; }
+    try {
+      var W = 640, H = 320, PAD = 36;
+      var lats = pts.map(function (p) { return p.lat; });
+      var lngs = pts.map(function (p) { return p.lng; });
+      var minLat = Math.min.apply(null, lats), maxLat = Math.max.apply(null, lats);
+      var minLng = Math.min.apply(null, lngs), maxLng = Math.max.apply(null, lngs);
+      if (maxLat - minLat < 0.002) { var cLat = (minLat + maxLat) / 2; minLat = cLat - 0.01; maxLat = cLat + 0.01; }
+      if (maxLng - minLng < 0.002) { var cLng = (minLng + maxLng) / 2; minLng = cLng - 0.01; maxLng = cLng + 0.01; }
+      var cosLat = Math.max(0.15, Math.cos((minLat + maxLat) / 2 * Math.PI / 180)); // 按纬度修正经度方向的比例，避免东西方向被拉宽
+      var spanX = (maxLng - minLng) * cosLat, spanY = maxLat - minLat;
+      var scale = Math.min((W - PAD * 2) / spanX, (H - PAD * 2) / spanY);
+      var offX = PAD + ((W - PAD * 2) - spanX * scale) / 2;
+      var offY = PAD + ((H - PAD * 2) - spanY * scale) / 2;
+      function project(lat, lng) {
+        return [offX + (lng - minLng) * cosLat * scale, offY + (maxLat - lat) * scale];
+      }
+
+      // 比例尺：挑一个让比例尺长度落在 40–110px 之间的整数公里数
+      var pxPerKm = scale / 111.32;
+      var niceKm = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500].reduce(function (best, km) {
+        var px = km * pxPerKm;
+        return (px >= 40 && px <= 110) ? km : best;
+      }, null) || Math.round(70 / pxPerKm) || 1;
+      var barPx = niceKm * pxPerKm;
+
+      var svg = [];
+      svg.push('<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">');
+      svg.push('<rect width="' + W + '" height="' + H + '" class="map-bg"></rect>');
+      for (var gx = 1; gx < 4; gx++) { var xg = (W / 4) * gx; svg.push('<line x1="' + xg + '" y1="0" x2="' + xg + '" y2="' + H + '" class="map-grid"></line>'); }
+      for (var gy = 1; gy < 3; gy++) { var yg = (H / 3) * gy; svg.push('<line x1="0" y1="' + yg + '" x2="' + W + '" y2="' + yg + '" class="map-grid"></line>'); }
+
+      // 指北针
+      svg.push('<g class="map-compass" transform="translate(' + (W - 28) + ',26)">' +
+        '<line x1="0" y1="11" x2="0" y2="-9"></line><polygon points="0,-13 -5,-3 5,-3"></polygon>' +
+        '<text y="23" text-anchor="middle">N</text></g>');
+
+      // 比例尺
+      var sx = PAD, sy = H - 16;
+      svg.push('<g class="map-scale">' +
+        '<line x1="' + sx + '" y1="' + sy + '" x2="' + (sx + barPx) + '" y2="' + sy + '"></line>' +
+        '<line x1="' + sx + '" y1="' + (sy - 4) + '" x2="' + sx + '" y2="' + (sy + 4) + '"></line>' +
+        '<line x1="' + (sx + barPx) + '" y1="' + (sy - 4) + '" x2="' + (sx + barPx) + '" y2="' + (sy + 4) + '"></line>' +
+        '<text x="' + (sx + barPx / 2) + '" y="' + (sy - 7) + '" text-anchor="middle">' + (niceKm < 1 ? niceKm : niceKm) + ' km</text></g>');
+
+      // 点和标签（示意位置，标签交替上下/贴边自动靠内，避免被裁切）
+      pts.forEach(function (p, i) {
+        var xy = project(p.lat, p.lng);
+        var x = xy[0], y = xy[1];
+        var cls = p.core ? "core" : (p.kind === "stay" ? "stay" : "");
+        var r = p.core ? 7 : 5;
+        svg.push('<g>');
+        svg.push('<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + r + '" class="map-dot ' + cls + '">' +
+          (p.label ? "<title>" + esc(p.label) + "</title>" : "") + "</circle>");
+        if (p.label) {
+          var dy = i % 2 === 0 ? -10 : 17;
+          var anchor = x > W - 90 ? "end" : (x < 90 ? "start" : "middle");
+          svg.push('<text x="' + x.toFixed(1) + '" y="' + (y + dy).toFixed(1) + '" text-anchor="' + anchor + '" class="map-label">' + esc(p.label) + "</text>");
+        }
+        svg.push("</g>");
+      });
+      svg.push("</svg>");
+      el.innerHTML = svg.join("");
+    } catch (e) {
+      el.outerHTML = '<p class="small muted">地图渲染失败：' + esc(e.message) + "</p>";
+    }
+  }
+
+  try {
+    var el = document.getElementById("stay-data");
+    if (!el) throw new Error("页面里没有找到 id=\"stay-data\" 的 JSON。");
+    render(JSON.parse(el.textContent));
+  } catch (e) {
+    app.className = "wrap";
+    app.innerHTML = '<div class="render-error">住宿页渲染失败：' + esc(e.message) + "</div>";
+  }
+})();
+
+</script>
+</body>
+</html>

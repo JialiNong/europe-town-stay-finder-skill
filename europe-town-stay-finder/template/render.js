@@ -41,7 +41,12 @@
       if (isNum(t.lat) && isNum(t.lng)) mapStays.push({ lat: t.lat, lng: t.lng, core: !!t.core, label: t.name + (t.core ? "（核心小镇）" : "") });
     });
     (d.stays || []).forEach(function (s, i) {
-      if (isNum(s.lat) && isNum(s.lng)) mapStays.push({ lat: s.lat, lng: s.lng, kind: "stay", label: "#" + (i + 1) + " " + s.name });
+      if (!isNum(s.lat) || !isNum(s.lng)) return;
+      // 同一村镇的几家住宿坐标常常完全一样（退回村镇坐标），加一点点固定偏移避免点完全重叠
+      var dupes = (d.stays || []).filter(function (o) { return isNum(o.lat) && o.lat === s.lat && o.lng === s.lng; });
+      var j = dupes.length > 1 ? dupes.indexOf(s) : 0;
+      var jitter = j ? (j % 2 ? 1 : -1) * Math.ceil(j / 2) * 0.0009 : 0;
+      mapStays.push({ lat: s.lat + jitter, lng: s.lng + jitter, kind: "stay", label: "#" + (i + 1) + " " + s.name });
     });
     var mapActivities = [];
     (d.activities || []).forEach(function (g) {
@@ -105,7 +110,8 @@
       out.push("</tbody></table></div>");
       if (d.townsNote) out.push('<p class="small muted" style="margin-top:8px">' + html(d.townsNote) + "</p>");
       if (mapStays.length) {
-        out.push('<div id="map-stays" class="mapbox"></div><div class="map-legend"><span><i style="background:#c0392b"></i>核心小镇</span><span><i style="background:#2e7d4f"></i>周边村镇</span><span><i style="background:#1f5f8f"></i>推荐住宿</span></div>');
+        out.push('<div id="map-stays" class="mapbox"></div><div class="map-legend"><span><i style="background:#c0392b"></i>核心小镇</span><span><i style="background:#2e7d4f"></i>周边村镇</span><span><i style="background:#1f5f8f"></i>推荐住宿</span></div>' +
+          '<p class="small muted" style="margin-top:6px">示意位置图，不是精确地理底图；鼠标悬停或点开看名字。</p>');
       }
       out.push("</section>");
     }
@@ -171,7 +177,7 @@
         });
         out.push("</div>");
       });
-      if (mapActivities.length) out.push('<div id="map-activities" class="mapbox"></div>');
+      if (mapActivities.length) out.push('<div id="map-activities" class="mapbox"></div><p class="small muted" style="margin-top:6px">示意位置图，不是精确地理底图；鼠标悬停或点开看名字。</p>');
       out.push("</section>");
     }
 
@@ -189,7 +195,7 @@
       });
       out.push("</tbody></table></div>");
       if (d.hikesNote) out.push('<p class="small muted" style="margin-top:8px">' + html(d.hikesNote) + "</p>");
-      if (mapHikes.length) out.push('<div id="map-hikes" class="mapbox"></div>');
+      if (mapHikes.length) out.push('<div id="map-hikes" class="mapbox"></div><p class="small muted" style="margin-top:6px">示意位置图，不是精确地理底图；鼠标悬停或点开看名字。</p>');
       out.push("</section>");
     }
 
@@ -215,35 +221,82 @@
     app.innerHTML = out.join("");
     if (d.title) document.title = d.title;
 
-    initMap("map-stays", mapStays);
-    initMap("map-activities", mapActivities);
-    initMap("map-hikes", mapHikes);
+    buildMap("map-stays", mapStays);
+    buildMap("map-activities", mapActivities);
+    buildMap("map-hikes", mapHikes);
   }
 
-  // 用 Leaflet + OpenStreetMap 画点状地图；没有 Leaflet（例如离线打开）或没有坐标数据时跳过
-  function initMap(id, points) {
+  // 自绘的示意地图：没有任何外部依赖（不用联网、不用地图库），直接用坐标按等距投影画成 SVG。
+  // 不是精确地理底图，只表示几个点之间的相对位置、方向和大致距离，小范围（同一个山谷/小镇圈）足够看懂。
+  function buildMap(id, points) {
     var el = document.getElementById(id);
     if (!el) return;
-    if (typeof L === "undefined" || !points.length) { el.parentNode && el.parentNode.removeChild(el); return; }
+    var pts = (points || []).filter(function (p) { return isNum(p.lat) && isNum(p.lng); });
+    if (!pts.length) { el.parentNode && el.parentNode.removeChild(el); return; }
     try {
-      var map = L.map(id, { scrollWheelZoom: false });
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 18,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
-      }).addTo(map);
-      var latlngs = [];
-      points.forEach(function (p) {
-        var color = p.core ? "#c0392b" : (p.kind === "stay" ? "#1f5f8f" : "#2e7d4f");
-        var marker = L.circleMarker([p.lat, p.lng], {
-          radius: p.core ? 10 : 7, color: color, weight: 2, fillColor: color, fillOpacity: 0.85
-        }).addTo(map);
-        if (p.label) marker.bindTooltip(esc(p.label), { direction: "top", offset: [0, -6] });
-        latlngs.push([p.lat, p.lng]);
+      var W = 640, H = 320, PAD = 36;
+      var lats = pts.map(function (p) { return p.lat; });
+      var lngs = pts.map(function (p) { return p.lng; });
+      var minLat = Math.min.apply(null, lats), maxLat = Math.max.apply(null, lats);
+      var minLng = Math.min.apply(null, lngs), maxLng = Math.max.apply(null, lngs);
+      if (maxLat - minLat < 0.002) { var cLat = (minLat + maxLat) / 2; minLat = cLat - 0.01; maxLat = cLat + 0.01; }
+      if (maxLng - minLng < 0.002) { var cLng = (minLng + maxLng) / 2; minLng = cLng - 0.01; maxLng = cLng + 0.01; }
+      var cosLat = Math.max(0.15, Math.cos((minLat + maxLat) / 2 * Math.PI / 180)); // 按纬度修正经度方向的比例，避免东西方向被拉宽
+      var spanX = (maxLng - minLng) * cosLat, spanY = maxLat - minLat;
+      var scale = Math.min((W - PAD * 2) / spanX, (H - PAD * 2) / spanY);
+      var offX = PAD + ((W - PAD * 2) - spanX * scale) / 2;
+      var offY = PAD + ((H - PAD * 2) - spanY * scale) / 2;
+      function project(lat, lng) {
+        return [offX + (lng - minLng) * cosLat * scale, offY + (maxLat - lat) * scale];
+      }
+
+      // 比例尺：挑一个让比例尺长度落在 40–110px 之间的整数公里数
+      var pxPerKm = scale / 111.32;
+      var niceKm = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500].reduce(function (best, km) {
+        var px = km * pxPerKm;
+        return (px >= 40 && px <= 110) ? km : best;
+      }, null) || Math.round(70 / pxPerKm) || 1;
+      var barPx = niceKm * pxPerKm;
+
+      var svg = [];
+      svg.push('<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">');
+      svg.push('<rect width="' + W + '" height="' + H + '" class="map-bg"></rect>');
+      for (var gx = 1; gx < 4; gx++) { var xg = (W / 4) * gx; svg.push('<line x1="' + xg + '" y1="0" x2="' + xg + '" y2="' + H + '" class="map-grid"></line>'); }
+      for (var gy = 1; gy < 3; gy++) { var yg = (H / 3) * gy; svg.push('<line x1="0" y1="' + yg + '" x2="' + W + '" y2="' + yg + '" class="map-grid"></line>'); }
+
+      // 指北针
+      svg.push('<g class="map-compass" transform="translate(' + (W - 28) + ',26)">' +
+        '<line x1="0" y1="11" x2="0" y2="-9"></line><polygon points="0,-13 -5,-3 5,-3"></polygon>' +
+        '<text y="23" text-anchor="middle">N</text></g>');
+
+      // 比例尺
+      var sx = PAD, sy = H - 16;
+      svg.push('<g class="map-scale">' +
+        '<line x1="' + sx + '" y1="' + sy + '" x2="' + (sx + barPx) + '" y2="' + sy + '"></line>' +
+        '<line x1="' + sx + '" y1="' + (sy - 4) + '" x2="' + sx + '" y2="' + (sy + 4) + '"></line>' +
+        '<line x1="' + (sx + barPx) + '" y1="' + (sy - 4) + '" x2="' + (sx + barPx) + '" y2="' + (sy + 4) + '"></line>' +
+        '<text x="' + (sx + barPx / 2) + '" y="' + (sy - 7) + '" text-anchor="middle">' + (niceKm < 1 ? niceKm : niceKm) + ' km</text></g>');
+
+      // 点和标签（示意位置，标签交替上下/贴边自动靠内，避免被裁切）
+      pts.forEach(function (p, i) {
+        var xy = project(p.lat, p.lng);
+        var x = xy[0], y = xy[1];
+        var cls = p.core ? "core" : (p.kind === "stay" ? "stay" : "");
+        var r = p.core ? 7 : 5;
+        svg.push('<g>');
+        svg.push('<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + r + '" class="map-dot ' + cls + '">' +
+          (p.label ? "<title>" + esc(p.label) + "</title>" : "") + "</circle>");
+        if (p.label) {
+          var dy = i % 2 === 0 ? -10 : 17;
+          var anchor = x > W - 90 ? "end" : (x < 90 ? "start" : "middle");
+          svg.push('<text x="' + x.toFixed(1) + '" y="' + (y + dy).toFixed(1) + '" text-anchor="' + anchor + '" class="map-label">' + esc(p.label) + "</text>");
+        }
+        svg.push("</g>");
       });
-      if (latlngs.length === 1) map.setView(latlngs[0], 13);
-      else map.fitBounds(L.latLngBounds(latlngs), { padding: [26, 26] });
+      svg.push("</svg>");
+      el.innerHTML = svg.join("");
     } catch (e) {
-      el.outerHTML = '<p class="small muted">地图加载失败：' + esc(e.message) + "</p>";
+      el.outerHTML = '<p class="small muted">地图渲染失败：' + esc(e.message) + "</p>";
     }
   }
 
