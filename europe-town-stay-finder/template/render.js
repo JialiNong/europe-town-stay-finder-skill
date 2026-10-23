@@ -26,10 +26,32 @@
   }
   function fmt(v, cur) { return isNaN(v) ? "—" : (Math.round(v * 100) / 100) + cur; }
 
+  function isNum(v) { return typeof v === "number" && !isNaN(v); }
+
   function render(d) {
     var cur = (d.budget && d.budget.currency) || "€";
     var B = d.budget ? num(d.budget.perNight) : NaN;
     var out = [];
+
+    out.push('<div class="toolbar no-print"><button type="button" onclick="window.print()">导出 / 打印 PDF</button></div>');
+
+    // 地图用的点：住宿（村镇 + 住宿自己的坐标）、户外运动、komoot 路线
+    var mapStays = [];
+    (d.towns || []).forEach(function (t) {
+      if (isNum(t.lat) && isNum(t.lng)) mapStays.push({ lat: t.lat, lng: t.lng, core: !!t.core, label: t.name + (t.core ? "（核心小镇）" : "") });
+    });
+    (d.stays || []).forEach(function (s, i) {
+      if (isNum(s.lat) && isNum(s.lng)) mapStays.push({ lat: s.lat, lng: s.lng, kind: "stay", label: "#" + (i + 1) + " " + s.name });
+    });
+    var mapActivities = [];
+    (d.activities || []).forEach(function (g) {
+      (g.items || []).forEach(function (it) {
+        if (isNum(it.lat) && isNum(it.lng)) mapActivities.push({ lat: it.lat, lng: it.lng, label: g.sport + "：" + it.name });
+      });
+    });
+    var mapHikes = (d.hikes || []).filter(function (h) { return isNum(h.lat) && isNum(h.lng); }).map(function (h) {
+      return { lat: h.lat, lng: h.lng, label: h.name + (h.rating ? "（" + h.rating + "★）" : "") };
+    });
 
     // 预算区间：×0.9–1.1 预算内；×0.8–0.9 / ×1.1–1.2 浮动
     function band(p) {
@@ -77,11 +99,14 @@
         out.push('<tr class="' + (t.core ? "core-row" : "") + '"><td>' + esc(t.name) + (t.core ? '<span class="core-mark">核心小镇</span>' : "") + "</td>" +
           '<td class="num">' + esc(t.core ? "—" : (t.time || "—")) + (t.mode && !t.core ? '<br><span class="small muted">' + esc(t.mode) + "</span>" : "") + "</td>" +
           '<td class="num">' + esc(t.core ? "—" : (t.transfers == null ? "—" : t.transfers)) + "</td>" +
-          "<td>" + esc(t.freq || "—") + '</td><td class="num">' + esc(t.lastBack || "—") + '</td><td class="num">' + esc(t.fare || "—") + "</td>" +
+          '<td style="white-space:nowrap">' + esc(t.freq || "—") + '</td><td class="num">' + esc(t.lastBack || "—") + '</td><td class="num">' + esc(t.fare || "—") + "</td>" +
           "<td>" + html(t.guestCard || "—") + (t.cityTax ? '<br><span class="small muted">城市税 ' + esc(t.cityTax) + "</span>" : "") + "</td></tr>");
       });
       out.push("</tbody></table></div>");
       if (d.townsNote) out.push('<p class="small muted" style="margin-top:8px">' + html(d.townsNote) + "</p>");
+      if (mapStays.length) {
+        out.push('<div id="map-stays" class="mapbox"></div><div class="map-legend"><span><i style="background:#c0392b"></i>核心小镇</span><span><i style="background:#2e7d4f"></i>周边村镇</span><span><i style="background:#1f5f8f"></i>推荐住宿</span></div>');
+      }
       out.push("</section>");
     }
 
@@ -146,6 +171,7 @@
         });
         out.push("</div>");
       });
+      if (mapActivities.length) out.push('<div id="map-activities" class="mapbox"></div>');
       out.push("</section>");
     }
 
@@ -163,6 +189,7 @@
       });
       out.push("</tbody></table></div>");
       if (d.hikesNote) out.push('<p class="small muted" style="margin-top:8px">' + html(d.hikesNote) + "</p>");
+      if (mapHikes.length) out.push('<div id="map-hikes" class="mapbox"></div>');
       out.push("</section>");
     }
 
@@ -187,6 +214,37 @@
     app.className = "wrap";
     app.innerHTML = out.join("");
     if (d.title) document.title = d.title;
+
+    initMap("map-stays", mapStays);
+    initMap("map-activities", mapActivities);
+    initMap("map-hikes", mapHikes);
+  }
+
+  // 用 Leaflet + OpenStreetMap 画点状地图；没有 Leaflet（例如离线打开）或没有坐标数据时跳过
+  function initMap(id, points) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (typeof L === "undefined" || !points.length) { el.parentNode && el.parentNode.removeChild(el); return; }
+    try {
+      var map = L.map(id, { scrollWheelZoom: false });
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+      }).addTo(map);
+      var latlngs = [];
+      points.forEach(function (p) {
+        var color = p.core ? "#c0392b" : (p.kind === "stay" ? "#1f5f8f" : "#2e7d4f");
+        var marker = L.circleMarker([p.lat, p.lng], {
+          radius: p.core ? 10 : 7, color: color, weight: 2, fillColor: color, fillOpacity: 0.85
+        }).addTo(map);
+        if (p.label) marker.bindTooltip(esc(p.label), { direction: "top", offset: [0, -6] });
+        latlngs.push([p.lat, p.lng]);
+      });
+      if (latlngs.length === 1) map.setView(latlngs[0], 13);
+      else map.fitBounds(L.latLngBounds(latlngs), { padding: [26, 26] });
+    } catch (e) {
+      el.outerHTML = '<p class="small muted">地图加载失败：' + esc(e.message) + "</p>";
+    }
   }
 
   try {

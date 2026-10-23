@@ -122,6 +122,690 @@ h2.sec{margin-bottom:10px}
 table.wide{min-width:780px}
 table.wide td:first-child{min-width:120px}
 
+/* ---- maps + print ---- */
+.toolbar{display:flex;justify-content:flex-end}
+.toolbar button{font:inherit;font-size:13px;font-weight:600;color:var(--glacier);background:var(--glacier-soft);border:none;border-radius:999px;padding:8px 18px;cursor:pointer}
+.toolbar button:hover{filter:brightness(0.94)}
+.toolbar button:active{filter:brightness(0.88)}
+.mapbox{height:320px;border-radius:10px;overflow:hidden;margin-top:12px;border:1px solid var(--line)}
+.leaflet-container{background:var(--surface);font-family:var(--f-body);font-size:13px}
+.leaflet-tooltip{font-family:var(--f-body);font-size:12px}
+.map-legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12px;color:var(--muted);margin-top:8px}
+.map-legend span{display:inline-flex;align-items:center;gap:6px}
+.map-legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+@media print{
+  .toolbar{display:none !important}
+  body{background:#fff}
+  .wrap{max-width:100%}
+  a{color:inherit}
+  section.route,.verdict,.panel,.mapbox{break-inside:avoid}
+  .leaflet-control-zoom,.leaflet-control-attribution{display:none}
+}
+
+/* ---- Leaflet 1.9.4 (vendored, MIT License, https://leafletjs.com) ---- */
+/* required styles */
+
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-tile-container,
+.leaflet-pane > svg,
+.leaflet-pane > canvas,
+.leaflet-zoom-box,
+.leaflet-image-layer,
+.leaflet-layer {
+	position: absolute;
+	left: 0;
+	top: 0;
+	}
+.leaflet-container {
+	overflow: hidden;
+	}
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	        user-select: none;
+	  -webkit-user-drag: none;
+	}
+/* Prevents IE11 from highlighting tiles in blue */
+.leaflet-tile::selection {
+	background: transparent;
+}
+/* Safari renders non-retina tile on retina better with this, but Chrome is worse */
+.leaflet-safari .leaflet-tile {
+	image-rendering: -webkit-optimize-contrast;
+	}
+/* hack that prevents hw layers "stretching" when loading new tiles */
+.leaflet-safari .leaflet-tile-container {
+	width: 1600px;
+	height: 1600px;
+	-webkit-transform-origin: 0 0;
+	}
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+	display: block;
+	}
+/* .leaflet-container svg: reset svg max-width decleration shipped in Joomla! (joomla.org) 3.x */
+/* .leaflet-container img: map is broken in FF if you have max-width: 100% on tiles */
+.leaflet-container .leaflet-overlay-pane svg {
+	max-width: none !important;
+	max-height: none !important;
+	}
+.leaflet-container .leaflet-marker-pane img,
+.leaflet-container .leaflet-shadow-pane img,
+.leaflet-container .leaflet-tile-pane img,
+.leaflet-container img.leaflet-image-layer,
+.leaflet-container .leaflet-tile {
+	max-width: none !important;
+	max-height: none !important;
+	width: auto;
+	padding: 0;
+	}
+
+.leaflet-container img.leaflet-tile {
+	/* See: https://bugs.chromium.org/p/chromium/issues/detail?id=600120 */
+	mix-blend-mode: plus-lighter;
+}
+
+.leaflet-container.leaflet-touch-zoom {
+	-ms-touch-action: pan-x pan-y;
+	touch-action: pan-x pan-y;
+	}
+.leaflet-container.leaflet-touch-drag {
+	-ms-touch-action: pinch-zoom;
+	/* Fallback for FF which doesn't support pinch-zoom */
+	touch-action: none;
+	touch-action: pinch-zoom;
+}
+.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
+	-ms-touch-action: none;
+	touch-action: none;
+}
+.leaflet-container {
+	-webkit-tap-highlight-color: transparent;
+}
+.leaflet-container a {
+	-webkit-tap-highlight-color: rgba(51, 181, 229, 0.4);
+}
+.leaflet-tile {
+	filter: inherit;
+	visibility: hidden;
+	}
+.leaflet-tile-loaded {
+	visibility: inherit;
+	}
+.leaflet-zoom-box {
+	width: 0;
+	height: 0;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+	z-index: 800;
+	}
+/* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */
+.leaflet-overlay-pane svg {
+	-moz-user-select: none;
+	}
+
+.leaflet-pane         { z-index: 400; }
+
+.leaflet-tile-pane    { z-index: 200; }
+.leaflet-overlay-pane { z-index: 400; }
+.leaflet-shadow-pane  { z-index: 500; }
+.leaflet-marker-pane  { z-index: 600; }
+.leaflet-tooltip-pane   { z-index: 650; }
+.leaflet-popup-pane   { z-index: 700; }
+
+.leaflet-map-pane canvas { z-index: 100; }
+.leaflet-map-pane svg    { z-index: 200; }
+
+.leaflet-vml-shape {
+	width: 1px;
+	height: 1px;
+	}
+.lvml {
+	behavior: url(#default#VML);
+	display: inline-block;
+	position: absolute;
+	}
+
+
+/* control positioning */
+
+.leaflet-control {
+	position: relative;
+	z-index: 800;
+	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
+	pointer-events: auto;
+	}
+.leaflet-top,
+.leaflet-bottom {
+	position: absolute;
+	z-index: 1000;
+	pointer-events: none;
+	}
+.leaflet-top {
+	top: 0;
+	}
+.leaflet-right {
+	right: 0;
+	}
+.leaflet-bottom {
+	bottom: 0;
+	}
+.leaflet-left {
+	left: 0;
+	}
+.leaflet-control {
+	float: left;
+	clear: both;
+	}
+.leaflet-right .leaflet-control {
+	float: right;
+	}
+.leaflet-top .leaflet-control {
+	margin-top: 10px;
+	}
+.leaflet-bottom .leaflet-control {
+	margin-bottom: 10px;
+	}
+.leaflet-left .leaflet-control {
+	margin-left: 10px;
+	}
+.leaflet-right .leaflet-control {
+	margin-right: 10px;
+	}
+
+
+/* zoom and fade animations */
+
+.leaflet-fade-anim .leaflet-popup {
+	opacity: 0;
+	-webkit-transition: opacity 0.2s linear;
+	   -moz-transition: opacity 0.2s linear;
+	        transition: opacity 0.2s linear;
+	}
+.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {
+	opacity: 1;
+	}
+.leaflet-zoom-animated {
+	-webkit-transform-origin: 0 0;
+	    -ms-transform-origin: 0 0;
+	        transform-origin: 0 0;
+	}
+svg.leaflet-zoom-animated {
+	will-change: transform;
+}
+
+.leaflet-zoom-anim .leaflet-zoom-animated {
+	-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);
+	   -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1);
+	        transition:         transform 0.25s cubic-bezier(0,0,0.25,1);
+	}
+.leaflet-zoom-anim .leaflet-tile,
+.leaflet-pan-anim .leaflet-tile {
+	-webkit-transition: none;
+	   -moz-transition: none;
+	        transition: none;
+	}
+
+.leaflet-zoom-anim .leaflet-zoom-hide {
+	visibility: hidden;
+	}
+
+
+/* cursors */
+
+.leaflet-interactive {
+	cursor: pointer;
+	}
+.leaflet-grab {
+	cursor: -webkit-grab;
+	cursor:    -moz-grab;
+	cursor:         grab;
+	}
+.leaflet-crosshair,
+.leaflet-crosshair .leaflet-interactive {
+	cursor: crosshair;
+	}
+.leaflet-popup-pane,
+.leaflet-control {
+	cursor: auto;
+	}
+.leaflet-dragging .leaflet-grab,
+.leaflet-dragging .leaflet-grab .leaflet-interactive,
+.leaflet-dragging .leaflet-marker-draggable {
+	cursor: move;
+	cursor: -webkit-grabbing;
+	cursor:    -moz-grabbing;
+	cursor:         grabbing;
+	}
+
+/* marker & overlays interactivity */
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-image-layer,
+.leaflet-pane > svg path,
+.leaflet-tile-container {
+	pointer-events: none;
+	}
+
+.leaflet-marker-icon.leaflet-interactive,
+.leaflet-image-layer.leaflet-interactive,
+.leaflet-pane > svg path.leaflet-interactive,
+svg.leaflet-image-layer.leaflet-interactive path {
+	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
+	pointer-events: auto;
+	}
+
+/* visual tweaks */
+
+.leaflet-container {
+	background: #ddd;
+	outline-offset: 1px;
+	}
+.leaflet-container a {
+	color: #0078A8;
+	}
+.leaflet-zoom-box {
+	border: 2px dotted #38f;
+	background: rgba(255,255,255,0.5);
+	}
+
+
+/* general typography */
+.leaflet-container {
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-size: 0.75rem;
+	line-height: 1.5;
+	}
+
+
+/* general toolbar styles */
+
+.leaflet-bar {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+	border-radius: 4px;
+	}
+.leaflet-bar a {
+	background-color: #fff;
+	border-bottom: 1px solid #ccc;
+	width: 26px;
+	height: 26px;
+	line-height: 26px;
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	color: black;
+	}
+.leaflet-bar a,
+.leaflet-control-layers-toggle {
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	}
+.leaflet-bar a:hover,
+.leaflet-bar a:focus {
+	background-color: #f4f4f4;
+	}
+.leaflet-bar a:first-child {
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	}
+.leaflet-bar a:last-child {
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom: none;
+	}
+.leaflet-bar a.leaflet-disabled {
+	cursor: default;
+	background-color: #f4f4f4;
+	color: #bbb;
+	}
+
+.leaflet-touch .leaflet-bar a {
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	}
+.leaflet-touch .leaflet-bar a:first-child {
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	}
+.leaflet-touch .leaflet-bar a:last-child {
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+	}
+
+/* zoom control */
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+	font: bold 18px 'Lucida Console', Monaco, monospace;
+	text-indent: 1px;
+	}
+
+.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {
+	font-size: 22px;
+	}
+
+
+/* layers control */
+
+.leaflet-control-layers {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+	background: #fff;
+	border-radius: 5px;
+	}
+.leaflet-control-layers-toggle {
+	background-image: url(images/layers.png);
+	width: 36px;
+	height: 36px;
+	}
+.leaflet-retina .leaflet-control-layers-toggle {
+	background-image: url(images/layers-2x.png);
+	background-size: 26px 26px;
+	}
+.leaflet-touch .leaflet-control-layers-toggle {
+	width: 44px;
+	height: 44px;
+	}
+.leaflet-control-layers .leaflet-control-layers-list,
+.leaflet-control-layers-expanded .leaflet-control-layers-toggle {
+	display: none;
+	}
+.leaflet-control-layers-expanded .leaflet-control-layers-list {
+	display: block;
+	position: relative;
+	}
+.leaflet-control-layers-expanded {
+	padding: 6px 10px 6px 6px;
+	color: #333;
+	background: #fff;
+	}
+.leaflet-control-layers-scrollbar {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding-right: 5px;
+	}
+.leaflet-control-layers-selector {
+	margin-top: 2px;
+	position: relative;
+	top: 1px;
+	}
+.leaflet-control-layers label {
+	display: block;
+	font-size: 13px;
+	font-size: 1.08333em;
+	}
+.leaflet-control-layers-separator {
+	height: 0;
+	border-top: 1px solid #ddd;
+	margin: 5px -10px 5px -6px;
+	}
+
+/* Default icon URLs */
+.leaflet-default-icon-path { /* used only in path-guessing heuristic, see L.Icon.Default */
+	background-image: url(images/marker-icon.png);
+	}
+
+
+/* attribution and scale controls */
+
+.leaflet-container .leaflet-control-attribution {
+	background: #fff;
+	background: rgba(255, 255, 255, 0.8);
+	margin: 0;
+	}
+.leaflet-control-attribution,
+.leaflet-control-scale-line {
+	padding: 0 5px;
+	color: #333;
+	line-height: 1.4;
+	}
+.leaflet-control-attribution a {
+	text-decoration: none;
+	}
+.leaflet-control-attribution a:hover,
+.leaflet-control-attribution a:focus {
+	text-decoration: underline;
+	}
+.leaflet-attribution-flag {
+	display: inline !important;
+	vertical-align: baseline !important;
+	width: 1em;
+	height: 0.6669em;
+	}
+.leaflet-left .leaflet-control-scale {
+	margin-left: 5px;
+	}
+.leaflet-bottom .leaflet-control-scale {
+	margin-bottom: 5px;
+	}
+.leaflet-control-scale-line {
+	border: 2px solid #777;
+	border-top: none;
+	line-height: 1.1;
+	padding: 2px 5px 1px;
+	white-space: nowrap;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+	background: rgba(255, 255, 255, 0.8);
+	text-shadow: 1px 1px #fff;
+	}
+.leaflet-control-scale-line:not(:first-child) {
+	border-top: 2px solid #777;
+	border-bottom: none;
+	margin-top: -2px;
+	}
+.leaflet-control-scale-line:not(:first-child):not(:last-child) {
+	border-bottom: 2px solid #777;
+	}
+
+.leaflet-touch .leaflet-control-attribution,
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+	box-shadow: none;
+	}
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+	border: 2px solid rgba(0,0,0,0.2);
+	background-clip: padding-box;
+	}
+
+
+/* popup */
+
+.leaflet-popup {
+	position: absolute;
+	text-align: center;
+	margin-bottom: 20px;
+	}
+.leaflet-popup-content-wrapper {
+	padding: 1px;
+	text-align: left;
+	border-radius: 12px;
+	}
+.leaflet-popup-content {
+	margin: 13px 24px 13px 20px;
+	line-height: 1.3;
+	font-size: 13px;
+	font-size: 1.08333em;
+	min-height: 1px;
+	}
+.leaflet-popup-content p {
+	margin: 17px 0;
+	margin: 1.3em 0;
+	}
+.leaflet-popup-tip-container {
+	width: 40px;
+	height: 20px;
+	position: absolute;
+	left: 50%;
+	margin-top: -1px;
+	margin-left: -20px;
+	overflow: hidden;
+	pointer-events: none;
+	}
+.leaflet-popup-tip {
+	width: 17px;
+	height: 17px;
+	padding: 1px;
+
+	margin: -10px auto 0;
+	pointer-events: auto;
+
+	-webkit-transform: rotate(45deg);
+	   -moz-transform: rotate(45deg);
+	    -ms-transform: rotate(45deg);
+	        transform: rotate(45deg);
+	}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+	background: white;
+	color: #333;
+	box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+	}
+.leaflet-container a.leaflet-popup-close-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: none;
+	text-align: center;
+	width: 24px;
+	height: 24px;
+	font: 16px/24px Tahoma, Verdana, sans-serif;
+	color: #757575;
+	text-decoration: none;
+	background: transparent;
+	}
+.leaflet-container a.leaflet-popup-close-button:hover,
+.leaflet-container a.leaflet-popup-close-button:focus {
+	color: #585858;
+	}
+.leaflet-popup-scrolled {
+	overflow: auto;
+	}
+
+.leaflet-oldie .leaflet-popup-content-wrapper {
+	-ms-zoom: 1;
+	}
+.leaflet-oldie .leaflet-popup-tip {
+	width: 24px;
+	margin: 0 auto;
+
+	-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)";
+	filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678);
+	}
+
+.leaflet-oldie .leaflet-control-zoom,
+.leaflet-oldie .leaflet-control-layers,
+.leaflet-oldie .leaflet-popup-content-wrapper,
+.leaflet-oldie .leaflet-popup-tip {
+	border: 1px solid #999;
+	}
+
+
+/* div icon */
+
+.leaflet-div-icon {
+	background: #fff;
+	border: 1px solid #666;
+	}
+
+
+/* Tooltip */
+/* Base styles for the element that has a tooltip */
+.leaflet-tooltip {
+	position: absolute;
+	padding: 6px;
+	background-color: #fff;
+	border: 1px solid #fff;
+	border-radius: 3px;
+	color: #222;
+	white-space: nowrap;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	pointer-events: none;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+	}
+.leaflet-tooltip.leaflet-interactive {
+	cursor: pointer;
+	pointer-events: auto;
+	}
+.leaflet-tooltip-top:before,
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+	position: absolute;
+	pointer-events: none;
+	border: 6px solid transparent;
+	background: transparent;
+	content: "";
+	}
+
+/* Directions */
+
+.leaflet-tooltip-bottom {
+	margin-top: 6px;
+}
+.leaflet-tooltip-top {
+	margin-top: -6px;
+}
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-top:before {
+	left: 50%;
+	margin-left: -6px;
+	}
+.leaflet-tooltip-top:before {
+	bottom: 0;
+	margin-bottom: -12px;
+	border-top-color: #fff;
+	}
+.leaflet-tooltip-bottom:before {
+	top: 0;
+	margin-top: -12px;
+	margin-left: -6px;
+	border-bottom-color: #fff;
+	}
+.leaflet-tooltip-left {
+	margin-left: -6px;
+}
+.leaflet-tooltip-right {
+	margin-left: 6px;
+}
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+	top: 50%;
+	margin-top: -6px;
+	}
+.leaflet-tooltip-left:before {
+	right: 0;
+	margin-right: -12px;
+	border-left-color: #fff;
+	}
+.leaflet-tooltip-right:before {
+	left: 0;
+	margin-left: -12px;
+	border-right-color: #fff;
+	}
+
+/* Printing */
+
+@media print {
+	/* Prevent printers from removing background-images of controls. */
+	.leaflet-control {
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+		}
+	}
+
 </style>
 </head>
 <body>
@@ -129,7 +813,7 @@ table.wide td:first-child{min-width:120px}
 <script type="application/json" id="stay-data">
 {
   "title": "Garmisch 周边住宿",
-  "version": 1,
+  "version": 2,
   "town": "Garmisch-Partenkirchen",
   "heading": "Garmisch 及周边住宿",
   "dateLabel": "2027 年 1 月 15–18 日（周五–周一）",
@@ -158,7 +842,9 @@ table.wide td:first-child{min-width:120px}
       "name": "Garmisch-Partenkirchen",
       "core": true,
       "guestCard": "电子游客卡：当地公交免费",
-      "cityTax": "3€/天"
+      "cityTax": "3€/天",
+      "lat": 47.4919,
+      "lng": 11.0958
     },
     {
       "name": "Farchant",
@@ -167,7 +853,9 @@ table.wide td:first-child{min-width:120px}
       "transfers": 0,
       "freq": "约每小时 1 班",
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）"
+      "fare": "0€（D-Ticket）",
+      "lat": 47.5186,
+      "lng": 11.1068
     },
     {
       "name": "Oberau",
@@ -176,7 +864,9 @@ table.wide td:first-child{min-width:120px}
       "transfers": 0,
       "freq": "约每小时 1 班",
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）"
+      "fare": "0€（D-Ticket）",
+      "lat": 47.5538,
+      "lng": 11.1543
     },
     {
       "name": "Grainau（Untergrainau）",
@@ -187,7 +877,9 @@ table.wide td:first-child{min-width:120px}
       "lastBack": "20:04",
       "fare": "游客卡免费",
       "guestCard": "GaPa–Grainau–Eibsee 公交和齿轨火车免费",
-      "cityTax": "3.50€/天"
+      "cityTax": "3.50€/天",
+      "lat": 47.4733,
+      "lng": 10.9736
     },
     {
       "name": "Eschenlohe",
@@ -196,7 +888,9 @@ table.wide td:first-child{min-width:120px}
       "transfers": 0,
       "freq": "约每小时 1 班",
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）"
+      "fare": "0€（D-Ticket）",
+      "lat": 47.5908,
+      "lng": 11.2503
     },
     {
       "name": "Klais（Krün）",
@@ -206,7 +900,9 @@ table.wide td:first-child{min-width:120px}
       "freq": "1–2 小时 1 班",
       "lastBack": "00:02",
       "fare": "0€（D-Ticket）",
-      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费"
+      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费",
+      "lat": 47.4997,
+      "lng": 11.2439
     },
     {
       "name": "Mittenwald",
@@ -216,7 +912,9 @@ table.wide td:first-child{min-width:120px}
       "freq": "1–2 小时 1 班",
       "lastBack": "00:02",
       "fare": "0€（D-Ticket）",
-      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费"
+      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费",
+      "lat": 47.4419,
+      "lng": 11.2614
     },
     {
       "name": "Murnau",
@@ -225,7 +923,9 @@ table.wide td:first-child{min-width:120px}
       "transfers": 0,
       "freq": "约每小时 1 班",
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）"
+      "fare": "0€（D-Ticket）",
+      "lat": 47.6872,
+      "lng": 11.2017
     },
     {
       "name": "Ehrwald（奥地利）",
@@ -234,7 +934,9 @@ table.wide td:first-child{min-width:120px}
       "transfers": 0,
       "freq": "1–2 小时 1 班",
       "lastBack": "20:04",
-      "fare": "0€（D-Ticket 在这段有效）"
+      "fare": "0€（D-Ticket 在这段有效）",
+      "lat": 47.4019,
+      "lng": 10.9314
     },
     {
       "name": "Uffing",
@@ -243,7 +945,9 @@ table.wide td:first-child{min-width:120px}
       "transfers": 0,
       "freq": "约每小时 1 班",
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）"
+      "fare": "0€（D-Ticket）",
+      "lat": 47.6967,
+      "lng": 11.1667
     },
     {
       "name": "Lermoos（奥地利）",
@@ -252,7 +956,9 @@ table.wide td:first-child{min-width:120px}
       "transfers": 0,
       "freq": "1–2 小时 1 班",
       "lastBack": "20:04",
-      "fare": "0€（D-Ticket 在这段有效）"
+      "fare": "0€（D-Ticket 在这段有效）",
+      "lat": 47.4046,
+      "lng": 10.8747
     },
     {
       "name": "Wallgau",
@@ -262,7 +968,9 @@ table.wide td:first-child{min-width:120px}
       "freq": "约每小时 1 班",
       "lastBack": "20:35（328 路，53 分钟）",
       "fare": "0€（D-Ticket）",
-      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费"
+      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费",
+      "lat": 47.5181,
+      "lng": 11.2881
     },
     {
       "name": "Oberammergau",
@@ -271,10 +979,12 @@ table.wide td:first-child{min-width:120px}
       "transfers": 0,
       "freq": "约每小时 1 班",
       "lastBack": "未查",
-      "fare": "0€（D-Ticket）"
+      "fare": "0€（D-Ticket）",
+      "lat": 47.5986,
+      "lng": 11.0658
     }
   ],
-  "townsNote": "火车时刻来自 ÖBB 时刻表（含 DB 数据，已有 2027 年 1 月的班次）；公交时刻来自 Google 地图，页面提示「时刻表可能不是最新」，出发前到 RVO 或 DB 核实。班次频率是按白天几个时段抽查的大概值。",
+  "townsNote": "火车时刻来自 ÖBB 时刻表（含 DB 数据，已有 2027 年 1 月的班次）；公交时刻来自 Google 地图，页面提示「时刻表可能不是最新」，出发前到 RVO 或 DB 核实。班次频率是按白天几个时段抽查的大概值。地图上的村镇和住宿坐标是村镇中心/大致位置，不是每家房源的精确门牌，预订前以 Booking/Airbnb 页面上的地图为准。",
   "stays": [
     {
       "name": "Double room, quiet, central Murnau",
@@ -298,7 +1008,9 @@ table.wide td:first-child{min-width:120px}
       ],
       "notes": [
         "同一位房东同价还有 <a href=\"https://www.airbnb.com/rooms/16659723\" target=\"_blank\" rel=\"noopener\">一间单人间<\/a>（4.9，126 条评价）。"
-      ]
+      ],
+      "lat": 47.6872,
+      "lng": 11.2017
     },
     {
       "name": "Private room with garden in Murnau",
@@ -318,7 +1030,9 @@ table.wide td:first-child{min-width:120px}
           "url": "https://www.airbnb.com/rooms/1477551",
           "note": "已含所有费用"
         }
-      ]
+      ],
+      "lat": 47.688,
+      "lng": 11.2005
     },
     {
       "name": "Kranzbach vacation home",
@@ -339,7 +1053,9 @@ table.wide td:first-child{min-width:120px}
           "url": "https://www.airbnb.com/rooms/1495678204999021640",
           "note": "城市税另付"
         }
-      ]
+      ],
+      "lat": 47.4997,
+      "lng": 11.2439
     },
     {
       "name": "Appartement im Hasental",
@@ -360,7 +1076,9 @@ table.wide td:first-child{min-width:120px}
           "url": "https://www.booking.com/hotel/de/schones-1-zimmer-appartement-mit-terrasse.html",
           "note": "公开价，登录 Genius 后可能更低"
         }
-      ]
+      ],
+      "lat": 47.4855,
+      "lng": 11.0781
     },
     {
       "name": "griabighoch2 – Room for two",
@@ -380,7 +1098,9 @@ table.wide td:first-child{min-width:120px}
           "url": "https://www.airbnb.com/rooms/1389298012446120601",
           "note": "已含所有费用"
         }
-      ]
+      ],
+      "lat": 47.5181,
+      "lng": 11.2881
     }
   ],
   "staysNote": "3 晚总价 ÷ 3 = 每晚价格。Airbnb 价格已含清洁费和服务费；Booking 价格写着「含税费」，但城市税通常到店另交。",
@@ -418,7 +1138,9 @@ table.wide td:first-child{min-width:120px}
           "where": "Garmisch",
           "price": "约 46€/天起（3 小时）",
           "how": "CheckYeti 4.9（127 条评价）",
-          "url": "https://www.checkyeti.com/de/d/231/1112"
+          "url": "https://www.checkyeti.com/de/d/231/1112",
+          "lat": 47.486,
+          "lng": 11.0793
         },
         {
           "name": "Skischule Zugspitze-Grainau",
@@ -427,14 +1149,18 @@ table.wide td:first-child{min-width:120px}
           "price": "约 51€/天起（3 小时）",
           "lang": "私教有德语、英语",
           "how": "CheckYeti 5.0（44 条评价）",
-          "url": "https://www.checkyeti.com/de/d/231/1112"
+          "url": "https://www.checkyeti.com/de/d/231/1112",
+          "lat": 47.486,
+          "lng": 11.0793
         },
         {
           "name": "Skischule Garmisch-Partenkirchen",
           "kind": "团体课 / 私教",
           "where": "Hausberg 4b（Hausbergbahn 旁）",
           "how": "开了 75 年的老牌滑雪学校；Google 4.6（751 条）",
-          "url": "https://www.skischule-gap.de"
+          "url": "https://www.skischule-gap.de",
+          "lat": 47.4858,
+          "lng": 11.079
         }
       ]
     },
@@ -516,13 +1242,17 @@ table.wide td:first-child{min-width:120px}
           "where": "Hausberg 5",
           "season": "周一–五 10–22 点，周末 10–20 点",
           "how": "Google 4.4（96 条）",
-          "url": "https://boulderhalle-gapa.de"
+          "url": "https://boulderhalle-gapa.de",
+          "lat": 47.4858,
+          "lng": 11.079
         },
         {
           "name": "Kletterhalle Ehrwald",
           "kind": "攀岩馆，有课程",
           "where": "Ehrwald（RB 25 分钟）",
-          "url": "https://zugspitzarena.com"
+          "url": "https://zugspitzarena.com",
+          "lat": 47.4019,
+          "lng": 10.9314
         }
       ]
     },
@@ -575,7 +1305,9 @@ table.wide td:first-child{min-width:120px}
       "ascent": "84 m",
       "start": "环线，起点在 Eibsee 站（齿轨火车 / 公交，凭 Grainau 游客卡免费）",
       "season": "冬季环湖路一般能走，可能结冰，带简易冰爪",
-      "url": "https://www.komoot.com/smarttour/e1805113668/eibsee-loop-trail"
+      "url": "https://www.komoot.com/smarttour/e1805113668/eibsee-loop-trail",
+      "lat": 47.4664,
+      "lng": 10.9664
     },
     {
       "name": "Partnach Gorge and Graseck Loop Trail",
@@ -588,7 +1320,9 @@ table.wide td:first-child{min-width:120px}
       "ascent": "190 m",
       "start": "环线，起点在 Olympia 滑雪场，从 Garmisch 站坐当地公交或步行",
       "season": "峡谷全年开放（10–5 月 8:00–18:00），冬天有冰挂；峡谷后往 Vordergraseck 的路施工封闭到 2026-11-20",
-      "url": "https://www.komoot.com/smarttour/e1800818328/partnach-gorge-and-graseck-loop-trail"
+      "url": "https://www.komoot.com/smarttour/e1800818328/partnach-gorge-and-graseck-loop-trail",
+      "lat": 47.4769,
+      "lng": 11.0889
     },
     {
       "name": "The Isar Nature Adventure Trail near Krün",
@@ -601,7 +1335,9 @@ table.wide td:first-child{min-width:120px}
       "ascent": "91 m",
       "start": "Krün，坐去 Wallgau 的 329 路公交",
       "season": "低海拔，冬天可走，有雪时更慢",
-      "url": "https://www.komoot.com/smarttour/e343831333/the-isar-nature-adventure-trail-near-kruen-alpenwelt-karwendel"
+      "url": "https://www.komoot.com/smarttour/e343831333/the-isar-nature-adventure-trail-near-kruen-alpenwelt-karwendel",
+      "lat": 47.4908,
+      "lng": 11.2567
     },
     {
       "name": "Three Lakes Hike from Krün",
@@ -614,7 +1350,9 @@ table.wide td:first-child{min-width:120px}
       "ascent": "145 m",
       "start": "Krün，坐 329 路公交；住 Klais 的话离几个湖更近",
       "season": "低海拔，冬天可走",
-      "url": "https://www.komoot.com/smarttour/e45205244/three-lakes-hike-from-kruen"
+      "url": "https://www.komoot.com/smarttour/e45205244/three-lakes-hike-from-kruen",
+      "lat": 47.4908,
+      "lng": 11.2567
     },
     {
       "name": "Große Ammer Loop",
@@ -640,7 +1378,9 @@ table.wide td:first-child{min-width:120px}
       "ascent": "625 m",
       "start": "Hammersbach（齿轨火车站）",
       "season": "<b>冬季关闭<\/b>，桥会拆掉，约 5 月底重开。夏天再来时的首选",
-      "url": "https://www.komoot.com/smarttour/e1805146480/durch-die-hoellentalklamm-zur-hoellentalangerhuette-und-zurueck"
+      "url": "https://www.komoot.com/smarttour/e1805146480/durch-die-hoellentalklamm-zur-hoellentalangerhuette-und-zurueck",
+      "lat": 47.4604,
+      "lng": 10.989
     }
   ],
   "hikesNote": "来自 komoot「Garmisch-Partenkirchen 县最受欢迎的徒步路线」。同一页上评分很高的 Leutascher Geisterklamm（4.7，1,843 条）冬季整段封闭；Kofel、Notkarspitze 是需要高山经验的困难路线，1 月不推荐，所以都没列。",
@@ -686,6 +1426,7 @@ table.wide td:first-child{min-width:120px}
   }
 }
 </script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 /* europe-town-stay-finder 住宿对比页渲染器 v1
  * 读取页面里 <script type="application/json" id="stay-data"> 的 JSON，渲染成对比页。
@@ -715,10 +1456,32 @@ table.wide td:first-child{min-width:120px}
   }
   function fmt(v, cur) { return isNaN(v) ? "—" : (Math.round(v * 100) / 100) + cur; }
 
+  function isNum(v) { return typeof v === "number" && !isNaN(v); }
+
   function render(d) {
     var cur = (d.budget && d.budget.currency) || "€";
     var B = d.budget ? num(d.budget.perNight) : NaN;
     var out = [];
+
+    out.push('<div class="toolbar no-print"><button type="button" onclick="window.print()">导出 / 打印 PDF</button></div>');
+
+    // 地图用的点：住宿（村镇 + 住宿自己的坐标）、户外运动、komoot 路线
+    var mapStays = [];
+    (d.towns || []).forEach(function (t) {
+      if (isNum(t.lat) && isNum(t.lng)) mapStays.push({ lat: t.lat, lng: t.lng, core: !!t.core, label: t.name + (t.core ? "（核心小镇）" : "") });
+    });
+    (d.stays || []).forEach(function (s, i) {
+      if (isNum(s.lat) && isNum(s.lng)) mapStays.push({ lat: s.lat, lng: s.lng, kind: "stay", label: "#" + (i + 1) + " " + s.name });
+    });
+    var mapActivities = [];
+    (d.activities || []).forEach(function (g) {
+      (g.items || []).forEach(function (it) {
+        if (isNum(it.lat) && isNum(it.lng)) mapActivities.push({ lat: it.lat, lng: it.lng, label: g.sport + "：" + it.name });
+      });
+    });
+    var mapHikes = (d.hikes || []).filter(function (h) { return isNum(h.lat) && isNum(h.lng); }).map(function (h) {
+      return { lat: h.lat, lng: h.lng, label: h.name + (h.rating ? "（" + h.rating + "★）" : "") };
+    });
 
     // 预算区间：×0.9–1.1 预算内；×0.8–0.9 / ×1.1–1.2 浮动
     function band(p) {
@@ -766,11 +1529,14 @@ table.wide td:first-child{min-width:120px}
         out.push('<tr class="' + (t.core ? "core-row" : "") + '"><td>' + esc(t.name) + (t.core ? '<span class="core-mark">核心小镇</span>' : "") + "</td>" +
           '<td class="num">' + esc(t.core ? "—" : (t.time || "—")) + (t.mode && !t.core ? '<br><span class="small muted">' + esc(t.mode) + "</span>" : "") + "</td>" +
           '<td class="num">' + esc(t.core ? "—" : (t.transfers == null ? "—" : t.transfers)) + "</td>" +
-          "<td>" + esc(t.freq || "—") + '</td><td class="num">' + esc(t.lastBack || "—") + '</td><td class="num">' + esc(t.fare || "—") + "</td>" +
+          '<td style="white-space:nowrap">' + esc(t.freq || "—") + '</td><td class="num">' + esc(t.lastBack || "—") + '</td><td class="num">' + esc(t.fare || "—") + "</td>" +
           "<td>" + html(t.guestCard || "—") + (t.cityTax ? '<br><span class="small muted">城市税 ' + esc(t.cityTax) + "</span>" : "") + "</td></tr>");
       });
       out.push("</tbody></table></div>");
       if (d.townsNote) out.push('<p class="small muted" style="margin-top:8px">' + html(d.townsNote) + "</p>");
+      if (mapStays.length) {
+        out.push('<div id="map-stays" class="mapbox"></div><div class="map-legend"><span><i style="background:#c0392b"></i>核心小镇</span><span><i style="background:#2e7d4f"></i>周边村镇</span><span><i style="background:#1f5f8f"></i>推荐住宿</span></div>');
+      }
       out.push("</section>");
     }
 
@@ -835,6 +1601,7 @@ table.wide td:first-child{min-width:120px}
         });
         out.push("</div>");
       });
+      if (mapActivities.length) out.push('<div id="map-activities" class="mapbox"></div>');
       out.push("</section>");
     }
 
@@ -852,6 +1619,7 @@ table.wide td:first-child{min-width:120px}
       });
       out.push("</tbody></table></div>");
       if (d.hikesNote) out.push('<p class="small muted" style="margin-top:8px">' + html(d.hikesNote) + "</p>");
+      if (mapHikes.length) out.push('<div id="map-hikes" class="mapbox"></div>');
       out.push("</section>");
     }
 
@@ -876,6 +1644,37 @@ table.wide td:first-child{min-width:120px}
     app.className = "wrap";
     app.innerHTML = out.join("");
     if (d.title) document.title = d.title;
+
+    initMap("map-stays", mapStays);
+    initMap("map-activities", mapActivities);
+    initMap("map-hikes", mapHikes);
+  }
+
+  // 用 Leaflet + OpenStreetMap 画点状地图；没有 Leaflet（例如离线打开）或没有坐标数据时跳过
+  function initMap(id, points) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (typeof L === "undefined" || !points.length) { el.parentNode && el.parentNode.removeChild(el); return; }
+    try {
+      var map = L.map(id, { scrollWheelZoom: false });
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+      }).addTo(map);
+      var latlngs = [];
+      points.forEach(function (p) {
+        var color = p.core ? "#c0392b" : (p.kind === "stay" ? "#1f5f8f" : "#2e7d4f");
+        var marker = L.circleMarker([p.lat, p.lng], {
+          radius: p.core ? 10 : 7, color: color, weight: 2, fillColor: color, fillOpacity: 0.85
+        }).addTo(map);
+        if (p.label) marker.bindTooltip(esc(p.label), { direction: "top", offset: [0, -6] });
+        latlngs.push([p.lat, p.lng]);
+      });
+      if (latlngs.length === 1) map.setView(latlngs[0], 13);
+      else map.fitBounds(L.latLngBounds(latlngs), { padding: [26, 26] });
+    } catch (e) {
+      el.outerHTML = '<p class="small muted">地图加载失败：' + esc(e.message) + "</p>";
+    }
   }
 
   try {

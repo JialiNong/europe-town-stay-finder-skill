@@ -1,6 +1,6 @@
 {
   "title": "Garmisch 周边住宿",
-  "version": 1,
+  "version": 2,
   "town": "Garmisch-Partenkirchen",
   "heading": "Garmisch 及周边住宿",
   "dateLabel": "2027 年 1 月 15–18 日（周五–周一）",
@@ -29,7 +29,9 @@
       "name": "Garmisch-Partenkirchen",
       "core": true,
       "guestCard": "电子游客卡：当地公交免费",
-      "cityTax": "3€/天"
+      "cityTax": "3€/天",
+      "lat": 47.4919,
+      "lng": 11.0958
     },
     {
       "name": "Farchant",
@@ -38,7 +40,9 @@
       "transfers": 0,
       "freq": "约每小时 1 班",
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）"
+      "fare": "0€（D-Ticket）",
+      "lat": 47.5186,
+      "lng": 11.1068
     },
     {
       "name": "Oberau",
@@ -47,7 +51,9 @@
       "transfers": 0,
       "freq": "约每小时 1 班",
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）"
+      "fare": "0€（D-Ticket）",
+      "lat": 47.5538,
+      "lng": 11.1543
     },
     {
       "name": "Grainau（Untergrainau）",
@@ -58,7 +64,9 @@
       "lastBack": "20:04",
       "fare": "游客卡免费",
       "guestCard": "GaPa–Grainau–Eibsee 公交和齿轨火车免费",
-      "cityTax": "3.50€/天"
+      "cityTax": "3.50€/天",
+      "lat": 47.4733,
+      "lng": 10.9736
     },
     {
       "name": "Eschenlohe",
@@ -67,7 +75,9 @@
       "transfers": 0,
       "freq": "约每小时 1 班",
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）"
+      "fare": "0€（D-Ticket）",
+      "lat": 47.5908,
+      "lng": 11.2503
     },
     {
       "name": "Klais（Krün）",
@@ -77,7 +87,9 @@
       "freq": "1–2 小时 1 班",
       "lastBack": "00:02",
       "fare": "0€（D-Ticket）",
-      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费"
+      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费",
+      "lat": 47.4997,
+      "lng": 11.2439
     },
     {
       "name": "Mittenwald",
@@ -87,7 +99,9 @@
       "freq": "1–2 小时 1 班",
       "lastBack": "00:02",
       "fare": "0€（D-Ticket）",
-      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费"
+      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费",
+      "lat": 47.4419,
+      "lng": 11.2614
     },
     {
       "name": "Murnau",
@@ -96,7 +110,9 @@
       "transfers": 0,
       "freq": "约每小时 1 班",
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）"
+      "fare": "0€（D-Ticket）",
+      "lat": 47.6872,
+      "lng": 11.2017
     },
     {
       "name": "Ehrwald（奥地利）",
@@ -105,7 +121,9 @@
       "transfers": 0,
       "freq": "1–2 小时 1 班",
       "lastBack": "20:04",
-      "fare": "0€（D-Ticket 在这段有效）"
+      "fare": "0€（D-Ticket 在这段有效）",
+      "lat": 47.4019,
+      "lng": 10.9314
     },
     {
       "name": "Uffing",
@@ -114,7 +132,9 @@
       "transfers": 0,
       "freq": "约每小时 1 班",
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）"
+      "fare": "0€（D-Ticket）",
+      "lat": 47.6967,
+      "lng": 11.1667
     },
     {
       "name": "Lermoos（奥地利）",
@@ -123,7 +143,9 @@
       "transfers": 0,
       "freq": "1–2 小时 1 班",
       "lastBack": "20:04",
-      "fare": "0€（D-Ticket 在这段有效）"
+      "fare": "0€（D-Ticket 在这段有效）",
+      "lat": 47.4046,
+      "lng": 10.8747
     },
     {
       "name": "Wallgau",
@@ -133,7 +155,9 @@
       "freq": "约每小时 1 班",
       "lastBack": "20:35（328 路，53 分钟）",
       "fare": "0€（D-Ticket）",
-      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费"
+      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费",
+      "lat": 47.5181,
+      "lng": 11.2881
     },
     {
       "name": "Oberammergau",
@@ -142,10 +166,12 @@
       "transfers": 0,
       "freq": "约每小时 1 班",
       "lastBack": "未查",
-      "fare": "0€（D-Ticket）"
+      "fare": "0€（D-Ticket）",
+      "lat": 47.5986,
+      "lng": 11.0658
     }
   ],
-  "townsNote": "火车时刻来自 ÖBB 时刻表（含 DB 数据，已有 2027 年 1 月的班次）；公交时刻来自 Google 地图，页面提示「时刻表可能不是最新」，出发前到 RVO 或 DB 核实。班次频率是按白天几个时段抽查的大概值。",
+  "townsNote": "火车时刻来自 ÖBB 时刻表（含 DB 数据，已有 2027 年 1 月的班次）；公交时刻来自 Google 地图，页面提示「时刻表可能不是最新」，出发前到 RVO 或 DB 核实。班次频率是按白天几个时段抽查的大概值。地图上的村镇和住宿坐标是村镇中心/大致位置，不是每家房源的精确门牌，预订前以 Booking/Airbnb 页面上的地图为准。",
   "stays": [
     {
       "name": "Double room, quiet, central Murnau",
@@ -169,7 +195,9 @@
       ],
       "notes": [
         "同一位房东同价还有 <a href=\"https://www.airbnb.com/rooms/16659723\" target=\"_blank\" rel=\"noopener\">一间单人间</a>（4.9，126 条评价）。"
-      ]
+      ],
+      "lat": 47.6872,
+      "lng": 11.2017
     },
     {
       "name": "Private room with garden in Murnau",
@@ -189,7 +217,9 @@
           "url": "https://www.airbnb.com/rooms/1477551",
           "note": "已含所有费用"
         }
-      ]
+      ],
+      "lat": 47.688,
+      "lng": 11.2005
     },
     {
       "name": "Kranzbach vacation home",
@@ -210,7 +240,9 @@
           "url": "https://www.airbnb.com/rooms/1495678204999021640",
           "note": "城市税另付"
         }
-      ]
+      ],
+      "lat": 47.4997,
+      "lng": 11.2439
     },
     {
       "name": "Appartement im Hasental",
@@ -231,7 +263,9 @@
           "url": "https://www.booking.com/hotel/de/schones-1-zimmer-appartement-mit-terrasse.html",
           "note": "公开价，登录 Genius 后可能更低"
         }
-      ]
+      ],
+      "lat": 47.4855,
+      "lng": 11.0781
     },
     {
       "name": "griabighoch2 – Room for two",
@@ -251,7 +285,9 @@
           "url": "https://www.airbnb.com/rooms/1389298012446120601",
           "note": "已含所有费用"
         }
-      ]
+      ],
+      "lat": 47.5181,
+      "lng": 11.2881
     }
   ],
   "staysNote": "3 晚总价 ÷ 3 = 每晚价格。Airbnb 价格已含清洁费和服务费；Booking 价格写着「含税费」，但城市税通常到店另交。",
@@ -289,7 +325,9 @@
           "where": "Garmisch",
           "price": "约 46€/天起（3 小时）",
           "how": "CheckYeti 4.9（127 条评价）",
-          "url": "https://www.checkyeti.com/de/d/231/1112"
+          "url": "https://www.checkyeti.com/de/d/231/1112",
+          "lat": 47.486,
+          "lng": 11.0793
         },
         {
           "name": "Skischule Zugspitze-Grainau",
@@ -298,14 +336,18 @@
           "price": "约 51€/天起（3 小时）",
           "lang": "私教有德语、英语",
           "how": "CheckYeti 5.0（44 条评价）",
-          "url": "https://www.checkyeti.com/de/d/231/1112"
+          "url": "https://www.checkyeti.com/de/d/231/1112",
+          "lat": 47.486,
+          "lng": 11.0793
         },
         {
           "name": "Skischule Garmisch-Partenkirchen",
           "kind": "团体课 / 私教",
           "where": "Hausberg 4b（Hausbergbahn 旁）",
           "how": "开了 75 年的老牌滑雪学校；Google 4.6（751 条）",
-          "url": "https://www.skischule-gap.de"
+          "url": "https://www.skischule-gap.de",
+          "lat": 47.4858,
+          "lng": 11.079
         }
       ]
     },
@@ -387,13 +429,17 @@
           "where": "Hausberg 5",
           "season": "周一–五 10–22 点，周末 10–20 点",
           "how": "Google 4.4（96 条）",
-          "url": "https://boulderhalle-gapa.de"
+          "url": "https://boulderhalle-gapa.de",
+          "lat": 47.4858,
+          "lng": 11.079
         },
         {
           "name": "Kletterhalle Ehrwald",
           "kind": "攀岩馆，有课程",
           "where": "Ehrwald（RB 25 分钟）",
-          "url": "https://zugspitzarena.com"
+          "url": "https://zugspitzarena.com",
+          "lat": 47.4019,
+          "lng": 10.9314
         }
       ]
     },
@@ -446,7 +492,9 @@
       "ascent": "84 m",
       "start": "环线，起点在 Eibsee 站（齿轨火车 / 公交，凭 Grainau 游客卡免费）",
       "season": "冬季环湖路一般能走，可能结冰，带简易冰爪",
-      "url": "https://www.komoot.com/smarttour/e1805113668/eibsee-loop-trail"
+      "url": "https://www.komoot.com/smarttour/e1805113668/eibsee-loop-trail",
+      "lat": 47.4664,
+      "lng": 10.9664
     },
     {
       "name": "Partnach Gorge and Graseck Loop Trail",
@@ -459,7 +507,9 @@
       "ascent": "190 m",
       "start": "环线，起点在 Olympia 滑雪场，从 Garmisch 站坐当地公交或步行",
       "season": "峡谷全年开放（10–5 月 8:00–18:00），冬天有冰挂；峡谷后往 Vordergraseck 的路施工封闭到 2026-11-20",
-      "url": "https://www.komoot.com/smarttour/e1800818328/partnach-gorge-and-graseck-loop-trail"
+      "url": "https://www.komoot.com/smarttour/e1800818328/partnach-gorge-and-graseck-loop-trail",
+      "lat": 47.4769,
+      "lng": 11.0889
     },
     {
       "name": "The Isar Nature Adventure Trail near Krün",
@@ -472,7 +522,9 @@
       "ascent": "91 m",
       "start": "Krün，坐去 Wallgau 的 329 路公交",
       "season": "低海拔，冬天可走，有雪时更慢",
-      "url": "https://www.komoot.com/smarttour/e343831333/the-isar-nature-adventure-trail-near-kruen-alpenwelt-karwendel"
+      "url": "https://www.komoot.com/smarttour/e343831333/the-isar-nature-adventure-trail-near-kruen-alpenwelt-karwendel",
+      "lat": 47.4908,
+      "lng": 11.2567
     },
     {
       "name": "Three Lakes Hike from Krün",
@@ -485,7 +537,9 @@
       "ascent": "145 m",
       "start": "Krün，坐 329 路公交；住 Klais 的话离几个湖更近",
       "season": "低海拔，冬天可走",
-      "url": "https://www.komoot.com/smarttour/e45205244/three-lakes-hike-from-kruen"
+      "url": "https://www.komoot.com/smarttour/e45205244/three-lakes-hike-from-kruen",
+      "lat": 47.4908,
+      "lng": 11.2567
     },
     {
       "name": "Große Ammer Loop",
@@ -511,7 +565,9 @@
       "ascent": "625 m",
       "start": "Hammersbach（齿轨火车站）",
       "season": "<b>冬季关闭</b>，桥会拆掉，约 5 月底重开。夏天再来时的首选",
-      "url": "https://www.komoot.com/smarttour/e1805146480/durch-die-hoellentalklamm-zur-hoellentalangerhuette-und-zurueck"
+      "url": "https://www.komoot.com/smarttour/e1805146480/durch-die-hoellentalklamm-zur-hoellentalangerhuette-und-zurueck",
+      "lat": 47.4604,
+      "lng": 10.989
     }
   ],
   "hikesNote": "来自 komoot「Garmisch-Partenkirchen 县最受欢迎的徒步路线」。同一页上评分很高的 Leutascher Geisterklamm（4.7，1,843 条）冬季整段封闭；Kofel、Notkarspitze 是需要高山经验的困难路线，1 月不推荐，所以都没列。",

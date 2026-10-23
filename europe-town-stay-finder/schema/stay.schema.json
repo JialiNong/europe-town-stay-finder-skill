@@ -47,7 +47,9 @@
           "lastBack": { "type": "string", "description": "晚上从核心小镇回村的末班车" },
           "fare": { "type": "string" },
           "guestCard": { "type": "string", "description": "html：游客卡包含的交通和活动" },
-          "cityTax": { "type": "string" }
+          "cityTax": { "type": "string" },
+          "lat": { "type": "number", "description": "村镇中心纬度，用于地图标点；查不到就不写这两个字段" },
+          "lng": { "type": "number", "description": "村镇中心经度" }
         }
       }
     },
@@ -83,7 +85,9 @@
               }
             }
           },
-          "notes": { "type": "array", "items": { "type": "string" }, "description": "html" }
+          "notes": { "type": "array", "items": { "type": "string" }, "description": "html" },
+          "lat": { "type": "number", "description": "住宿纬度（Booking/Airbnb 房源页地图上能看到大致坐标），用于地图标点；查不到就不写，地图会退回用村镇坐标" },
+          "lng": { "type": "number", "description": "住宿经度" }
         }
       }
     },
@@ -124,7 +128,9 @@
                 "season": { "type": "string" },
                 "lang": { "type": "string" },
                 "how": { "type": "string", "description": "html" },
-                "url": { "type": "string" }
+                "url": { "type": "string" },
+                "lat": { "type": "number", "description": "活动地点/集合点纬度，用于地图标点，查不到就不写" },
+                "lng": { "type": "number", "description": "活动地点/集合点经度" }
               }
             }
           }
@@ -147,7 +153,9 @@
           "ascent": { "type": "string" },
           "start": { "type": "string", "description": "html：起点和公交怎么去" },
           "season": { "type": "string", "description": "html" },
-          "url": { "type": "string" }
+          "url": { "type": "string" },
+          "lat": { "type": "number", "description": "起点纬度（komoot 路线页地图能看到），用于地图标点，查不到就不写" },
+          "lng": { "type": "number", "description": "起点经度" }
         }
       }
     },
