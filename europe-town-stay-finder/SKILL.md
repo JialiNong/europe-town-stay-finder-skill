@@ -109,13 +109,16 @@ description: "在欧洲给一个想去的小镇找住宿：把核心小镇和公
 
 ### 怎么搜
 
-用当地语言加英文搜，例如：
+用当地语言加英文搜。通用的网页搜索工具对当地小机构结果很少时，在浏览器里用 google.com 搜德语 / 法语关键词，效果好得多。例如：
 
 | 运动 | 德语 | 法语 | 英语 |
 |---|---|---|---|
-| 攀岩 | Klettern Kurs, Kletterhalle, Klettergebiet | escalade cours, salle d'escalade, site d'escalade | climbing course |
+| 攀岩 | Klettern Kurs, Kletterhalle, Boulderhalle, Klettergebiet | escalade cours, salle d'escalade, site d'escalade | climbing course |
 | 向导/登山学校 | Bergschule, Alpinschule, Bergführer | guide de haute montagne, compagnie des guides | mountain guide |
 | 滑雪 | Skischule, Skikurs Erwachsene | école de ski (ESF / ESI), cours adulte | ski school adults |
+| 滑雪登山 | Skitourenkurs Einsteiger | cours ski de randonnée | ski touring course |
+| 越野滑雪 | Langlaufkurs, Langlaufschule | cours ski de fond | cross-country ski lesson |
+| 雪鞋徒步 | geführte Schneeschuhwanderung | sortie raquettes accompagnée | guided snowshoe hike |
 | 滑翔伞 | Gleitschirm Tandem, Gleitschirmschule | parapente biplace, école de parapente | paragliding tandem |
 | via ferrata | Klettersteig geführt | via ferrata guidée | guided via ferrata |
 | 徒步团体 | geführte Wanderung, Wandergruppe | randonnée accompagnée | guided hike, hiking group |
@@ -123,7 +126,7 @@ description: "在欧洲给一个想去的小镇找住宿：把核心小镇和公
 ### 去哪找
 
 - 当地旅游局官网的活动/体验页，以及游客卡附带的**免费导览活动（Gästeprogramm / programme d'animations）**。
-- 登山学校、向导公司、滑雪学校、滑翔伞学校的官网。
+- 登山学校、向导公司、滑雪学校、滑翔伞学校的官网；CheckYeti 上常有课程起价和评价。
 - 阿尔卑斯协会当地分会（德国 DAV、奥地利 ÖAV、瑞士 SAC、法国 CAF、意大利 CAI）：常有团体活动，很多要求是会员，写清楚。
 - 团体：Meetup、Facebook 群组、攀岩馆的找搭档板（Partnerbörse）。
 - 用 Google 地图看这些机构的评分和评价数。
@@ -134,10 +137,10 @@ description: "在欧洲给一个想去的小镇找住宿：把核心小镇和公
 
 ## 第 5 步：komoot 高分徒步路线
 
-1. 对核心小镇和推荐住宿的村镇，搜「komoot hiking around <小镇>」，打开 komoot 的路线指南页（形如 `https://www.komoot.com/guide/<编号>/hiking-around-<小镇>`）。每条路线会显示**评分和评分人数**（例如「4.8 (7857)」）、难度、距离、时长、爬升。
+1. 对核心小镇和推荐住宿的村镇，搜「komoot hiking around <小镇>」，打开 komoot 的路线指南页（形如 `https://www.komoot.com/guide/<编号>/hiking-around-<小镇>`）。每条路线会显示**评分和评分人数**（例如「4.8 (7857)」）、难度、距离、时长、爬升。英文页的距离和爬升是英里和英尺，换算成公里和米。
 2. **挑选**：优先评分 ≥ 4.5，并且评分人数在这个地区里排在前面的。不同地区热度差别很大，不设固定的人数门槛，而是按「这个地区里评分高、人数也多」相对地挑；把评分和人数都写出来。每个地区挑 3–6 条，总共 5–12 条，难度尽量覆盖简单到困难。
 3. **公交能不能到起点**：点进路线页看起点，用 Google 地图公交模式查从推荐住宿的村镇过去要多久。环线最方便；单程路线要写清楚终点怎么坐车回去。起点只能开车到的，标出来或不列。
-4. **季节**：入住日期在冬季或春季时，高海拔路线可能有积雪或关闭，山屋和缆车可能停运（很多缆车 11 月和春季有检修停运期），要标出来，并优先挑低海拔或冬季徒步（Winterwanderweg / sentier raquettes）路线。
+4. **季节**：入住日期在冬季或春季时，高海拔路线可能有积雪或关闭，山屋和缆车可能停运（很多缆车 11 月和春季有检修停运期），很多峡谷冬季整段封闭（例如 Höllentalklamm、Leutascher Geisterklamm），要去官网核实并标出来，优先挑低海拔或冬季徒步（Winterwanderweg / sentier raquettes）路线。也顺便看一下路线上有没有施工封路的公告。
 5. 也可以参考 komoot 的 Highlights（显示「X% 推荐，N 人」）来补充景点。
 
 ## 第 6 步：输出 JSON，用固定模板渲染对比页
@@ -168,7 +171,7 @@ python3 scripts/render.py path/to/garmisch-2027-01.json    # 只用标准库
 
 ### JSON 字段
 
-自动计算的不用自己写：预算区间（预算内 ×0.9–1.1、浮动 ×0.8–0.9 / ×1.1–1.2）和每家住宿的「预算内 / 超预算 X%」标签、每家的最低价渠道、总览表里的最低价标绿、住宿编号（按 `stays` 顺序 1、2、3…，所以**按推荐顺序排好**）。标「html」的字段可以用 `<b>`、`<a href=… target="_blank" rel="noopener">`、`<br>`，其他字段是纯文本。
+自动计算的不用自己写：预算区间（预算内 ×0.9–1.1、浮动 ×0.8–0.9 / ×1.1–1.2）和每家住宿的「预算内 / 超预算 X%」标签、每家的最低价渠道、总览表里的最低价标绿、住宿编号（按 `stays` 顺序 1、2、3…，所以**按推荐顺序排好**）。因为「超预算 X%」会自动显示，`tag` 不要再写百分比，写这家的特点。标「html」的字段可以用 `<b>`、`<a href=… target="_blank" rel="noopener">`、`<br>`，其他字段是纯文本。
 
 | 字段 | 说明 |
 |---|---|
@@ -186,6 +189,7 @@ python3 scripts/render.py path/to/garmisch-2027-01.json    # 只用标准库
 | `nearMiss[]` | 差点入选：`{name, town, price, url, why(html)}` |
 | `activities[]` | 按运动分组：`{sport, note(html), items:[{name, kind, where, level, price, season, lang, how(html), url}]}` |
 | `hikes[]` | komoot 路线：`{name, area, rating, count, difficulty: easy / moderate / hard, distance, duration, ascent, start(html), season(html), url}` |
+| `hikesNote` | html，路线表脚注（例如哪些高分路线因为季节没列） |
 | `excluded[]` | 排除的村镇：`{name, why(html)}` |
 | `footer.paragraphs` / `footer.links` | html 数组：假设、补充搜索、没查到的来源 / 链接行，每行 `[{text, url}, …]` |
 
@@ -193,6 +197,6 @@ python3 scripts/render.py path/to/garmisch-2027-01.json    # 只用标准库
 
 1. **顶部结论**：推荐住哪个村、哪几家（最便宜、评分最高、交通最方便），为什么；符合条件的总共几家，有没有用到第 3 步的补充搜索。
 2. **公交 1 小时圈**、**住宿**（同一房源的多个渠道放在同一家的 `prices` 里）、**差点入选**、**户外运动**、**komoot 路线**、**排除的村镇**都按上面的字段填。
-3. **页脚**写假设（预算区间、步行距离、Google 评分门槛等默认值）和哪些来源没查到、原因。
+3. **页脚**写假设（预算区间、步行距离、Google 评分门槛等默认值）、每个平台实际搜了哪些村镇、哪些来源没查到和原因。
 
 发布后在对话里用几句话总结推荐的住宿和村镇，不要把表格再贴一遍。

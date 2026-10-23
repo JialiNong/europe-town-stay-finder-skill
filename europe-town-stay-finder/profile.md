@@ -3,6 +3,6 @@
 > 这是 europe-town-stay-finder 的个人设置。换成你自己的情况：有没有车、持有的车票和折扣卡、订房平台的会员等级。agent 每次查住宿前都会先读这个文件。
 
 - **没有车，旅行时也不租车**，完全靠公共交通。所以住宿和周边村镇的可选范围由公交决定，徒步路线的起点也要能坐公交到。
-- 持有 **Deutschlandticket**：德国境内的区域车（RE / RB / S-Bahn / 公交）免费，所以在德国，住在周边村子每天往返核心小镇通常是 0 元。缆车、登山齿轨（如 Zugspitzbahn）不包含。跨境段（例如 Mittenwald → 奥地利）是否有效，要单独核实。
+- 持有 **Deutschlandticket**：德国境内的区域车（RE / RB / S-Bahn / 公交）免费，所以在德国，住在周边村子每天往返核心小镇通常是 0 元。缆车、登山齿轨（如 Zugspitzbahn）不包含。跨境段是否有效要单独核实（例如 Garmisch → Ehrwald、Lermoos、Reutte 的 Außerfernbahn 有效，Mittenwald → Scharnitz、Seefeld 不在列表里）。
 - 持有 **BahnCard 25**。
 - 是 **Booking 最高等级 Genius 会员**，她登录后看到的 Booking 价格通常比你查到的公开价低。报价时写「Booking 公开价 X€，你登录后可能更低」。
