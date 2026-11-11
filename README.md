@@ -61,7 +61,7 @@ europe-town-stay-finder/        ← the skill itself (zip this folder to upload 
 └── examples/
     ├── garmisch-2027-01.json   ← a real search, bilingual
     ├── garmisch-2027-01.html
-    ├── demo-caps-mock.json     ← made-up data showing the caps and a single-language page
+    ├── demo-caps-mock.json     ← made-up data showing the per-section caps
     └── demo-caps-mock.html
 
 AGENTS.md                       ← entry point for Cursor / Codex / Gemini CLI

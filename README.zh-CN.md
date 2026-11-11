@@ -52,7 +52,7 @@ europe-town-stay-finder/        ← skill 本体（可以整个文件夹打包�
 └── examples/
     ├── garmisch-2027-01.json   ← 真实查询的结果，中英双语
     ├── garmisch-2027-01.html
-    ├── demo-caps-mock.json     ← 虚构数据，演示每类数量上限和单语页面
+    ├── demo-caps-mock.json     ← 虚构数据，演示每类数量上限
     └── demo-caps-mock.html
 
 AGENTS.md                       ← Cursor / Codex / Gemini CLI 等会自动读的入口
