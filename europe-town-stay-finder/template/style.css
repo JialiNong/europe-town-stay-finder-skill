@@ -115,10 +115,14 @@ table.wide td:first-child{min-width:120px}
 
 
 /* ---- maps (自绘 SVG，无外部依赖) + print ---- */
-.toolbar{display:flex;justify-content:flex-end}
-.toolbar button{font:inherit;font-size:13px;font-weight:600;color:var(--glacier);background:var(--glacier-soft);border:none;border-radius:999px;padding:8px 18px;cursor:pointer}
-.toolbar button:hover{filter:brightness(0.94)}
-.toolbar button:active{filter:brightness(0.88)}
+.toolbar{display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap}
+.toolbar .print-btn{font:inherit;font-size:13px;font-weight:600;color:var(--glacier);background:var(--glacier-soft);border:none;border-radius:999px;padding:8px 18px;cursor:pointer}
+.toolbar .print-btn:hover{filter:brightness(0.94)}
+.toolbar .print-btn:active{filter:brightness(0.88)}
+.lang-switch{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px;background:var(--surface)}
+.lang-switch button{font:inherit;font-size:13px;font-weight:600;border:none;background:transparent;color:var(--muted);border-radius:999px;padding:6px 14px;cursor:pointer}
+.lang-switch button[aria-pressed="true"]{background:var(--glacier-soft);color:var(--glacier)}
+.lang-switch button:focus-visible,.toolbar .print-btn:focus-visible{outline:2px solid var(--glacier);outline-offset:2px}
 .mapbox{border-radius:10px;overflow:hidden;margin-top:12px;border:1px solid var(--line);background:var(--surface)}
 .mapbox svg{width:100%;height:auto;display:block}
 .map-bg{fill:var(--surface)}
@@ -134,6 +138,9 @@ table.wide td:first-child{min-width:120px}
 .map-legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12px;color:var(--muted);margin-top:8px}
 .map-legend span{display:inline-flex;align-items:center;gap:6px}
 .map-legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.map-legend i.lg-core{background:var(--piste-red)}
+.map-legend i.lg-town{background:var(--piste-green)}
+.map-legend i.lg-stay{background:var(--piste-blue)}
 
 @media print{
   .toolbar{display:none !important}

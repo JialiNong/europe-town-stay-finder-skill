@@ -19,7 +19,7 @@
 
 ## 规则
 
-- 回复和页面都用中文（除非用户换了语言）。
+- 和用户对话用用户的语言；页面默认中英双语，见 SKILL.md 的「语言」一节。 / Talk to the user in their language; the page is bilingual (zh + en) by default.
 - 价格、评分、时刻必须是实时查到的，并写明来源和查询时间；查不到就写「未能查到」，不要估。
 - 不下单，不填写个人或支付信息，遇到验证码或登录不要绕过。
 - 改页面样式时只改 `europe-town-stay-finder/template/`，改完运行 `npm run example` 用示例重新渲染检查一遍。

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
-<title>Garmisch 周边住宿</title>
+<title>Stays around Garmisch</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700;900&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
 /* Layout: one reading column, departure-board time rows, piste-colour difficulty tags */
@@ -124,10 +124,14 @@ table.wide td:first-child{min-width:120px}
 
 
 /* ---- maps (自绘 SVG，无外部依赖) + print ---- */
-.toolbar{display:flex;justify-content:flex-end}
-.toolbar button{font:inherit;font-size:13px;font-weight:600;color:var(--glacier);background:var(--glacier-soft);border:none;border-radius:999px;padding:8px 18px;cursor:pointer}
-.toolbar button:hover{filter:brightness(0.94)}
-.toolbar button:active{filter:brightness(0.88)}
+.toolbar{display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap}
+.toolbar .print-btn{font:inherit;font-size:13px;font-weight:600;color:var(--glacier);background:var(--glacier-soft);border:none;border-radius:999px;padding:8px 18px;cursor:pointer}
+.toolbar .print-btn:hover{filter:brightness(0.94)}
+.toolbar .print-btn:active{filter:brightness(0.88)}
+.lang-switch{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px;background:var(--surface)}
+.lang-switch button{font:inherit;font-size:13px;font-weight:600;border:none;background:transparent;color:var(--muted);border-radius:999px;padding:6px 14px;cursor:pointer}
+.lang-switch button[aria-pressed="true"]{background:var(--glacier-soft);color:var(--glacier)}
+.lang-switch button:focus-visible,.toolbar .print-btn:focus-visible{outline:2px solid var(--glacier);outline-offset:2px}
 .mapbox{border-radius:10px;overflow:hidden;margin-top:12px;border:1px solid var(--line);background:var(--surface)}
 .mapbox svg{width:100%;height:auto;display:block}
 .map-bg{fill:var(--surface)}
@@ -143,6 +147,9 @@ table.wide td:first-child{min-width:120px}
 .map-legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12px;color:var(--muted);margin-top:8px}
 .map-legend span{display:inline-flex;align-items:center;gap:6px}
 .map-legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.map-legend i.lg-core{background:var(--piste-red)}
+.map-legend i.lg-town{background:var(--piste-green)}
+.map-legend i.lg-stay{background:var(--piste-blue)}
 
 @media print{
   .toolbar{display:none !important}
@@ -158,190 +165,432 @@ table.wide td:first-child{min-width:120px}
 <div id="app" class="wrap"></div>
 <script type="application/json" id="stay-data">
 {
-  "title": "Garmisch 周边住宿",
+  "languages": [
+    "zh",
+    "en"
+  ],
+  "lang": "en",
+  "title": {
+    "zh": "Garmisch 周边住宿",
+    "en": "Stays around Garmisch"
+  },
   "version": 2,
   "town": "Garmisch-Partenkirchen",
-  "heading": "Garmisch 及周边住宿",
-  "dateLabel": "2027 年 1 月 15–18 日（周五–周一）",
+  "heading": {
+    "zh": "Garmisch 及周边住宿",
+    "en": "Where to stay in and around Garmisch"
+  },
+  "dateLabel": {
+    "zh": "2027 年 1 月 15–18 日（周五–周一）",
+    "en": "15–18 January 2027 (Fri–Mon)"
+  },
   "nights": 3,
   "budget": {
     "perNight": 50,
     "currency": "€"
   },
-  "queriedAt": "2026 年 10 月 23 日晚（柏林时间）",
-  "intro": "条件：每晚 50€（含所有费用），<b>必须有厨房<\/b>，房型不限；Booking ≥8.0、Airbnb ≥4.5，评价都 ≥15 条；周边村镇公交单程 ≤60 分钟、最多换乘 1 次。时刻按 2027 年 1 月 15 日（周五）查。",
+  "queriedAt": {
+    "zh": "2026 年 10 月 23 日晚（柏林时间）",
+    "en": "Evening of 23 October 2026 (Berlin time)"
+  },
+  "intro": {
+    "zh": "条件：每晚 50€（含所有费用），<b>必须有厨房<\/b>，房型不限；Booking ≥8.0、Airbnb ≥4.5，评价都 ≥15 条；周边村镇公交单程 ≤60 分钟、最多换乘 1 次。时刻按 2027 年 1 月 15 日（周五）查。",
+    "en": "Criteria: €50 per night all-in, <b>a kitchen is required<\/b>, any room type; Booking ≥8.0, Airbnb ≥4.5, at least 15 reviews each; nearby villages within 60 minutes one way by public transport, at most 1 change. Timetables checked for Friday 15 January 2027."
+  },
   "verdict": {
     "items": [
-      "<b>没有一家同时满足全部条件。<\/b>整个 1 小时圈里，有厨房、评分达标的房源最低约 62€/晚（3 晚 186€），比预算高 24%。下面列的是最接近的几家，每家都标了差在哪里。",
-      "<b>最接近：1 · Murnau 的独立房间，62€/晚。<\/b>可以用房东的厨房和客厅。Murnau 坐 RB 24 分钟直达 Garmisch，末班车 23:07，Deutschlandticket 免费。",
-      "<b>想要整套公寓：3 · Klais 的 40 m² 公寓，65€/晚。<\/b>有完整厨房，到 Klais 站步行约 10 分钟，RB 13 分钟到 Garmisch，末班车 00:02。",
-      "<b>想住在 Garmisch 本镇：4 · Appartement im Hasental，65€/晚（Booking 公开价）。<\/b>你登录 Genius 后如果有 8% 以上的折扣，就能进到 60€ 以内。",
-      "<b>唯一在预算内的：Uffing 湖边小屋，42€/晚，有厨房。<\/b>评分 5.0，但只有 12 条评价，所以放在「差点入选」。Uffing 坐 RB 29 分钟直达 Garmisch。"
+      {
+        "zh": "<b>没有一家同时满足全部条件。<\/b>整个 1 小时圈里，有厨房、评分达标的房源最低约 62€/晚（3 晚 186€），比预算高 24%。下面列的是最接近的几家，每家都标了差在哪里。",
+        "en": "<b>Nothing meets every criterion.<\/b> Across the whole 1-hour radius, the cheapest well-rated place with a kitchen is about €62/night (€186 for 3 nights), 24% over budget. Below are the closest options, each with what it misses."
+      },
+      {
+        "zh": "<b>最接近：1 · Murnau 的独立房间，62€/晚。<\/b>可以用房东的厨房和客厅。Murnau 坐 RB 24 分钟直达 Garmisch，末班车 23:07，Deutschlandticket 免费。",
+        "en": "<b>Closest: 1 · A private room in Murnau, €62/night.<\/b> Use of the host's kitchen and living room. Murnau to Garmisch is a direct 24-minute RB ride, last train 23:07, free with the Deutschlandticket."
+      },
+      {
+        "zh": "<b>想要整套公寓：3 · Klais 的 40 m² 公寓，65€/晚。<\/b>有完整厨房，到 Klais 站步行约 10 分钟，RB 13 分钟到 Garmisch，末班车 00:02。",
+        "en": "<b>If you want a whole flat: 3 · A 40 m² flat in Klais, €65/night.<\/b> Full kitchen, about 10 minutes' walk to Klais station, 13 minutes by RB to Garmisch, last train 00:02."
+      },
+      {
+        "zh": "<b>想住在 Garmisch 本镇：4 · Appartement im Hasental，65€/晚（Booking 公开价）。<\/b>你登录 Genius 后如果有 8% 以上的折扣，就能进到 60€ 以内。",
+        "en": "<b>To stay in Garmisch itself: 4 · Appartement im Hasental, €65/night (Booking public rate).<\/b> If your Genius login gives 8% or more off, it drops under €60."
+      },
+      {
+        "zh": "<b>唯一在预算内的：Uffing 湖边小屋，42€/晚，有厨房。<\/b>评分 5.0，但只有 12 条评价，所以放在「差点入选」。Uffing 坐 RB 29 分钟直达 Garmisch。",
+        "en": "<b>The only one in budget: a lakeside cabin in Uffing, €42/night, with kitchen.<\/b> Rated 5.0 but only 12 reviews, so it's under \"Near misses\". Uffing to Garmisch is a direct 29-minute RB ride."
+      }
     ],
     "alerts": [
-      "已用第 3 步补充搜索：Hostelworld 和德国私人度假屋平台 traum-ferienwohnungen.de。后者在 Zugspitzland 最便宜的 Ferienwohnung 也是 195€/3 晚。",
-      "价格都不含城市税（Kurbeitrag）：Garmisch 3€/天，Grainau 3.50€/天，其他村子要到店确认。交了城市税会拿到游客卡，当地公交免费。"
+      {
+        "zh": "已用第 3 步补充搜索：Hostelworld 和德国私人度假屋平台 traum-ferienwohnungen.de。后者在 Zugspitzland 最便宜的 Ferienwohnung 也是 195€/3 晚。",
+        "en": "Step 3 fallback search was used: Hostelworld and the German private holiday-flat site traum-ferienwohnungen.de. The cheapest Ferienwohnung there in the Zugspitz area is still €195 for 3 nights."
+      },
+      {
+        "zh": "价格都不含城市税（Kurbeitrag）：Garmisch 3€/天，Grainau 3.50€/天，其他村子要到店确认。交了城市税会拿到游客卡，当地公交免费。",
+        "en": "Prices exclude the tourist tax (Kurbeitrag): Garmisch €3/day, Grainau €3.50/day, other villages to be confirmed on arrival. Paying it gets you a guest card with free local buses."
+      }
     ]
   },
   "towns": [
     {
       "name": "Garmisch-Partenkirchen",
       "core": true,
-      "guestCard": "电子游客卡：当地公交免费",
-      "cityTax": "3€/天",
+      "guestCard": {
+        "zh": "电子游客卡：当地公交免费",
+        "en": "Digital guest card: free local buses"
+      },
+      "cityTax": {
+        "zh": "3€/天",
+        "en": "€3/day"
+      },
       "lat": 47.4919,
       "lng": 11.0958
     },
     {
       "name": "Farchant",
-      "mode": "RB 区域火车",
-      "time": "3 分钟",
+      "mode": {
+        "zh": "RB 区域火车",
+        "en": "RB regional train"
+      },
+      "time": {
+        "zh": "3 分钟",
+        "en": "3 min"
+      },
       "transfers": 0,
-      "freq": "约每小时 1 班",
+      "freq": {
+        "zh": "约每小时 1 班",
+        "en": "About 1 per hour"
+      },
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）",
+      "fare": {
+        "zh": "0€（D-Ticket）",
+        "en": "€0 (D-Ticket)"
+      },
       "lat": 47.5186,
       "lng": 11.1068
     },
     {
       "name": "Oberau",
-      "mode": "RB 区域火车",
-      "time": "7 分钟",
+      "mode": {
+        "zh": "RB 区域火车",
+        "en": "RB regional train"
+      },
+      "time": {
+        "zh": "7 分钟",
+        "en": "7 min"
+      },
       "transfers": 0,
-      "freq": "约每小时 1 班",
+      "freq": {
+        "zh": "约每小时 1 班",
+        "en": "About 1 per hour"
+      },
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）",
+      "fare": {
+        "zh": "0€（D-Ticket）",
+        "en": "€0 (D-Ticket)"
+      },
       "lat": 47.5538,
       "lng": 11.1543
     },
     {
-      "name": "Grainau（Untergrainau）",
-      "mode": "Zugspitzbahn 齿轨火车",
-      "time": "7 分钟",
+      "name": {
+        "zh": "Grainau（Untergrainau）",
+        "en": "Grainau (Untergrainau)"
+      },
+      "mode": {
+        "zh": "Zugspitzbahn 齿轨火车",
+        "en": "Zugspitzbahn cog railway"
+      },
+      "time": {
+        "zh": "7 分钟",
+        "en": "7 min"
+      },
       "transfers": 0,
-      "freq": "约每小时 1 班",
+      "freq": {
+        "zh": "约每小时 1 班",
+        "en": "About 1 per hour"
+      },
       "lastBack": "20:04",
-      "fare": "游客卡免费",
-      "guestCard": "GaPa–Grainau–Eibsee 公交和齿轨火车免费",
-      "cityTax": "3.50€/天",
+      "fare": {
+        "zh": "游客卡免费",
+        "en": "Free with guest card"
+      },
+      "guestCard": {
+        "zh": "GaPa–Grainau–Eibsee 公交和齿轨火车免费",
+        "en": "Free GaPa–Grainau–Eibsee buses and cog railway"
+      },
+      "cityTax": {
+        "zh": "3.50€/天",
+        "en": "€3.50/day"
+      },
       "lat": 47.4733,
       "lng": 10.9736
     },
     {
       "name": "Eschenlohe",
-      "mode": "RB 区域火车",
-      "time": "13 分钟",
+      "mode": {
+        "zh": "RB 区域火车",
+        "en": "RB regional train"
+      },
+      "time": {
+        "zh": "13 分钟",
+        "en": "13 min"
+      },
       "transfers": 0,
-      "freq": "约每小时 1 班",
+      "freq": {
+        "zh": "约每小时 1 班",
+        "en": "About 1 per hour"
+      },
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）",
+      "fare": {
+        "zh": "0€（D-Ticket）",
+        "en": "€0 (D-Ticket)"
+      },
       "lat": 47.5908,
       "lng": 11.2503
     },
     {
-      "name": "Klais（Krün）",
-      "mode": "RB 区域火车",
-      "time": "13 分钟",
+      "name": {
+        "zh": "Klais（Krün）",
+        "en": "Klais (Krün)"
+      },
+      "mode": {
+        "zh": "RB 区域火车",
+        "en": "RB regional train"
+      },
+      "time": {
+        "zh": "13 分钟",
+        "en": "13 min"
+      },
       "transfers": 0,
-      "freq": "1–2 小时 1 班",
+      "freq": {
+        "zh": "1–2 小时 1 班",
+        "en": "1 every 1–2 hours"
+      },
       "lastBack": "00:02",
-      "fare": "0€（D-Ticket）",
-      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费",
+      "fare": {
+        "zh": "0€（D-Ticket）",
+        "en": "€0 (D-Ticket)"
+      },
+      "guestCard": {
+        "zh": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费",
+        "en": "Alpenwelt Karwendel card: free winter buses and cross-country trails"
+      },
       "lat": 47.4997,
       "lng": 11.2439
     },
     {
       "name": "Mittenwald",
-      "mode": "RB 区域火车",
-      "time": "21 分钟",
+      "mode": {
+        "zh": "RB 区域火车",
+        "en": "RB regional train"
+      },
+      "time": {
+        "zh": "21 分钟",
+        "en": "21 min"
+      },
       "transfers": 0,
-      "freq": "1–2 小时 1 班",
+      "freq": {
+        "zh": "1–2 小时 1 班",
+        "en": "1 every 1–2 hours"
+      },
       "lastBack": "00:02",
-      "fare": "0€（D-Ticket）",
-      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费",
+      "fare": {
+        "zh": "0€（D-Ticket）",
+        "en": "€0 (D-Ticket)"
+      },
+      "guestCard": {
+        "zh": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费",
+        "en": "Alpenwelt Karwendel card: free winter buses and cross-country trails"
+      },
       "lat": 47.4419,
       "lng": 11.2614
     },
     {
       "name": "Murnau",
-      "mode": "RB 区域火车",
-      "time": "24 分钟",
+      "mode": {
+        "zh": "RB 区域火车",
+        "en": "RB regional train"
+      },
+      "time": {
+        "zh": "24 分钟",
+        "en": "24 min"
+      },
       "transfers": 0,
-      "freq": "约每小时 1 班",
+      "freq": {
+        "zh": "约每小时 1 班",
+        "en": "About 1 per hour"
+      },
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）",
+      "fare": {
+        "zh": "0€（D-Ticket）",
+        "en": "€0 (D-Ticket)"
+      },
       "lat": 47.6872,
       "lng": 11.2017
     },
     {
-      "name": "Ehrwald（奥地利）",
+      "name": {
+        "zh": "Ehrwald（奥地利）",
+        "en": "Ehrwald (Austria)"
+      },
       "mode": "Außerfernbahn RB",
-      "time": "25 分钟",
+      "time": {
+        "zh": "25 分钟",
+        "en": "25 min"
+      },
       "transfers": 0,
-      "freq": "1–2 小时 1 班",
+      "freq": {
+        "zh": "1–2 小时 1 班",
+        "en": "1 every 1–2 hours"
+      },
       "lastBack": "20:04",
-      "fare": "0€（D-Ticket 在这段有效）",
+      "fare": {
+        "zh": "0€（D-Ticket 在这段有效）",
+        "en": "€0 (D-Ticket valid on this stretch)"
+      },
       "lat": 47.4019,
       "lng": 10.9314
     },
     {
       "name": "Uffing",
-      "mode": "RB 区域火车",
-      "time": "29 分钟",
+      "mode": {
+        "zh": "RB 区域火车",
+        "en": "RB regional train"
+      },
+      "time": {
+        "zh": "29 分钟",
+        "en": "29 min"
+      },
       "transfers": 0,
-      "freq": "约每小时 1 班",
+      "freq": {
+        "zh": "约每小时 1 班",
+        "en": "About 1 per hour"
+      },
       "lastBack": "23:07",
-      "fare": "0€（D-Ticket）",
+      "fare": {
+        "zh": "0€（D-Ticket）",
+        "en": "€0 (D-Ticket)"
+      },
       "lat": 47.6967,
       "lng": 11.1667
     },
     {
-      "name": "Lermoos（奥地利）",
+      "name": {
+        "zh": "Lermoos（奥地利）",
+        "en": "Lermoos (Austria)"
+      },
       "mode": "Außerfernbahn RB",
-      "time": "30 分钟",
+      "time": {
+        "zh": "30 分钟",
+        "en": "30 min"
+      },
       "transfers": 0,
-      "freq": "1–2 小时 1 班",
+      "freq": {
+        "zh": "1–2 小时 1 班",
+        "en": "1 every 1–2 hours"
+      },
       "lastBack": "20:04",
-      "fare": "0€（D-Ticket 在这段有效）",
+      "fare": {
+        "zh": "0€（D-Ticket 在这段有效）",
+        "en": "€0 (D-Ticket valid on this stretch)"
+      },
       "lat": 47.4046,
       "lng": 10.8747
     },
     {
       "name": "Wallgau",
-      "mode": "329 路公交",
-      "time": "33 分钟",
+      "mode": {
+        "zh": "329 路公交",
+        "en": "Bus 329"
+      },
+      "time": {
+        "zh": "33 分钟",
+        "en": "33 min"
+      },
       "transfers": 0,
-      "freq": "约每小时 1 班",
-      "lastBack": "20:35（328 路，53 分钟）",
-      "fare": "0€（D-Ticket）",
-      "guestCard": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费",
+      "freq": {
+        "zh": "约每小时 1 班",
+        "en": "About 1 per hour"
+      },
+      "lastBack": {
+        "zh": "20:35（328 路，53 分钟）",
+        "en": "20:35 (bus 328, 53 min)"
+      },
+      "fare": {
+        "zh": "0€（D-Ticket）",
+        "en": "€0 (D-Ticket)"
+      },
+      "guestCard": {
+        "zh": "Alpenwelt Karwendel 卡：冬季公交、越野滑雪道免费",
+        "en": "Alpenwelt Karwendel card: free winter buses and cross-country trails"
+      },
       "lat": 47.5181,
       "lng": 11.2881
     },
     {
       "name": "Oberammergau",
-      "mode": "公交",
-      "time": "42 分钟",
+      "mode": {
+        "zh": "公交",
+        "en": "Bus"
+      },
+      "time": {
+        "zh": "42 分钟",
+        "en": "42 min"
+      },
       "transfers": 0,
-      "freq": "约每小时 1 班",
-      "lastBack": "未查",
-      "fare": "0€（D-Ticket）",
+      "freq": {
+        "zh": "约每小时 1 班",
+        "en": "About 1 per hour"
+      },
+      "lastBack": {
+        "zh": "未查",
+        "en": "Not checked"
+      },
+      "fare": {
+        "zh": "0€（D-Ticket）",
+        "en": "€0 (D-Ticket)"
+      },
       "lat": 47.5986,
       "lng": 11.0658
     }
   ],
-  "townsNote": "火车时刻来自 ÖBB 时刻表（含 DB 数据，已有 2027 年 1 月的班次）；公交时刻来自 Google 地图，页面提示「时刻表可能不是最新」，出发前到 RVO 或 DB 核实。班次频率是按白天几个时段抽查的大概值。地图上的村镇和住宿坐标是村镇中心/大致位置，不是每家房源的精确门牌，预订前以 Booking/Airbnb 页面上的地图为准。",
+  "townsNote": {
+    "zh": "火车时刻来自 ÖBB 时刻表（含 DB 数据，已有 2027 年 1 月的班次）；公交时刻来自 Google 地图，页面提示「时刻表可能不是最新」，出发前到 RVO 或 DB 核实。班次频率是按白天几个时段抽查的大概值。地图上的村镇和住宿坐标是村镇中心/大致位置，不是每家房源的精确门牌，预订前以 Booking/Airbnb 页面上的地图为准。",
+    "en": "Train times from the ÖBB timetable (includes DB data, already has January 2027 services); bus times from Google Maps, which warned the timetable may be out of date, so check RVO or DB before you go. Frequencies are approximate, sampled at a few daytime slots. Village and stay coordinates on the map are village centres or rough locations, not exact addresses; use the map on Booking/Airbnb before booking."
+  },
   "stays": [
     {
       "name": "Double room, quiet, central Murnau",
       "town": "Murnau",
-      "type": "独立房间（共用浴室）",
-      "tag": "最接近",
-      "walk": "到 Murnau 站步行约 15 分钟",
-      "toCore": "RB 24 分钟",
-      "breakfast": "不含",
-      "cancel": "1 月 10 日前免费取消",
-      "summary": "房东 Diana 是做了 13 年的超赞房东。房间安静，可以用厨房和客厅，离步行街 5 分钟。",
+      "type": {
+        "zh": "独立房间（共用浴室）",
+        "en": "Private room (shared bathroom)"
+      },
+      "tag": {
+        "zh": "最接近",
+        "en": "Closest"
+      },
+      "walk": {
+        "zh": "到 Murnau 站步行约 15 分钟",
+        "en": "About 15 min walk to Murnau station"
+      },
+      "toCore": {
+        "zh": "RB 24 分钟",
+        "en": "RB 24 min"
+      },
+      "breakfast": {
+        "zh": "不含",
+        "en": "Not included"
+      },
+      "cancel": {
+        "zh": "1 月 10 日前免费取消",
+        "en": "Free cancellation until 10 Jan"
+      },
+      "summary": {
+        "zh": "房东 Diana 是做了 13 年的超赞房东。房间安静，可以用厨房和客厅，离步行街 5 分钟。",
+        "en": "Diana has been a Superhost for 13 years. Quiet room, use of the kitchen and living room, 5 minutes from the pedestrian street."
+      },
       "prices": [
         {
           "channel": "Airbnb",
@@ -349,11 +598,17 @@ table.wide td:first-child{min-width:120px}
           "total": 186,
           "rating": "4.84 (116)",
           "url": "https://www.airbnb.com/rooms/16659146",
-          "note": "已含所有费用"
+          "note": {
+            "zh": "已含所有费用",
+            "en": "All fees included"
+          }
         }
       ],
       "notes": [
-        "同一位房东同价还有 <a href=\"https://www.airbnb.com/rooms/16659723\" target=\"_blank\" rel=\"noopener\">一间单人间<\/a>（4.9，126 条评价）。"
+        {
+          "zh": "同一位房东同价还有 <a href=\"https://www.airbnb.com/rooms/16659723\" target=\"_blank\" rel=\"noopener\">一间单人间<\/a>（4.9，126 条评价）。",
+          "en": "The same host has <a href=\"https://www.airbnb.com/rooms/16659723\" target=\"_blank\" rel=\"noopener\">a single room<\/a> at the same price (4.9, 126 reviews)."
+        }
       ],
       "lat": 47.6872,
       "lng": 11.2017
@@ -361,12 +616,30 @@ table.wide td:first-child{min-width:120px}
     {
       "name": "Private room with garden in Murnau",
       "town": "Murnau",
-      "type": "独立房间（共用浴室）",
-      "tag": "评价最多",
-      "walk": "到 Murnau 站步行约 15 分钟",
-      "toCore": "RB 24 分钟",
-      "breakfast": "不含",
-      "summary": "和第 1 家是同一位房东。可以用厨房、壁炉房、阳光房和花园，评价数最多（218 条）。",
+      "type": {
+        "zh": "独立房间（共用浴室）",
+        "en": "Private room (shared bathroom)"
+      },
+      "tag": {
+        "zh": "评价最多",
+        "en": "Most reviewed"
+      },
+      "walk": {
+        "zh": "到 Murnau 站步行约 15 分钟",
+        "en": "About 15 min walk to Murnau station"
+      },
+      "toCore": {
+        "zh": "RB 24 分钟",
+        "en": "RB 24 min"
+      },
+      "breakfast": {
+        "zh": "不含",
+        "en": "Not included"
+      },
+      "summary": {
+        "zh": "和第 1 家是同一位房东。可以用厨房、壁炉房、阳光房和花园，评价数最多（218 条）。",
+        "en": "Same host as #1. Use of the kitchen, fireplace room, sunroom and garden; the most reviews (218)."
+      },
       "prices": [
         {
           "channel": "Airbnb",
@@ -374,7 +647,10 @@ table.wide td:first-child{min-width:120px}
           "total": 186,
           "rating": "4.83 (218)",
           "url": "https://www.airbnb.com/rooms/1477551",
-          "note": "已含所有费用"
+          "note": {
+            "zh": "已含所有费用",
+            "en": "All fees included"
+          }
         }
       ],
       "lat": 47.688,
@@ -382,14 +658,38 @@ table.wide td:first-child{min-width:120px}
     },
     {
       "name": "Kranzbach vacation home",
-      "town": "Klais（Krün）",
-      "type": "整套公寓 40 m²，带厨房",
-      "tag": "整套公寓",
-      "walk": "到 Klais 站步行约 7–10 分钟，公交站约 100 m",
-      "toCore": "RB 13 分钟",
-      "breakfast": "不含",
-      "cancel": "12 月 16 日前免费取消，1 月 8 日前部分退款",
-      "summary": "Klais 小村边上的独栋房子二楼，一室一厅带厨房。村里只有一家餐馆，加油站早上 7 点起能买面包和少量食品，买菜最好在 Garmisch 或 Mittenwald 买好带回来。",
+      "town": {
+        "zh": "Klais（Krün）",
+        "en": "Klais (Krün)"
+      },
+      "type": {
+        "zh": "整套公寓 40 m²，带厨房",
+        "en": "Whole flat, 40 m², with kitchen"
+      },
+      "tag": {
+        "zh": "整套公寓",
+        "en": "Whole flat"
+      },
+      "walk": {
+        "zh": "到 Klais 站步行约 7–10 分钟，公交站约 100 m",
+        "en": "About 7–10 min walk to Klais station, bus stop about 100 m"
+      },
+      "toCore": {
+        "zh": "RB 13 分钟",
+        "en": "RB 13 min"
+      },
+      "breakfast": {
+        "zh": "不含",
+        "en": "Not included"
+      },
+      "cancel": {
+        "zh": "12 月 16 日前免费取消，1 月 8 日前部分退款",
+        "en": "Free cancellation until 16 Dec, partial refund until 8 Jan"
+      },
+      "summary": {
+        "zh": "Klais 小村边上的独栋房子二楼，一室一厅带厨房。村里只有一家餐馆，加油站早上 7 点起能买面包和少量食品，买菜最好在 Garmisch 或 Mittenwald 买好带回来。",
+        "en": "Upper floor of a detached house at the edge of tiny Klais: living room, bedroom and kitchen. The village has one restaurant; the petrol station sells bread and basics from 7 a.m., so it's best to shop in Garmisch or Mittenwald and bring it back."
+      },
       "prices": [
         {
           "channel": "Airbnb",
@@ -397,7 +697,10 @@ table.wide td:first-child{min-width:120px}
           "total": 195,
           "rating": "4.94 (69)",
           "url": "https://www.airbnb.com/rooms/1495678204999021640",
-          "note": "城市税另付"
+          "note": {
+            "zh": "城市税另付",
+            "en": "Tourist tax extra"
+          }
         }
       ],
       "lat": 47.4997,
@@ -406,13 +709,34 @@ table.wide td:first-child{min-width:120px}
     {
       "name": "Appartement im Hasental",
       "town": "Garmisch-Partenkirchen",
-      "type": "小公寓 14 m²，带厨房角",
-      "tag": "住在本镇",
-      "walk": "到 Garmisch 站 1.5 km（约 20 分钟），凭游客卡可坐当地公交",
-      "toCore": "就在 Garmisch",
-      "breakfast": "不含",
-      "cancel": "2027 年 1 月 10 日前免费取消",
-      "summary": "有冰箱、烤箱、灶台和咖啡机，带露台和山景。房间很小，一个人住刚好。",
+      "type": {
+        "zh": "小公寓 14 m²，带厨房角",
+        "en": "Studio, 14 m², with kitchenette"
+      },
+      "tag": {
+        "zh": "住在本镇",
+        "en": "In town"
+      },
+      "walk": {
+        "zh": "到 Garmisch 站 1.5 km（约 20 分钟），凭游客卡可坐当地公交",
+        "en": "1.5 km to Garmisch station (about 20 min); local buses free with guest card"
+      },
+      "toCore": {
+        "zh": "就在 Garmisch",
+        "en": "In Garmisch itself"
+      },
+      "breakfast": {
+        "zh": "不含",
+        "en": "Not included"
+      },
+      "cancel": {
+        "zh": "2027 年 1 月 10 日前免费取消",
+        "en": "Free cancellation until 10 January 2027"
+      },
+      "summary": {
+        "zh": "有冰箱、烤箱、灶台和咖啡机，带露台和山景。房间很小，一个人住刚好。",
+        "en": "Fridge, oven, hob and coffee machine, with a terrace and mountain view. Very small; just right for one."
+      },
       "prices": [
         {
           "channel": "Booking",
@@ -420,7 +744,10 @@ table.wide td:first-child{min-width:120px}
           "total": 195,
           "rating": "9.2 (48)",
           "url": "https://www.booking.com/hotel/de/schones-1-zimmer-appartement-mit-terrasse.html",
-          "note": "公开价，登录 Genius 后可能更低"
+          "note": {
+            "zh": "公开价，登录 Genius 后可能更低",
+            "en": "Public rate; may be lower when logged in with Genius"
+          }
         }
       ],
       "lat": 47.4855,
@@ -429,12 +756,30 @@ table.wide td:first-child{min-width:120px}
     {
       "name": "griabighoch2 – Room for two",
       "town": "Wallgau",
-      "type": "独立房间（独立浴室），带阳台",
-      "tag": "评分最高 · 厨房待确认",
-      "walk": "未写，预订前问房东",
-      "toCore": "329 路公交 33 分钟",
-      "breakfast": "不含",
-      "summary": "评分最高（4.97，91 条）。搜索时按「厨房」筛选出来的，但房源页的设施列表里没看到厨房，预订前问清楚。回 Wallgau 的末班车 20:35，晚上活动受限。",
+      "type": {
+        "zh": "独立房间（独立浴室），带阳台",
+        "en": "Private room (private bathroom) with balcony"
+      },
+      "tag": {
+        "zh": "评分最高 · 厨房待确认",
+        "en": "Highest rated · kitchen to confirm"
+      },
+      "walk": {
+        "zh": "未写，预订前问房东",
+        "en": "Not stated; ask the host before booking"
+      },
+      "toCore": {
+        "zh": "329 路公交 33 分钟",
+        "en": "Bus 329, 33 min"
+      },
+      "breakfast": {
+        "zh": "不含",
+        "en": "Not included"
+      },
+      "summary": {
+        "zh": "评分最高（4.97，91 条）。搜索时按「厨房」筛选出来的，但房源页的设施列表里没看到厨房，预订前问清楚。回 Wallgau 的末班车 20:35，晚上活动受限。",
+        "en": "Highest rated (4.97, 91 reviews). It came up with the \"kitchen\" filter, but no kitchen is listed in the amenities, so ask before booking. The last bus back to Wallgau is 20:35, which limits evenings."
+      },
       "prices": [
         {
           "channel": "Airbnb",
@@ -442,68 +787,131 @@ table.wide td:first-child{min-width:120px}
           "total": 189,
           "rating": "4.97 (91)",
           "url": "https://www.airbnb.com/rooms/1389298012446120601",
-          "note": "已含所有费用"
+          "note": {
+            "zh": "已含所有费用",
+            "en": "All fees included"
+          }
         }
       ],
       "lat": 47.5181,
       "lng": 11.2881
     }
   ],
-  "staysNote": "3 晚总价 ÷ 3 = 每晚价格。Airbnb 价格已含清洁费和服务费；Booking 价格写着「含税费」，但城市税通常到店另交。",
+  "staysNote": {
+    "zh": "3 晚总价 ÷ 3 = 每晚价格。Airbnb 价格已含清洁费和服务费；Booking 价格写着「含税费」，但城市税通常到店另交。",
+    "en": "Total for 3 nights ÷ 3 = price per night. Airbnb prices include cleaning and service fees; Booking says \"taxes included\", but the tourist tax is usually paid on arrival."
+  },
   "nearMiss": [
     {
       "name": "Cottage on Staffelsee",
       "town": "Uffing",
-      "price": "42€/晚（3 晚 125€）",
+      "price": {
+        "zh": "42€/晚（3 晚 125€）",
+        "en": "€42/night (€125 for 3 nights)"
+      },
       "url": "https://www.airbnb.com/rooms/1757111296700476532",
-      "why": "评分 5.0，有厨房，价格在预算内，但<b>只有 12 条评价<\/b>（要求 ≥15）。独立房间、共用浴室，1 月 14 日前免费取消。到 Uffing 站的距离房东没写，预订前问一下。"
+      "why": {
+        "zh": "评分 5.0，有厨房，价格在预算内，但<b>只有 12 条评价<\/b>（要求 ≥15）。独立房间、共用浴室，1 月 14 日前免费取消。到 Uffing 站的距离房东没写，预订前问一下。",
+        "en": "Rated 5.0, has a kitchen and is within budget, but <b>only 12 reviews<\/b> (15 required). Private room, shared bathroom, free cancellation until 14 Jan. The host doesn't say how far Uffing station is; ask before booking."
+      }
     },
     {
       "name": "moun10 Jugendherberge",
       "town": "Garmisch-Partenkirchen",
-      "price": "60€/晚（3 晚 181€，男女混住上下铺）",
+      "price": {
+        "zh": "60€/晚（3 晚 181€，男女混住上下铺）",
+        "en": "€60/night (€181 for 3 nights, mixed bunk dorm)"
+      },
       "url": "https://www.booking.com/hotel/de/moun10.html",
-      "why": "Booking 8.8（1,299 条）、Hostelworld 9.4，就在火车站对面，含早餐，但<b>没有客用厨房<\/b>。要有 DJH 青旅会员卡。"
+      "why": {
+        "zh": "Booking 8.8（1,299 条）、Hostelworld 9.4，就在火车站对面，含早餐，但<b>没有客用厨房<\/b>。要有 DJH 青旅会员卡。",
+        "en": "Booking 8.8 (1,299 reviews), Hostelworld 9.4, right opposite the station, breakfast included, but <b>no guest kitchen<\/b>. Requires a DJH youth-hostel membership card."
+      }
     },
     {
-      "name": "Panoramic room「zur Sissi」",
+      "name": {
+        "zh": "Panoramic room「zur Sissi」",
+        "en": "Panoramic room \"zur Sissi\""
+      },
       "town": "Uffing",
-      "price": "67€/晚（3 晚 201€）",
+      "price": {
+        "zh": "67€/晚（3 晚 201€）",
+        "en": "€67/night (€201 for 3 nights)"
+      },
       "url": "https://www.airbnb.com/rooms/42325738",
-      "why": "Airbnb 4.86（202 条），有厨房，但比预算高 34%。"
+      "why": {
+        "zh": "Airbnb 4.86（202 条），有厨房，但比预算高 34%。",
+        "en": "Airbnb 4.86 (202 reviews), has a kitchen, but 34% over budget."
+      }
     }
   ],
   "activities": [
     {
-      "sport": "滑雪",
-      "note": "Garmisch-Classic 雪场（Hausberg、Kreuzeck、Alpspitze）从 Garmisch 坐公交就到；1 月是滑雪季。",
+      "sport": {
+        "zh": "滑雪",
+        "en": "Skiing"
+      },
+      "note": {
+        "zh": "Garmisch-Classic 雪场（Hausberg、Kreuzeck、Alpspitze）从 Garmisch 坐公交就到；1 月是滑雪季。",
+        "en": "The Garmisch-Classic ski area (Hausberg, Kreuzeck, Alpspitze) is a bus ride from Garmisch; January is peak season."
+      },
       "items": [
         {
           "name": "Skischule Sprenzel",
-          "kind": "成人团体课",
+          "kind": {
+            "zh": "成人团体课",
+            "en": "Adult group lessons"
+          },
           "where": "Garmisch",
-          "price": "约 46€/天起（3 小时）",
-          "how": "CheckYeti 4.9（127 条评价）",
+          "price": {
+            "zh": "约 46€/天起（3 小时）",
+            "en": "From about €46/day (3 hours)"
+          },
+          "how": {
+            "zh": "CheckYeti 4.9（127 条评价）",
+            "en": "CheckYeti 4.9 (127 reviews)"
+          },
           "url": "https://www.checkyeti.com/de/d/231/1112",
           "lat": 47.486,
           "lng": 11.0793
         },
         {
           "name": "Skischule Zugspitze-Grainau",
-          "kind": "成人团体课 / 私教",
+          "kind": {
+            "zh": "成人团体课 / 私教",
+            "en": "Adult group lessons / private"
+          },
           "where": "Garmisch-Classic",
-          "price": "约 51€/天起（3 小时）",
-          "lang": "私教有德语、英语",
-          "how": "CheckYeti 5.0（44 条评价）",
+          "price": {
+            "zh": "约 51€/天起（3 小时）",
+            "en": "From about €51/day (3 hours)"
+          },
+          "lang": {
+            "zh": "私教有德语、英语",
+            "en": "Private lessons in German or English"
+          },
+          "how": {
+            "zh": "CheckYeti 5.0（44 条评价）",
+            "en": "CheckYeti 5.0 (44 reviews)"
+          },
           "url": "https://www.checkyeti.com/de/d/231/1112",
           "lat": 47.486,
           "lng": 11.0793
         },
         {
           "name": "Skischule Garmisch-Partenkirchen",
-          "kind": "团体课 / 私教",
-          "where": "Hausberg 4b（Hausbergbahn 旁）",
-          "how": "开了 75 年的老牌滑雪学校；Google 4.6（751 条）",
+          "kind": {
+            "zh": "团体课 / 私教",
+            "en": "Group lessons / private"
+          },
+          "where": {
+            "zh": "Hausberg 4b（Hausbergbahn 旁）",
+            "en": "Hausberg 4b (next to the Hausbergbahn)"
+          },
+          "how": {
+            "zh": "开了 75 年的老牌滑雪学校；Google 4.6（751 条）",
+            "en": "A ski school running for 75 years; Google 4.6 (751 reviews)"
+          },
           "url": "https://www.skischule-gap.de",
           "lat": 47.4858,
           "lng": 11.079
@@ -511,91 +919,181 @@ table.wide td:first-child{min-width:120px}
       ]
     },
     {
-      "sport": "滑雪登山（Skitour）",
+      "sport": {
+        "zh": "滑雪登山（Skitour）",
+        "en": "Ski touring"
+      },
       "items": [
         {
           "name": "Alpinschule Garmisch",
-          "kind": "雪道上的入门课（1 天）",
-          "where": "Hausbergbahn 山下集合 08:30",
-          "level": "入门",
+          "kind": {
+            "zh": "雪道上的入门课（1 天）",
+            "en": "Beginner course on the pistes (1 day)"
+          },
+          "where": {
+            "zh": "Hausbergbahn 山下集合 08:30",
+            "en": "Meet at the bottom of the Hausbergbahn, 08:30"
+          },
+          "level": {
+            "zh": "入门",
+            "en": "Beginner"
+          },
           "price": "95€",
-          "how": "至少 5 人成团；还有 2 天的 Kreuzeck 入门课 249€",
+          "how": {
+            "zh": "至少 5 人成团；还有 2 天的 Kreuzeck 入门课 249€",
+            "en": "Runs with at least 5 people; there's also a 2-day Kreuzeck beginner course for €249"
+          },
           "url": "https://www.alpinschule-garmisch.de"
         },
         {
           "name": "Bergsteigerschule Zugspitze",
-          "kind": "周末 2 天入门课",
-          "where": "Kreuzeck，住 Kreuzeckhaus 山屋",
-          "level": "入门",
-          "how": "含雪崩搜救装备和山屋住宿半膳，价格看官网",
+          "kind": {
+            "zh": "周末 2 天入门课",
+            "en": "2-day weekend beginner course"
+          },
+          "where": {
+            "zh": "Kreuzeck，住 Kreuzeckhaus 山屋",
+            "en": "Kreuzeck, staying at the Kreuzeckhaus mountain hut"
+          },
+          "level": {
+            "zh": "入门",
+            "en": "Beginner"
+          },
+          "how": {
+            "zh": "含雪崩搜救装备和山屋住宿半膳，价格看官网",
+            "en": "Avalanche rescue kit and half-board hut stay included; see the website for price"
+          },
           "url": "https://www.bergsteigerschule-zugspitze.de"
         }
       ]
     },
     {
-      "sport": "越野滑雪（Langlauf）",
-      "note": "住 Klais、Mittenwald、Wallgau 的话，Alpenwelt Karwendel 游客卡可以免费用越野滑雪道。",
+      "sport": {
+        "zh": "越野滑雪（Langlauf）",
+        "en": "Cross-country skiing (Langlauf)"
+      },
+      "note": {
+        "zh": "住 Klais、Mittenwald、Wallgau 的话，Alpenwelt Karwendel 游客卡可以免费用越野滑雪道。",
+        "en": "If you stay in Klais, Mittenwald or Wallgau, the Alpenwelt Karwendel guest card gives free use of the cross-country trails."
+      },
       "items": [
         {
           "name": "Skischule Krün-Wallgau",
-          "kind": "小班课 / 私教",
-          "where": "Krün、Wallgau",
-          "how": "只开小班和私教",
+          "kind": {
+            "zh": "小班课 / 私教",
+            "en": "Small group / private"
+          },
+          "where": {
+            "zh": "Krün、Wallgau",
+            "en": "Krün, Wallgau"
+          },
+          "how": {
+            "zh": "只开小班和私教",
+            "en": "Small groups and private lessons only"
+          },
           "url": "https://www.skischule-kruen-wallgau.de"
         },
         {
           "name": "Skilanglaufschule Isartal",
-          "kind": "课程 + 租板",
+          "kind": {
+            "zh": "课程 + 租板",
+            "en": "Lessons + rental"
+          },
           "where": "Alpenwelt Karwendel",
-          "level": "入门 / 进阶",
+          "level": {
+            "zh": "入门 / 进阶",
+            "en": "Beginner / intermediate"
+          },
           "url": "https://www.alpenwelt-karwendel.de"
         }
       ]
     },
     {
-      "sport": "雪鞋徒步（Schneeschuh）",
+      "sport": {
+        "zh": "雪鞋徒步（Schneeschuh）",
+        "en": "Snowshoeing (Schneeschuh)"
+      },
       "items": [
         {
           "name": "Alpinschule Garmisch",
-          "kind": "入门雪鞋徒步，上 Eckbauer",
-          "level": "能连续上坡 1–2 小时",
+          "kind": {
+            "zh": "入门雪鞋徒步，上 Eckbauer",
+            "en": "Beginner snowshoe hike up the Eckbauer"
+          },
+          "level": {
+            "zh": "能连续上坡 1–2 小时",
+            "en": "Able to walk uphill for 1–2 hours"
+          },
           "price": "69€",
           "url": "https://www.alpinschule-garmisch.de"
         },
         {
           "name": "Vivalpin Berg- und Skiführer",
-          "kind": "向导带队，含装备",
+          "kind": {
+            "zh": "向导带队，含装备",
+            "en": "Guided, equipment included"
+          },
           "where": "Garmisch",
-          "price": "79€ 起",
-          "how": "Google 4.9（379 条）；Grainau 游客卡在部分行程有 9 折",
+          "price": {
+            "zh": "79€ 起",
+            "en": "From €79"
+          },
+          "how": {
+            "zh": "Google 4.9（379 条）；Grainau 游客卡在部分行程有 9 折",
+            "en": "Google 4.9 (379 reviews); 10% off some tours with the Grainau guest card"
+          },
           "url": "https://www.vivalpin.com"
         },
         {
           "name": "Die Bergführer",
-          "kind": "一日团，含雪鞋和杖",
-          "where": "Garmisch、Oberammergau 一带",
+          "kind": {
+            "zh": "一日团，含雪鞋和杖",
+            "en": "Day trip, snowshoes and poles included"
+          },
+          "where": {
+            "zh": "Garmisch、Oberammergau 一带",
+            "en": "Around Garmisch and Oberammergau"
+          },
           "price": "65€",
           "url": "https://www.die-bergfuehrer.de"
         }
       ]
     },
     {
-      "sport": "攀岩 / 抱石",
+      "sport": {
+        "zh": "攀岩 / 抱石",
+        "en": "Climbing / bouldering"
+      },
       "items": [
         {
           "name": "DAV Boulderhalle Garmisch-Partenkirchen",
-          "kind": "抱石馆（DAV 当地分会）",
+          "kind": {
+            "zh": "抱石馆（DAV 当地分会）",
+            "en": "Bouldering gym (local DAV section)"
+          },
           "where": "Hausberg 5",
-          "season": "周一–五 10–22 点，周末 10–20 点",
-          "how": "Google 4.4（96 条）",
+          "season": {
+            "zh": "周一–五 10–22 点，周末 10–20 点",
+            "en": "Mon–Fri 10–22, weekends 10–20"
+          },
+          "how": {
+            "zh": "Google 4.4（96 条）",
+            "en": "Google 4.4 (96 reviews)"
+          },
           "url": "https://boulderhalle-gapa.de",
           "lat": 47.4858,
           "lng": 11.079
         },
         {
           "name": "Kletterhalle Ehrwald",
-          "kind": "攀岩馆，有课程",
-          "where": "Ehrwald（RB 25 分钟）",
+          "kind": {
+            "zh": "攀岩馆，有课程",
+            "en": "Climbing gym with courses"
+          },
+          "where": {
+            "zh": "Ehrwald（RB 25 分钟）",
+            "en": "Ehrwald (RB 25 min)"
+          },
           "url": "https://zugspitzarena.com",
           "lat": 47.4019,
           "lng": 10.9314
@@ -603,38 +1101,83 @@ table.wide td:first-child{min-width:120px}
       ]
     },
     {
-      "sport": "滑翔伞（双人飞行）",
-      "note": "从 Kreuzeck、Osterfelderkopf、Wank 起飞，冬天能不能飞看天气和缆车，预约时确认。",
+      "sport": {
+        "zh": "滑翔伞（双人飞行）",
+        "en": "Paragliding (tandem flights)"
+      },
+      "note": {
+        "zh": "从 Kreuzeck、Osterfelderkopf、Wank 起飞，冬天能不能飞看天气和缆车，预约时确认。",
+        "en": "Launches from Kreuzeck, Osterfelderkopf and Wank; winter flying depends on weather and lifts, so confirm when booking."
+      },
       "items": [
         {
           "name": "Aerotaxi",
-          "kind": "全景双人飞行",
-          "price": "164€ 起",
-          "how": "CheckYeti 5.0（36 条）",
+          "kind": {
+            "zh": "全景双人飞行",
+            "en": "Panoramic tandem flight"
+          },
+          "price": {
+            "zh": "164€ 起",
+            "en": "From €164"
+          },
+          "how": {
+            "zh": "CheckYeti 5.0（36 条）",
+            "en": "CheckYeti 5.0 (36 reviews)"
+          },
           "url": "https://www.aerotaxi.de"
         },
         {
           "name": "flyandchill GAP",
-          "kind": "双人飞行",
-          "price": "125€ 起",
-          "where": "Kreuzeck、Osterfelder、Wank",
+          "kind": {
+            "zh": "双人飞行",
+            "en": "Tandem flight"
+          },
+          "price": {
+            "zh": "125€ 起",
+            "en": "From €125"
+          },
+          "where": {
+            "zh": "Kreuzeck、Osterfelder、Wank",
+            "en": "Kreuzeck, Osterfelder, Wank"
+          },
           "url": "https://www.tandemfliegen-flyandchillgap.de"
         }
       ]
     },
     {
-      "sport": "团体活动",
+      "sport": {
+        "zh": "团体活动",
+        "en": "Group activities"
+      },
       "items": [
         {
-          "name": "游客卡免费活动",
-          "kind": "导览徒步、冬季徒步",
-          "where": "Garmisch、Grainau、Alpenwelt Karwendel",
-          "how": "住宿交了城市税就有游客卡，活动表在各地旅游局官网"
+          "name": {
+            "zh": "游客卡免费活动",
+            "en": "Free guest-card activities"
+          },
+          "kind": {
+            "zh": "导览徒步、冬季徒步",
+            "en": "Guided walks, winter hikes"
+          },
+          "where": {
+            "zh": "Garmisch、Grainau、Alpenwelt Karwendel",
+            "en": "Garmisch, Grainau, Alpenwelt Karwendel"
+          },
+          "how": {
+            "zh": "住宿交了城市税就有游客卡，活动表在各地旅游局官网",
+            "en": "You get a guest card once your stay pays the tourist tax; programmes are on each tourist office's website"
+          }
         },
         {
           "name": "DAV Sektion Garmisch-Partenkirchen",
-          "kind": "当地阿尔卑斯协会分会",
-          "how": "团体活动大多要求是会员；抱石馆是他们开的"
+          "kind": {
+            "zh": "当地阿尔卑斯协会分会",
+            "en": "Local Alpine Club section"
+          },
+          "how": {
+            "zh": "团体活动大多要求是会员；抱石馆是他们开的",
+            "en": "Most group activities are members-only; they run the bouldering gym"
+          }
         }
       ]
     }
@@ -649,8 +1192,14 @@ table.wide td:first-child{min-width:120px}
       "distance": "7.1 km",
       "duration": "1:54",
       "ascent": "84 m",
-      "start": "环线，起点在 Eibsee 站（齿轨火车 / 公交，凭 Grainau 游客卡免费）",
-      "season": "冬季环湖路一般能走，可能结冰，带简易冰爪",
+      "start": {
+        "zh": "环线，起点在 Eibsee 站（齿轨火车 / 公交，凭 Grainau 游客卡免费）",
+        "en": "Loop starting at Eibsee station (cog railway / bus, free with the Grainau guest card)"
+      },
+      "season": {
+        "zh": "冬季环湖路一般能走，可能结冰，带简易冰爪",
+        "en": "The lakeside path is usually walkable in winter but can be icy; bring microspikes"
+      },
       "url": "https://www.komoot.com/smarttour/e1805113668/eibsee-loop-trail",
       "lat": 47.4664,
       "lng": 10.9664
@@ -664,8 +1213,14 @@ table.wide td:first-child{min-width:120px}
       "distance": "6.4 km",
       "duration": "1:56",
       "ascent": "190 m",
-      "start": "环线，起点在 Olympia 滑雪场，从 Garmisch 站坐当地公交或步行",
-      "season": "峡谷全年开放（10–5 月 8:00–18:00），冬天有冰挂；峡谷后往 Vordergraseck 的路施工封闭到 2026-11-20",
+      "start": {
+        "zh": "环线，起点在 Olympia 滑雪场，从 Garmisch 站坐当地公交或步行",
+        "en": "Loop from the Olympic ski stadium, by local bus or on foot from Garmisch station"
+      },
+      "season": {
+        "zh": "峡谷全年开放（10–5 月 8:00–18:00），冬天有冰挂；峡谷后往 Vordergraseck 的路施工封闭到 2026-11-20",
+        "en": "The gorge is open all year (Oct–May 8:00–18:00) with icicles in winter; the path beyond it towards Vordergraseck is closed for works until 2026-11-20"
+      },
       "url": "https://www.komoot.com/smarttour/e1800818328/partnach-gorge-and-graseck-loop-trail",
       "lat": 47.4769,
       "lng": 11.0889
@@ -679,8 +1234,14 @@ table.wide td:first-child{min-width:120px}
       "distance": "7.4 km",
       "duration": "1:59",
       "ascent": "91 m",
-      "start": "Krün，坐去 Wallgau 的 329 路公交",
-      "season": "低海拔，冬天可走，有雪时更慢",
+      "start": {
+        "zh": "Krün，坐去 Wallgau 的 329 路公交",
+        "en": "Krün, by bus 329 towards Wallgau"
+      },
+      "season": {
+        "zh": "低海拔，冬天可走，有雪时更慢",
+        "en": "Low altitude, fine in winter, slower in snow"
+      },
       "url": "https://www.komoot.com/smarttour/e343831333/the-isar-nature-adventure-trail-near-kruen-alpenwelt-karwendel",
       "lat": 47.4908,
       "lng": 11.2567
@@ -694,8 +1255,14 @@ table.wide td:first-child{min-width:120px}
       "distance": "14.4 km",
       "duration": "3:50",
       "ascent": "145 m",
-      "start": "Krün，坐 329 路公交；住 Klais 的话离几个湖更近",
-      "season": "低海拔，冬天可走",
+      "start": {
+        "zh": "Krün，坐 329 路公交；住 Klais 的话离几个湖更近",
+        "en": "Krün, by bus 329; closer to the lakes if you stay in Klais"
+      },
+      "season": {
+        "zh": "低海拔，冬天可走",
+        "en": "Low altitude, fine in winter"
+      },
       "url": "https://www.komoot.com/smarttour/e45205244/three-lakes-hike-from-kruen",
       "lat": 47.4908,
       "lng": 11.2567
@@ -709,12 +1276,21 @@ table.wide td:first-child{min-width:120px}
       "distance": "11.8 km",
       "duration": "3:27",
       "ascent": "267 m",
-      "start": "起点在 Ammer 河谷，公交怎么到没查",
-      "season": "冬天河谷路段可能结冰",
+      "start": {
+        "zh": "起点在 Ammer 河谷，公交怎么到没查",
+        "en": "Starts in the Ammer valley; transit access not checked"
+      },
+      "season": {
+        "zh": "冬天河谷路段可能结冰",
+        "en": "The valley path can be icy in winter"
+      },
       "url": "https://www.komoot.com/smarttour/e1521737863/grosse-ammer-loop"
     },
     {
-      "name": "Höllentalklamm 到 Höllentalangerhütte 往返",
+      "name": {
+        "zh": "Höllentalklamm 到 Höllentalangerhütte 往返",
+        "en": "Höllentalklamm to the Höllentalangerhütte and back"
+      },
       "area": "Grainau",
       "rating": "4.8",
       "count": "3649",
@@ -722,45 +1298,84 @@ table.wide td:first-child{min-width:120px}
       "distance": "11.8 km",
       "duration": "4:43",
       "ascent": "625 m",
-      "start": "Hammersbach（齿轨火车站）",
-      "season": "<b>冬季关闭<\/b>，桥会拆掉，约 5 月底重开。夏天再来时的首选",
+      "start": {
+        "zh": "Hammersbach（齿轨火车站）",
+        "en": "Hammersbach (cog railway station)"
+      },
+      "season": {
+        "zh": "<b>冬季关闭<\/b>，桥会拆掉，约 5 月底重开。夏天再来时的首选",
+        "en": "<b>Closed in winter<\/b>: the bridges are removed and it reopens around the end of May. Top pick for a summer visit"
+      },
       "url": "https://www.komoot.com/smarttour/e1805146480/durch-die-hoellentalklamm-zur-hoellentalangerhuette-und-zurueck",
       "lat": 47.4604,
       "lng": 10.989
     }
   ],
-  "hikesNote": "来自 komoot「Garmisch-Partenkirchen 县最受欢迎的徒步路线」。同一页上评分很高的 Leutascher Geisterklamm（4.7，1,843 条）冬季整段封闭；Kofel、Notkarspitze 是需要高山经验的困难路线，1 月不推荐，所以都没列。",
+  "hikesNote": {
+    "zh": "来自 komoot「Garmisch-Partenkirchen 县最受欢迎的徒步路线」。同一页上评分很高的 Leutascher Geisterklamm（4.7，1,843 条）冬季整段封闭；Kofel、Notkarspitze 是需要高山经验的困难路线，1 月不推荐，所以都没列。",
+    "en": "From komoot's \"most popular hikes in Garmisch-Partenkirchen district\". The highly rated Leutascher Geisterklamm on the same page (4.7, 1,843 votes) is closed in winter; Kofel and Notkarspitze are hard routes needing alpine experience and aren't advisable in January, so they're left out."
+  },
   "excluded": [],
   "footer": {
     "paragraphs": [
-      "假设：预算是每晚总价（含清洁费和服务费），城市税单独算；「有厨房」包括可以用房东厨房的独立房间。预算内 45–55€，浮动区间 40–60€。",
-      "Booking 用了「评分 8+」和「厨房」筛选并按价格排序，每个村镇单独搜：Garmisch、Grainau、Farchant、Mittenwald、Krün、Murnau、Oberammergau、Ehrwald。Booking 把「Oberau」识别成了 Oberaudorf（另一个地方），Oberau 的 Booking 结果没查到。",
-      "Airbnb 用了「厨房」筛选、3 晚总价 ≤200€，按 Garmisch、Mittenwald、Murnau 搜；Airbnb 的搜索范围很大，结果里一半是 1 小时圈外的房源（Füssen、Schongau、Penzberg 等），都排除了。",
-      "补充搜索：Hostelworld（moun10 没有客用厨房）、traum-ferienwohnungen.de（Zugspitzland 最便宜 195€/3 晚）。Google 酒店价格没查。",
-      "Booking 的价格是未登录的公开价，你登录 Genius 后可能更低，Garmisch 的 Hasental 小公寓最有可能因此进入 60€ 以内。"
+      {
+        "zh": "假设：预算是每晚总价（含清洁费和服务费），城市税单独算；「有厨房」包括可以用房东厨房的独立房间。预算内 45–55€，浮动区间 40–60€。",
+        "en": "Assumptions: the budget is the all-in price per night (cleaning and service fees included), tourist tax counted separately; \"kitchen\" includes private rooms with use of the host's kitchen. In budget €45–55, stretch range €40–60."
+      },
+      {
+        "zh": "Booking 用了「评分 8+」和「厨房」筛选并按价格排序，每个村镇单独搜：Garmisch、Grainau、Farchant、Mittenwald、Krün、Murnau、Oberammergau、Ehrwald。Booking 把「Oberau」识别成了 Oberaudorf（另一个地方），Oberau 的 Booking 结果没查到。",
+        "en": "Booking was searched per village with the \"8+ rating\" and \"kitchen\" filters, sorted by price: Garmisch, Grainau, Farchant, Mittenwald, Krün, Murnau, Oberammergau, Ehrwald. Booking resolved \"Oberau\" to Oberaudorf (a different place), so there are no Booking results for Oberau."
+      },
+      {
+        "zh": "Airbnb 用了「厨房」筛选、3 晚总价 ≤200€，按 Garmisch、Mittenwald、Murnau 搜；Airbnb 的搜索范围很大，结果里一半是 1 小时圈外的房源（Füssen、Schongau、Penzberg 等），都排除了。",
+        "en": "Airbnb was searched with the \"kitchen\" filter and a 3-night total ≤ €200 for Garmisch, Mittenwald and Murnau; its search area is very wide and half the results were outside the 1-hour radius (Füssen, Schongau, Penzberg, etc.), all excluded."
+      },
+      {
+        "zh": "补充搜索：Hostelworld（moun10 没有客用厨房）、traum-ferienwohnungen.de（Zugspitzland 最便宜 195€/3 晚）。Google 酒店价格没查。",
+        "en": "Fallback search: Hostelworld (moun10 has no guest kitchen), traum-ferienwohnungen.de (cheapest in the Zugspitz area €195 for 3 nights). Google hotel prices were not checked."
+      },
+      {
+        "zh": "Booking 的价格是未登录的公开价，你登录 Genius 后可能更低，Garmisch 的 Hasental 小公寓最有可能因此进入 60€ 以内。",
+        "en": "Booking prices are public rates seen logged out; your Genius login may show less, which could bring the Hasental studio in Garmisch under €60."
+      }
     ],
     "links": [
       [
         {
-          "text": "Garmisch 游客卡",
+          "text": {
+            "zh": "Garmisch 游客卡",
+            "en": "Garmisch guest card"
+          },
           "url": "https://gapa-tourismus.de/guest-card"
         },
         {
-          "text": "Grainau 游客卡",
+          "text": {
+            "zh": "Grainau 游客卡",
+            "en": "Grainau guest card"
+          },
           "url": "https://grainau.de/en/guestcard-en"
         },
         {
-          "text": "Alpenwelt Karwendel 游客卡",
+          "text": {
+            "zh": "Alpenwelt Karwendel 游客卡",
+            "en": "Alpenwelt Karwendel guest card"
+          },
           "url": "https://www.alpenwelt-karwendel.de/en/alpenweltcard-guest-card"
         }
       ],
       [
         {
-          "text": "ÖBB 时刻表",
+          "text": {
+            "zh": "ÖBB 时刻表",
+            "en": "ÖBB timetable"
+          },
           "url": "https://fahrplan.oebb.at"
         },
         {
-          "text": "komoot：Garmisch 一带徒步",
+          "text": {
+            "zh": "komoot：Garmisch 一带徒步",
+            "en": "komoot: hikes around Garmisch"
+          },
           "url": "https://www.komoot.com/guide/845/hiking-around-garmisch-partenkirchen"
         },
         {
@@ -773,47 +1388,225 @@ table.wide td:first-child{min-width:120px}
 }
 </script>
 <script>
-/* europe-town-stay-finder 住宿对比页渲染器 v1
- * 读取页面里 <script type="application/json" id="stay-data"> 的 JSON，渲染成对比页。
+/* europe-town-stay-finder 住宿对比页渲染器 v2 · stay comparison page renderer
+ * 读取 <script type="application/json" id="stay-data"> 的 JSON，渲染成对比页。
  * 预算区间、每家的最低价渠道、表格里的最低价都自动计算。
- * 标了「html」的字段允许 <b> <a> <br> 等行内标签，其余字段按纯文本处理。
+ * 双语：任何文本字段都可以写成 {"zh": "…", "en": "…"}，页面右上角可切换中文 / English。
+ * 标了「html」的字段只保留 <b> <i> <a> <br> 等行内标签，其余按纯文本处理。
  */
 (function () {
   "use strict";
   var app = document.getElementById("app") || document.body.appendChild(document.createElement("div"));
 
+  var DICT = {
+    zh: {
+      version: function (n) { return "第 " + n + " 版"; },
+      nights: function (n) { return n + " 晚"; },
+      heading: function (town) { return town + " 及周边住宿"; },
+      perNight: "每晚预算", inBudget: "预算内", floatBand: "浮动区间",
+      bandIn: "预算内", bandBelow: function (p) { return "低于预算 " + p + "%"; }, bandOver: function (p) { return "超预算 " + p + "%"; }, bandFarBelow: "远低于预算",
+      verdict: "结论", towns: "公交 1 小时圈",
+      thTown: "村镇", thToCore: "到核心小镇", thTransfers: "换乘", thFreq: "班次", thLast: "末班回村", thFare: "单程票价", thCard: "游客卡 / 城市税",
+      core: "核心小镇", coreSuffix: "（核心小镇）", cityTax: "城市税 ",
+      legendCore: "核心小镇", legendTown: "周边村镇", legendStay: "推荐住宿",
+      mapNote: "示意位置图，不是精确地理底图；鼠标悬停或点开看名字。",
+      stays: "住宿总览", thStay: "住宿", thType: "房型", thRating: "评分", thWalk: "到车站", thLowest: "每晚最低", thWhere: "在哪订",
+      perNightUnit: " /晚", metaTown: "村镇", metaType: "房型", metaWalk: "到车站", metaToCore: "到核心小镇", metaBreakfast: "早餐", metaCancel: "取消",
+      channels: "各渠道价格", chChannel: "渠道", chRating: "评分", chPrice: "每晚 / 全程",
+      nearMiss: "差点入选", activities: "户外运动与教练、团体",
+      hikes: "komoot 高分徒步路线", thRoute: "路线", thRated: "评分（人数）", thDiff: "难度", thDist: "距离 · 时长 · 爬升", thStart: "起点和公交", thSeason: "季节",
+      easy: "简单", moderate: "中等", hard: "困难",
+      excluded: "排除的村镇",
+      queried: function (s) { return "查询时间：" + s + "。价格是查询时的快照，以平台为准。"; },
+      mapFail: "地图渲染失败：",
+      print: "导出 / 打印 PDF",
+      noData: function (id) { return "页面里没有找到 id=\"" + id + "\" 的 JSON。"; },
+      renderFail: "住宿页渲染失败："
+    },
+    en: {
+      version: function (n) { return "v" + n; },
+      nights: function (n) { return n + (n === 1 ? " night" : " nights"); },
+      heading: function (town) { return "Where to stay in and around " + town; },
+      perNight: "Budget per night", inBudget: "In budget", floatBand: "Stretch range",
+      bandIn: "In budget", bandBelow: function (p) { return p + "% under budget"; }, bandOver: function (p) { return p + "% over budget"; }, bandFarBelow: "Well under budget",
+      verdict: "Bottom line", towns: "Within 1 hour by public transport",
+      thTown: "Village / town", thToCore: "To main town", thTransfers: "Changes", thFreq: "Frequency", thLast: "Last ride back", thFare: "Single fare", thCard: "Guest card / tourist tax",
+      core: "Main town", coreSuffix: " (main town)", cityTax: "Tourist tax ",
+      legendCore: "Main town", legendTown: "Nearby village", legendStay: "Recommended stay",
+      mapNote: "Schematic map, not to geographic detail; hover or tap a dot to see its name.",
+      stays: "Stays at a glance", thStay: "Stay", thType: "Room type", thRating: "Rating", thWalk: "To station", thLowest: "Lowest / night", thWhere: "Book on",
+      perNightUnit: " /night", metaTown: "Village", metaType: "Room", metaWalk: "To station", metaToCore: "To main town", metaBreakfast: "Breakfast", metaCancel: "Cancellation",
+      channels: "Price by channel", chChannel: "Channel", chRating: "Rating", chPrice: "Per night / total",
+      nearMiss: "Near misses", activities: "Outdoor sports: instructors and groups",
+      hikes: "Top-rated komoot hikes", thRoute: "Route", thRated: "Rating (votes)", thDiff: "Difficulty", thDist: "Distance · time · ascent", thStart: "Start and transit", thSeason: "Season",
+      easy: "Easy", moderate: "Moderate", hard: "Hard",
+      excluded: "Villages ruled out",
+      queried: function (s) { return "Checked " + s + ". Prices are a snapshot from that time; the booking platform is authoritative."; },
+      mapFail: "Could not draw the map: ",
+      print: "Print / save as PDF",
+      noData: function (id) { return "No JSON with id=\"" + id + "\" found on the page."; },
+      renderFail: "Could not render the stay page: "
+    }
+  };
+
+  /* ---- 共用：双语、HTML 白名单、链接校验 · shared: i18n, HTML allowlist, URL check ---- */
+  var LANG_KEY = "travel-skill-lang";
+  var CUR = /^zh/i.test((navigator.language || "")) ? "zh" : "en";
+  function t(k) {
+    var s = DICT[CUR][k];
+    if (s == null) s = DICT.zh[k];
+    return typeof s === "function" ? s.apply(null, Array.prototype.slice.call(arguments, 1)) : s;
+  }
+  // 本地化字段：任何字符串（或数组）都可以写成 {"zh": "…", "en": "…"}；缺一种语言时退回另一种
+  function isLoc(v) {
+    if (!v || typeof v !== "object" || Array.isArray(v)) return false;
+    var k = Object.keys(v);
+    return k.length > 0 && k.every(function (x) { return x === "zh" || x === "en"; });
+  }
+  function localize(v, lang) {
+    if (isLoc(v)) {
+      var pick = v[lang];
+      if (pick == null || pick === "") pick = v[lang === "zh" ? "en" : "zh"];
+      return localize(pick, lang);
+    }
+    if (Array.isArray(v)) return v.map(function (x) { return localize(x, lang); });
+    if (v && typeof v === "object") {
+      var o = {};
+      Object.keys(v).forEach(function (k) { o[k] = localize(v[k], lang); });
+      return o;
+    }
+    return v;
+  }
+  function scanLangs(v, acc) {
+    if (isLoc(v)) Object.keys(v).forEach(function (k) { if (v[k] != null && v[k] !== "") acc[k] = 1; });
+    if (v && typeof v === "object") Object.keys(v).forEach(function (k) { scanLangs(v[k], acc); });
+    return acc;
+  }
+  function availableLangs(raw) {
+    var langs = (Array.isArray(raw.languages) ? raw.languages : []).filter(function (l) { return l === "zh" || l === "en"; });
+    if (!langs.length) langs = Object.keys(scanLangs(raw, {})).sort().reverse(); // zh 在前
+    if (!langs.length) langs = [raw.lang === "en" ? "en" : "zh"];
+    return langs;
+  }
+  function initialLang(raw, langs) {
+    var q = (location.search.match(/[?&]lang=(zh|en)\b/) || [])[1];
+    var saved = null;
+    try { saved = localStorage.getItem(LANG_KEY); } catch (e) { /* 隐私模式等 */ }
+    var order = [q, saved, raw.lang, CUR, langs[0]];
+    for (var i = 0; i < order.length; i++) if (order[i] && langs.indexOf(order[i]) >= 0) return order[i];
+    return langs[0];
+  }
+
   function esc(s) {
-    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   }
-  function html(s) { return s == null ? "" : String(s); }
+  function safeUrl(u) {
+    u = String(u == null ? "" : u).trim();
+    return /^(https?:|mailto:|#)/i.test(u) ? u : "";
+  }
+  function a(url, text) {
+    var u = safeUrl(url);
+    return u ? '<a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(text) + "</a>" : esc(text);
+  }
+  // 标「html」的字段只保留少量行内标签，链接只允许 http(s) / mailto，其余标签去壳、属性全部去掉
+  var KEEP = { B: 1, STRONG: 1, I: 1, EM: 1, A: 1, BR: 1, SMALL: 1, CODE: 1, SPAN: 1 };
+  var DROP = { SCRIPT: 1, STYLE: 1, IFRAME: 1, OBJECT: 1, EMBED: 1, TEMPLATE: 1, NOSCRIPT: 1, SVG: 1, MATH: 1, LINK: 1, META: 1 };
+  function clean(node) {
+    Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+      if (n.nodeType === 3) return;
+      if (n.nodeType !== 1 || DROP[n.tagName.toUpperCase()]) { node.removeChild(n); return; }
+      clean(n);
+      var tag = n.tagName.toUpperCase();
+      if (!KEEP[tag]) {
+        while (n.firstChild) node.insertBefore(n.firstChild, n);
+        node.removeChild(n);
+        return;
+      }
+      var href = tag === "A" ? safeUrl(n.getAttribute("href")) : "";
+      Array.prototype.slice.call(n.attributes).forEach(function (at) { n.removeAttribute(at.name); });
+      if (href) { n.setAttribute("href", href); n.setAttribute("target", "_blank"); n.setAttribute("rel", "noopener"); }
+    });
+  }
+  function html(s) {
+    if (s == null || s === "") return "";
+    s = String(s);
+    if (!/[<&]/.test(s)) return s;
+    var tpl = document.createElement("template");
+    tpl.innerHTML = s;
+    clean(tpl.content);
+    var box = document.createElement("div");
+    box.appendChild(tpl.content);
+    return box.innerHTML;
+  }
+  function toolbar(langs) {
+    var s = '<div class="toolbar no-print">';
+    if (langs.length > 1) {
+      s += '<div class="lang-switch" role="group" aria-label="Language / 语言">' + langs.map(function (l) {
+        return '<button type="button" data-lang="' + l + '" aria-pressed="' + (l === CUR) + '">' + (l === "zh" ? "中文" : "EN") + "</button>";
+      }).join("") + "</div>";
+    }
+    return s + '<button type="button" class="print-btn" data-print>' + esc(t("print")) + "</button></div>";
+  }
+  // 启动：读 JSON → 选语言 → 渲染；切换语言时保持滚动位置
+  function boot(dataId) {
+    var raw, langs;
+    function draw() {
+      document.documentElement.lang = CUR === "zh" ? "zh-CN" : "en";
+      var d = localize(raw, CUR);
+      render(d, toolbar(langs));
+      if (d.title) document.title = d.title;
+    }
+    try {
+      var el = document.getElementById(dataId);
+      if (!el) throw new Error(t("noData", dataId));
+      raw = JSON.parse(el.textContent);
+      langs = availableLangs(raw);
+      CUR = initialLang(raw, langs);
+      draw();
+    } catch (e) {
+      app.className = "wrap";
+      app.innerHTML = '<div class="render-error">' + esc(t("renderFail")) + esc(e.message) + "</div>";
+      return;
+    }
+    app.addEventListener("click", function (e) {
+      var b = e.target && e.target.closest ? e.target.closest("[data-lang],[data-print]") : null;
+      if (!b) return;
+      if (b.hasAttribute("data-print")) { window.print(); return; }
+      var l = b.getAttribute("data-lang");
+      if (!l || l === CUR) return;
+      CUR = l;
+      try { localStorage.setItem(LANG_KEY, l); } catch (x) { /* ignore */ }
+      var y = window.scrollY;
+      draw();
+      window.scrollTo(0, y);
+    });
+  }
+  /* ---- 共用部分结束 · end of shared part ---- */
+
+
   function num(s) {
     if (typeof s === "number") return s;
     var m = String(s == null ? "" : s).replace(/,/g, ".").match(/\d+(\.\d+)?/);
     return m ? parseFloat(m[0]) : NaN;
   }
-  function a(url, text) {
-    return url ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(text) + "</a>" : esc(text);
-  }
   function list(items) {
     return items && items.length ? '<ul class="notes">' + items.map(function (x) { return "<li>" + html(x) + "</li>"; }).join("") + "</ul>" : "";
   }
   function fmt(v, cur) { return isNaN(v) ? "—" : (Math.round(v * 100) / 100) + cur; }
-
   function isNum(v) { return typeof v === "number" && !isNaN(v); }
+  function mapNote() { return '<p class="small muted" style="margin-top:6px">' + esc(t("mapNote")) + "</p>"; }
 
-  function render(d) {
+  function render(d, bar) {
     var cur = (d.budget && d.budget.currency) || "€";
     var B = d.budget ? num(d.budget.perNight) : NaN;
-    var out = [];
-
-    out.push('<div class="toolbar no-print"><button type="button" onclick="window.print()">导出 / 打印 PDF</button></div>');
+    var out = [bar];
 
     // 地图用的点：住宿（村镇 + 住宿自己的坐标）、户外运动、komoot 路线
     var mapStays = [];
-    (d.towns || []).forEach(function (t) {
-      if (isNum(t.lat) && isNum(t.lng)) mapStays.push({ lat: t.lat, lng: t.lng, core: !!t.core, label: t.name + (t.core ? "（核心小镇）" : "") });
+    (d.towns || []).forEach(function (tw) {
+      if (isNum(tw.lat) && isNum(tw.lng)) mapStays.push({ lat: tw.lat, lng: tw.lng, core: !!tw.core, label: tw.name + (tw.core ? t("coreSuffix") : "") });
     });
     (d.stays || []).forEach(function (s, i) {
       if (!isNum(s.lat) || !isNum(s.lng)) return;
@@ -826,22 +1619,22 @@ table.wide td:first-child{min-width:120px}
     var mapActivities = [];
     (d.activities || []).forEach(function (g) {
       (g.items || []).forEach(function (it) {
-        if (isNum(it.lat) && isNum(it.lng)) mapActivities.push({ lat: it.lat, lng: it.lng, label: g.sport + "：" + it.name });
+        if (isNum(it.lat) && isNum(it.lng)) mapActivities.push({ lat: it.lat, lng: it.lng, label: g.sport + ": " + it.name });
       });
     });
     var mapHikes = (d.hikes || []).filter(function (h) { return isNum(h.lat) && isNum(h.lng); }).map(function (h) {
-      return { lat: h.lat, lng: h.lng, label: h.name + (h.rating ? "（" + h.rating + "★）" : "") };
+      return { lat: h.lat, lng: h.lng, label: h.name + (h.rating ? " (" + h.rating + "★)" : "") };
     });
 
     // 预算区间：×0.9–1.1 预算内；×0.8–0.9 / ×1.1–1.2 浮动
     function band(p) {
       if (isNaN(B) || isNaN(p)) return "";
       var r = p / B;
-      if (r >= 0.9 && r <= 1.1) return '<span class="band in">预算内</span>';
-      if (r >= 0.8 && r < 0.9) return '<span class="band float">低于预算 ' + Math.round((1 - r) * 100) + "%</span>";
-      if (r > 1.1 && r <= 1.2) return '<span class="band float">超预算 ' + Math.round((r - 1) * 100) + "%</span>";
-      if (r < 0.8) return '<span class="band">远低于预算</span>';
-      return '<span class="band">超预算 ' + Math.round((r - 1) * 100) + "%</span>";
+      if (r >= 0.9 && r <= 1.1) return '<span class="band in">' + esc(t("bandIn")) + "</span>";
+      if (r >= 0.8 && r < 0.9) return '<span class="band float">' + esc(t("bandBelow", Math.round((1 - r) * 100))) + "</span>";
+      if (r > 1.1 && r <= 1.2) return '<span class="band float">' + esc(t("bandOver", Math.round((r - 1) * 100))) + "</span>";
+      if (r < 0.8) return '<span class="band">' + esc(t("bandFarBelow")) + "</span>";
+      return '<span class="band">' + esc(t("bandOver", Math.round((r - 1) * 100))) + "</span>";
     }
     // 每家住宿：最低价渠道
     function cheapest(s) {
@@ -854,19 +1647,19 @@ table.wide td:first-child{min-width:120px}
     }
 
     // 页头
-    var eyebrow = d.eyebrow || [d.town, d.dateLabel, d.nights ? d.nights + " 晚" : "", "第 " + (d.version || 1) + " 版"].filter(Boolean).join(" · ");
+    var eyebrow = d.eyebrow || [d.town, d.dateLabel, d.nights ? t("nights", d.nights) : "", t("version", d.version || 1)].filter(Boolean).join(" · ");
     out.push('<header><div class="eyebrow">' + esc(eyebrow) + "</div>");
-    out.push("<h1>" + esc(d.heading || (d.town + " 及周边住宿")) + "</h1>");
+    out.push("<h1>" + esc(d.heading || t("heading", d.town)) + "</h1>");
     if (!isNaN(B)) {
-      out.push('<div class="budget"><span>每晚预算 <b>' + fmt(B, cur) + "</b></span><span>预算内 <b>" + fmt(B * 0.9, cur) + "–" + fmt(B * 1.1, cur) +
-        "</b></span><span>浮动区间 <b>" + fmt(B * 0.8, cur) + "–" + fmt(B * 1.2, cur) + "</b></span></div>");
+      out.push('<div class="budget"><span>' + esc(t("perNight")) + " <b>" + fmt(B, cur) + "</b></span><span>" + esc(t("inBudget")) + " <b>" + fmt(B * 0.9, cur) + "–" + fmt(B * 1.1, cur) +
+        "</b></span><span>" + esc(t("floatBand")) + " <b>" + fmt(B * 0.8, cur) + "–" + fmt(B * 1.2, cur) + "</b></span></div>");
     }
     if (d.intro) out.push('<p class="route-line">' + html(d.intro) + "</p>");
     out.push("</header>");
 
     // 结论
     if (d.verdict) {
-      out.push('<div class="verdict"><h2>结论</h2>' + (d.verdict.items ? "<ul>" + d.verdict.items.map(function (x) { return "<li>" + html(x) + "</li>"; }).join("") + "</ul>" : ""));
+      out.push('<div class="verdict"><h2>' + esc(t("verdict")) + "</h2>" + (d.verdict.items ? "<ul>" + d.verdict.items.map(function (x) { return "<li>" + html(x) + "</li>"; }).join("") + "</ul>" : ""));
       (d.verdict.alerts || (d.verdict.alert ? [d.verdict.alert] : [])).forEach(function (x) { out.push('<p class="alert">' + html(x) + "</p>"); });
       out.push("</div>");
     }
@@ -874,19 +1667,20 @@ table.wide td:first-child{min-width:120px}
     // 公交 1 小时圈
     var towns = d.towns || [];
     if (towns.length) {
-      out.push('<section><h2 class="sec">' + esc(d.townsTitle || "公交 1 小时圈") + '</h2><div class="scroll"><table class="wide"><thead><tr><th>村镇</th><th>到核心小镇</th><th>换乘</th><th>班次</th><th>末班回村</th><th>单程票价</th><th>游客卡 / 城市税</th></tr></thead><tbody>');
-      towns.forEach(function (t) {
-        out.push('<tr class="' + (t.core ? "core-row" : "") + '"><td>' + esc(t.name) + (t.core ? '<span class="core-mark">核心小镇</span>' : "") + "</td>" +
-          '<td class="num">' + esc(t.core ? "—" : (t.time || "—")) + (t.mode && !t.core ? '<br><span class="small muted">' + esc(t.mode) + "</span>" : "") + "</td>" +
-          '<td class="num">' + esc(t.core ? "—" : (t.transfers == null ? "—" : t.transfers)) + "</td>" +
-          '<td style="white-space:nowrap">' + esc(t.freq || "—") + '</td><td class="num">' + esc(t.lastBack || "—") + '</td><td class="num">' + esc(t.fare || "—") + "</td>" +
-          "<td>" + html(t.guestCard || "—") + (t.cityTax ? '<br><span class="small muted">城市税 ' + esc(t.cityTax) + "</span>" : "") + "</td></tr>");
+      out.push('<section><h2 class="sec">' + esc(d.townsTitle || t("towns")) + '</h2><div class="scroll"><table class="wide"><thead><tr>' +
+        ["thTown", "thToCore", "thTransfers", "thFreq", "thLast", "thFare", "thCard"].map(function (k) { return "<th>" + esc(t(k)) + "</th>"; }).join("") + "</tr></thead><tbody>");
+      towns.forEach(function (tw) {
+        out.push('<tr class="' + (tw.core ? "core-row" : "") + '"><td>' + esc(tw.name) + (tw.core ? '<span class="core-mark">' + esc(t("core")) + "</span>" : "") + "</td>" +
+          '<td class="num">' + esc(tw.core ? "—" : (tw.time || "—")) + (tw.mode && !tw.core ? '<br><span class="small muted">' + esc(tw.mode) + "</span>" : "") + "</td>" +
+          '<td class="num">' + esc(tw.core ? "—" : (tw.transfers == null ? "—" : tw.transfers)) + "</td>" +
+          '<td style="white-space:nowrap">' + esc(tw.freq || "—") + '</td><td class="num">' + esc(tw.lastBack || "—") + '</td><td class="num">' + esc(tw.fare || "—") + "</td>" +
+          "<td>" + (tw.guestCard ? html(tw.guestCard) : "—") + (tw.cityTax ? '<br><span class="small muted">' + esc(t("cityTax")) + esc(tw.cityTax) + "</span>" : "") + "</td></tr>");
       });
       out.push("</tbody></table></div>");
       if (d.townsNote) out.push('<p class="small muted" style="margin-top:8px">' + html(d.townsNote) + "</p>");
       if (mapStays.length) {
-        out.push('<div id="map-stays" class="mapbox"></div><div class="map-legend"><span><i style="background:#c0392b"></i>核心小镇</span><span><i style="background:#2e7d4f"></i>周边村镇</span><span><i style="background:#1f5f8f"></i>推荐住宿</span></div>' +
-          '<p class="small muted" style="margin-top:6px">示意位置图，不是精确地理底图；鼠标悬停或点开看名字。</p>');
+        out.push('<div id="map-stays" class="mapbox"></div><div class="map-legend"><span><i class="lg-core"></i>' + esc(t("legendCore")) + '</span><span><i class="lg-town"></i>' + esc(t("legendTown")) +
+          '</span><span><i class="lg-stay"></i>' + esc(t("legendStay")) + "</span></div>" + mapNote());
       }
       out.push("</section>");
     }
@@ -894,13 +1688,14 @@ table.wide td:first-child{min-width:120px}
     // 住宿总览表
     var stays = d.stays || [];
     if (stays.length) {
-      var mins = stays.map(function (s) { var c = cheapest(s); return c ? c.v : NaN; });
-      var lowest = Math.min.apply(null, mins.filter(function (v) { return !isNaN(v); }));
-      out.push('<section><h2 class="sec">' + esc(d.staysTitle || "住宿总览") + '</h2><div class="scroll"><table class="wide"><thead><tr><th>#</th><th>住宿</th><th>村镇</th><th>房型</th><th>评分</th><th>到车站</th><th>每晚最低</th><th>在哪订</th></tr></thead><tbody>');
+      var mins = stays.map(function (s) { var c = cheapest(s); return c ? c.v : NaN; }).filter(function (v) { return !isNaN(v); });
+      var lowest = mins.length ? Math.min.apply(null, mins) : NaN;
+      out.push('<section><h2 class="sec">' + esc(d.staysTitle || t("stays")) + '</h2><div class="scroll"><table class="wide"><thead><tr><th>#</th>' +
+        ["thStay", "thTown", "thType", "thRating", "thWalk", "thLowest", "thWhere"].map(function (k) { return "<th>" + esc(t(k)) + "</th>"; }).join("") + "</tr></thead><tbody>");
       stays.forEach(function (s, i) {
         var c = cheapest(s);
         var ratings = (s.prices || []).filter(function (p) { return p.rating; }).map(function (p) { return p.channel + " " + p.rating; });
-        out.push('<tr><td class="num">' + (i + 1) + "</td><td>" + esc(s.name) + "</td><td>" + esc(s.town) + "</td><td>" + esc(s.type || "—") + '</td><td class="num">' + esc(ratings.join(" / ") || "—") +
+        out.push('<tr><td class="num">' + (i + 1) + '</td><td><a href="#stay-' + (i + 1) + '">' + esc(s.name) + "</a></td><td>" + esc(s.town) + "</td><td>" + esc(s.type || "—") + '</td><td class="num">' + esc(ratings.join(" / ") || "—") +
           "</td><td>" + esc(s.walk || "—") + '</td><td class="num' + (c && c.v === lowest ? " best" : "") + '">' + (c ? fmt(c.v, cur) : "—") + "<br>" + (c ? band(c.v) : "") +
           "</td><td>" + (c ? esc(c.p.channel) : "—") + "</td></tr>");
       });
@@ -913,13 +1708,14 @@ table.wide td:first-child{min-width:120px}
         var c = cheapest(s);
         out.push('<section class="route" id="stay-' + (i + 1) + '"><div class="route-head"><div style="display:flex;flex-direction:column;gap:4px">' +
           (s.tag ? '<span class="pick">' + esc(s.tag) + "</span>" : "") + "<h3>" + (i + 1) + " · " + esc(s.name) + '</h3></div><div class="total">' +
-          (c ? fmt(c.v, cur) + '<span class="small muted" style="font-family:var(--f-body);font-weight:400"> /晚</span>' : "—") + "</div></div>");
-        var meta = [["村镇", s.town], ["房型", s.type], ["到车站", s.walk], ["到核心小镇", s.toCore], ["早餐", s.breakfast], ["取消", s.cancel]]
-          .filter(function (m) { return m[1]; }).map(function (m) { return "<span>" + m[0] + " <b>" + esc(m[1]) + "</b></span>"; });
+          (c ? fmt(c.v, cur) + '<span class="small muted" style="font-family:var(--f-body);font-weight:400">' + esc(t("perNightUnit")) + "</span>" : "—") + "</div></div>");
+        var meta = [["metaTown", s.town], ["metaType", s.type], ["metaWalk", s.walk], ["metaToCore", s.toCore], ["metaBreakfast", s.breakfast], ["metaCancel", s.cancel]]
+          .filter(function (m) { return m[1]; }).map(function (m) { return "<span>" + esc(t(m[0])) + " <b>" + esc(m[1]) + "</b></span>"; });
         if (meta.length) out.push('<div class="stay-meta">' + meta.join("") + "</div>");
         if (s.summary) out.push("<p>" + html(s.summary) + "</p>");
         if (s.prices && s.prices.length) {
-          out.push('<div><div class="block-title">各渠道价格</div><div class="channels"><span class="h">渠道</span><span class="h num">评分</span><span class="h num">每晚 / 全程</span>');
+          out.push('<div><div class="block-title">' + esc(t("channels")) + '</div><div class="channels"><span class="h">' + esc(t("chChannel")) + '</span><span class="h num">' + esc(t("chRating")) +
+            '</span><span class="h num">' + esc(t("chPrice")) + "</span>");
           s.prices.forEach(function (p) {
             var v = num(p.perNight), isBest = c && v === c.v;
             out.push("<span>" + a(p.url, p.channel) + (p.note ? '<br><span class="small muted">' + html(p.note) + "</span>" : "") + '</span><span class="num">' + esc(p.rating || "—") +
@@ -934,7 +1730,7 @@ table.wide td:first-child{min-width:120px}
 
     // 差点入选
     if (d.nearMiss && d.nearMiss.length) {
-      out.push('<section class="excluded"><h2>差点入选</h2>' + d.nearMiss.map(function (n) {
+      out.push('<section class="excluded"><h2>' + esc(t("nearMiss")) + "</h2>" + d.nearMiss.map(function (n) {
         return '<div class="ex"><b>' + a(n.url, n.name) + (n.town ? '<span class="muted" style="font-weight:400"> · ' + esc(n.town) + "</span>" : "") +
           (n.price ? '<span class="muted" style="font-weight:400;font-family:var(--f-data)"> · ' + esc(n.price) + "</span>" : "") + "</b><span>" + html(n.why) + "</span></div>";
       }).join("") + "</section>");
@@ -942,7 +1738,7 @@ table.wide td:first-child{min-width:120px}
 
     // 户外运动与教练/团体
     if (d.activities && d.activities.length) {
-      out.push('<section class="panel"><h2>' + esc(d.activitiesTitle || "户外运动与教练、团体") + "</h2>");
+      out.push('<section class="panel"><h2>' + esc(d.activitiesTitle || t("activities")) + "</h2>");
       d.activities.forEach(function (g) {
         out.push('<div class="sport"><h3>' + esc(g.sport) + "</h3>" + (g.note ? '<p class="small muted">' + html(g.note) + "</p>" : ""));
         (g.items || []).forEach(function (it) {
@@ -952,38 +1748,38 @@ table.wide td:first-child{min-width:120px}
         });
         out.push("</div>");
       });
-      if (mapActivities.length) out.push('<div id="map-activities" class="mapbox"></div><p class="small muted" style="margin-top:6px">示意位置图，不是精确地理底图；鼠标悬停或点开看名字。</p>');
+      if (mapActivities.length) out.push('<div id="map-activities" class="mapbox"></div>' + mapNote());
       out.push("</section>");
     }
 
     // komoot 徒步路线
     if (d.hikes && d.hikes.length) {
-      var dmap = { easy: "简单", moderate: "中等", hard: "困难" };
-      out.push('<section><h2 class="sec">' + esc(d.hikesTitle || "komoot 高分徒步路线") + '</h2><div class="scroll"><table class="wide"><thead><tr><th>路线</th><th>评分（人数）</th><th>难度</th><th>距离 · 时长 · 爬升</th><th>起点和公交</th><th>季节</th></tr></thead><tbody>');
+      out.push('<section><h2 class="sec">' + esc(d.hikesTitle || t("hikes")) + '</h2><div class="scroll"><table class="wide"><thead><tr>' +
+        ["thRoute", "thRated", "thDiff", "thDist", "thStart", "thSeason"].map(function (k) { return "<th>" + esc(t(k)) + "</th>"; }).join("") + "</tr></thead><tbody>");
       d.hikes.forEach(function (h) {
-        var dk = dmap[h.difficulty] ? h.difficulty : "moderate";
+        var dk = { easy: 1, moderate: 1, hard: 1 }[h.difficulty] ? h.difficulty : "moderate";
         out.push("<tr><td>" + a(h.url, h.name) + (h.area ? '<br><span class="small muted">' + esc(h.area) + "</span>" : "") + "</td>" +
-          '<td class="hike-rating">' + esc(h.rating) + " <small>(" + esc(h.count) + ")</small></td>" +
-          '<td><span class="diff ' + dk + '"><i></i>' + dmap[dk] + "</span></td>" +
+          '<td class="hike-rating">' + esc(h.rating || "—") + (h.count ? " <small>(" + esc(h.count) + ")</small>" : "") + "</td>" +
+          '<td><span class="diff ' + dk + '"><i></i>' + esc(t(dk)) + "</span></td>" +
           '<td class="num">' + [h.distance, h.duration, h.ascent ? "↑" + h.ascent : ""].filter(Boolean).map(esc).join(" · ") + "</td>" +
-          "<td>" + html(h.start || "—") + "</td><td>" + html(h.season || "—") + "</td></tr>");
+          "<td>" + (h.start ? html(h.start) : "—") + "</td><td>" + (h.season ? html(h.season) : "—") + "</td></tr>");
       });
       out.push("</tbody></table></div>");
       if (d.hikesNote) out.push('<p class="small muted" style="margin-top:8px">' + html(d.hikesNote) + "</p>");
-      if (mapHikes.length) out.push('<div id="map-hikes" class="mapbox"></div><p class="small muted" style="margin-top:6px">示意位置图，不是精确地理底图；鼠标悬停或点开看名字。</p>');
+      if (mapHikes.length) out.push('<div id="map-hikes" class="mapbox"></div>' + mapNote());
       out.push("</section>");
     }
 
     // 排除的村镇 / 其他
     if (d.excluded && d.excluded.length) {
-      out.push('<section class="excluded"><h2>' + esc(d.excludedTitle || "排除的村镇") + "</h2>" + d.excluded.map(function (e) {
+      out.push('<section class="excluded"><h2>' + esc(d.excludedTitle || t("excluded")) + "</h2>" + d.excluded.map(function (e) {
         return '<div class="ex"><b>' + esc(e.name) + "</b><span>" + html(e.why) + "</span></div>";
       }).join("") + "</section>");
     }
 
     // 页脚
     var f = d.footer || {};
-    out.push("<footer><p>查询时间：" + esc(d.queriedAt || "") + "。价格是查询时的快照，以平台为准。</p>");
+    out.push("<footer><p>" + esc(t("queried", d.queriedAt || "")) + "</p>");
     (f.paragraphs || []).forEach(function (p) { out.push("<p>" + html(p) + "</p>"); });
     if (f.links && f.links.length) {
       out.push("<ul>" + f.links.map(function (row) {
@@ -994,7 +1790,6 @@ table.wide td:first-child{min-width:120px}
 
     app.className = "wrap";
     app.innerHTML = out.join("");
-    if (d.title) document.title = d.title;
 
     buildMap("map-stays", mapStays);
     buildMap("map-activities", mapActivities);
@@ -1007,7 +1802,7 @@ table.wide td:first-child{min-width:120px}
     var el = document.getElementById(id);
     if (!el) return;
     var pts = (points || []).filter(function (p) { return isNum(p.lat) && isNum(p.lng); });
-    if (!pts.length) { el.parentNode && el.parentNode.removeChild(el); return; }
+    if (!pts.length) { if (el.parentNode) el.parentNode.removeChild(el); return; }
     try {
       var W = 640, H = 320, PAD = 36;
       var lats = pts.map(function (p) { return p.lat; });
@@ -1016,73 +1811,50 @@ table.wide td:first-child{min-width:120px}
       var minLng = Math.min.apply(null, lngs), maxLng = Math.max.apply(null, lngs);
       if (maxLat - minLat < 0.002) { var cLat = (minLat + maxLat) / 2; minLat = cLat - 0.01; maxLat = cLat + 0.01; }
       if (maxLng - minLng < 0.002) { var cLng = (minLng + maxLng) / 2; minLng = cLng - 0.01; maxLng = cLng + 0.01; }
-      var cosLat = Math.max(0.15, Math.cos((minLat + maxLat) / 2 * Math.PI / 180)); // 按纬度修正经度方向的比例，避免东西方向被拉宽
+      var cosLat = Math.max(0.15, Math.cos((minLat + maxLat) / 2 * Math.PI / 180)); // 按纬度修正经度方向的比例
       var spanX = (maxLng - minLng) * cosLat, spanY = maxLat - minLat;
       var scale = Math.min((W - PAD * 2) / spanX, (H - PAD * 2) / spanY);
       var offX = PAD + ((W - PAD * 2) - spanX * scale) / 2;
       var offY = PAD + ((H - PAD * 2) - spanY * scale) / 2;
-      function project(lat, lng) {
-        return [offX + (lng - minLng) * cosLat * scale, offY + (maxLat - lat) * scale];
-      }
+      function project(lat, lng) { return [offX + (lng - minLng) * cosLat * scale, offY + (maxLat - lat) * scale]; }
 
       // 比例尺：挑一个让比例尺长度落在 40–110px 之间的整数公里数
       var pxPerKm = scale / 111.32;
       var niceKm = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500].reduce(function (best, km) {
         var px = km * pxPerKm;
         return (px >= 40 && px <= 110) ? km : best;
-      }, null) || Math.round(70 / pxPerKm) || 1;
+      }, null) || Math.max(1, Math.round(70 / pxPerKm));
       var barPx = niceKm * pxPerKm;
 
-      var svg = [];
-      svg.push('<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">');
+      var svg = ['<svg viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img">'];
       svg.push('<rect width="' + W + '" height="' + H + '" class="map-bg"></rect>');
       for (var gx = 1; gx < 4; gx++) { var xg = (W / 4) * gx; svg.push('<line x1="' + xg + '" y1="0" x2="' + xg + '" y2="' + H + '" class="map-grid"></line>'); }
       for (var gy = 1; gy < 3; gy++) { var yg = (H / 3) * gy; svg.push('<line x1="0" y1="' + yg + '" x2="' + W + '" y2="' + yg + '" class="map-grid"></line>'); }
-
-      // 指北针
-      svg.push('<g class="map-compass" transform="translate(' + (W - 28) + ',26)">' +
-        '<line x1="0" y1="11" x2="0" y2="-9"></line><polygon points="0,-13 -5,-3 5,-3"></polygon>' +
-        '<text y="23" text-anchor="middle">N</text></g>');
-
-      // 比例尺
+      svg.push('<g class="map-compass" transform="translate(' + (W - 28) + ',26)"><line x1="0" y1="11" x2="0" y2="-9"></line><polygon points="0,-13 -5,-3 5,-3"></polygon><text y="23" text-anchor="middle">N</text></g>');
       var sx = PAD, sy = H - 16;
-      svg.push('<g class="map-scale">' +
-        '<line x1="' + sx + '" y1="' + sy + '" x2="' + (sx + barPx) + '" y2="' + sy + '"></line>' +
+      svg.push('<g class="map-scale"><line x1="' + sx + '" y1="' + sy + '" x2="' + (sx + barPx) + '" y2="' + sy + '"></line>' +
         '<line x1="' + sx + '" y1="' + (sy - 4) + '" x2="' + sx + '" y2="' + (sy + 4) + '"></line>' +
         '<line x1="' + (sx + barPx) + '" y1="' + (sy - 4) + '" x2="' + (sx + barPx) + '" y2="' + (sy + 4) + '"></line>' +
-        '<text x="' + (sx + barPx / 2) + '" y="' + (sy - 7) + '" text-anchor="middle">' + (niceKm < 1 ? niceKm : niceKm) + ' km</text></g>');
-
-      // 点和标签（示意位置，标签交替上下/贴边自动靠内，避免被裁切）
+        '<text x="' + (sx + barPx / 2) + '" y="' + (sy - 7) + '" text-anchor="middle">' + niceKm + " km</text></g>");
       pts.forEach(function (p, i) {
-        var xy = project(p.lat, p.lng);
-        var x = xy[0], y = xy[1];
+        var xy = project(p.lat, p.lng), x = xy[0], y = xy[1];
         var cls = p.core ? "core" : (p.kind === "stay" ? "stay" : "");
-        var r = p.core ? 7 : 5;
-        svg.push('<g>');
-        svg.push('<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + r + '" class="map-dot ' + cls + '">' +
+        svg.push('<g><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + (p.core ? 7 : 5) + '" class="map-dot ' + cls + '">' +
           (p.label ? "<title>" + esc(p.label) + "</title>" : "") + "</circle>");
         if (p.label) {
-          var dy = i % 2 === 0 ? -10 : 17;
           var anchor = x > W - 90 ? "end" : (x < 90 ? "start" : "middle");
-          svg.push('<text x="' + x.toFixed(1) + '" y="' + (y + dy).toFixed(1) + '" text-anchor="' + anchor + '" class="map-label">' + esc(p.label) + "</text>");
+          svg.push('<text x="' + x.toFixed(1) + '" y="' + (y + (i % 2 === 0 ? -10 : 17)).toFixed(1) + '" text-anchor="' + anchor + '" class="map-label">' + esc(p.label) + "</text>");
         }
         svg.push("</g>");
       });
       svg.push("</svg>");
       el.innerHTML = svg.join("");
     } catch (e) {
-      el.outerHTML = '<p class="small muted">地图渲染失败：' + esc(e.message) + "</p>";
+      el.outerHTML = '<p class="small muted">' + esc(t("mapFail")) + esc(e.message) + "</p>";
     }
   }
 
-  try {
-    var el = document.getElementById("stay-data");
-    if (!el) throw new Error("页面里没有找到 id=\"stay-data\" 的 JSON。");
-    render(JSON.parse(el.textContent));
-  } catch (e) {
-    app.className = "wrap";
-    app.innerHTML = '<div class="render-error">住宿页渲染失败：' + esc(e.message) + "</div>";
-  }
+  boot("stay-data");
 })();
 
 </script>

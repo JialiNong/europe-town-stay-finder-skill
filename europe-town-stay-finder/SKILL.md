@@ -14,7 +14,12 @@ description: "在欧洲给一个想去的小镇找住宿：把核心小镇和公
 
 平时要手动在 Booking、Airbnb、Google 地图和各家官网之间来回对比价格和评价。这个 skill 的思路是：**先画出「核心小镇 + 公交 1 小时圈」，再在圈内每个村镇按同样的门槛搜 Booking 和 Airbnb，不够就补充 Google 和当地民宿；最后把核心小镇周边的户外运动、教练和团体、komoot 高分徒步路线一起整理出来。**
 
-回复和 HTML 页面都用中文。
+## 语言
+
+- 和用户对话用用户自己的语言。
+- **页面默认中英双语**：JSON 顶层写 `"languages": ["zh", "en"]` 和 `"lang"`（默认先显示哪种，见 `profile.md` 的「页面语言」，没写就用用户的语言），每个文本字段写成 `{"zh": "…", "en": "…"}`。页面右上角有「中文 / EN」切换按钮，浏览者的选择会被记住；链接后面加 `?lang=en` 可以直接打开英文版。
+- 两种语言的内容必须一致：数字、价格、时间、链接完全相同，只翻译文字；地名、车次、站名、机构名保留原文。
+- 用户只要一种语言，或者想省 token 时（双语会让 JSON 长约一倍），直接写普通字符串，页面就不显示切换按钮。
 
 ## 用户的固定情况
 
@@ -34,7 +39,7 @@ description: "在欧洲给一个想去的小镇找住宿：把核心小镇和公
 | 硬性要求 | 例如必须有厨房、要早餐 | 没说就不加 |
 | 想做的运动 | 攀岩、滑雪、徒步、滑翔伞等 | 默认按季节把适合的都看一遍 |
 
-把缺的项合并成一次提问（AskUserQuestion），不要一项一项问。有合理默认值的就直接用，并在结果里写明。
+把缺的项合并成一次提问（有提问工具就用，例如 Claude 的 AskUserQuestion），不要一项一项问。有合理默认值的就直接用，并在结果里写明。
 
 **必须有厨房时**：独立房间能用房东的厨房也算，但要在房源页的描述或设施里看到写明，只靠搜索筛选不够。青旅要有客用厨房（Gästeküche / guest kitchen），只含早餐的不算。
 
@@ -47,7 +52,7 @@ description: "在欧洲给一个想去的小镇找住宿：把核心小镇和公
    - 单程 **≤ 60 分钟**（含步行到站的时间）。
    - **直达优先，最多换乘 1 次**；换乘 2 次及以上的村镇排除。
    - 记下：车型（区域火车 / 公交）、单程时长、换乘次数、**白天每小时几班**、**晚上从核心小镇回村的末班车时间**、周末和淡季班次是否减少、单程票价（D-Ticket 覆盖的写 0€）。
-   - **火车班次批量查**：用 ÖBB 时刻表 fahrplan.oebb.at（含 DB 的数据，通常已经有下一个时刻表年度的班次）。在它的页面里用自己的接口查：先用 `/bin/ajax-getstop.exe/dn?REQ0JourneyStopsS0A=1&REQ0JourneyStopsS0G=<站名>?` 拿车站 ID（德语变音字母用 `escape()` 编码，返回按 latin1 解码），再用 `/bin/query.exe/dn?SID=<A=1@O=站名@L=ID@>&ZID=…&date=DD.MM.YYYY&time=HH:MM&timesel=depart&start=1` 查，解析结果表里每行的出发、到达、时长、换乘次数。每次查询约 10–15 秒，放到后台跑、把结果存在 `window` 变量里，再分几次取，不要在一次调用里等全部结果。查三个时段：上午（看班次和时长）、晚上 21:30（看末班车）、反方向早上。
+   - **火车班次批量查**（可选，被拦截就改用 Google 地图逐个查）：用 ÖBB 时刻表 fahrplan.oebb.at（含 DB 的数据，通常已经有下一个时刻表年度的班次）。在它的页面里用自己的接口查：先用 `/bin/ajax-getstop.exe/dn?REQ0JourneyStopsS0A=1&REQ0JourneyStopsS0G=<站名>?` 拿车站 ID（德语变音字母用 `escape()` 编码，返回按 latin1 解码），再用 `/bin/query.exe/dn?SID=<A=1@O=站名@L=ID@>&ZID=…&date=DD.MM.YYYY&time=HH:MM&timesel=depart&start=1` 查，解析结果表里每行的出发、到达、时长、换乘次数。每次查询约 10–15 秒，放到后台跑、把结果存在 `window` 变量里，再分几次取，不要在一次调用里等全部结果。查三个时段：上午（看班次和时长）、晚上 21:30（看末班车）、反方向早上。
    - **ÖBB 时刻表里没有很多德国当地公交**（例如 RVO 的 Krün、Wallgau、Oberammergau 线路），查不到不代表没有车：只通公交的村子一定要再用 Google 地图公交模式查。
    - 地址格式：`https://www.google.com/maps/dir/<起点>/<终点>/data=!4m6!4m5!2m3!6e0!7e2!8j<秒>!3e3?hl=en`，`<秒>` 是把当地出发时间当作 UTC 算出的 Unix 时间戳，`!3e3` 是公交模式。结果列表文字读不到时，截图放大看。出现「We don't have the most recent timetables」时，去当地交通官网（例如 DB、RVO、SNCF / TER、cars Région、ÖBB / VVT）核实时刻。
 3. **查游客卡（Gästekarte / Kurkarte / carte d'hôte）**：很多阿尔卑斯地区住宿时会发游客卡，凭卡免费坐当地公交，有的连区域火车也免费（例如霞慕尼山谷），还常带免费的导览徒步、缆车折扣。查清每个村的游客卡包括哪些交通和活动，以及每晚要交多少城市税/Kurtaxe——这会改变「住哪个村最划算」。以当地旅游局官网为准。
@@ -83,10 +88,10 @@ description: "在欧洲给一个想去的小镇找住宿：把核心小镇和公
 
 ### 共同规则
 
-- **到车站的步行距离**：≤ 15 分钟正常列出；15–25 分钟标出来；超过 25 分钟降到「差点入选」，因为用户没有车。
+- **到车站的步行距离**：≤ 15 分钟正常列出；15–25 分钟标出来；超过 25 分钟降到「差点入选」。如果 `profile.md` 写了用户有车，这条可以放宽，并在页脚写明。
 - **同一房源多渠道比价**：排名靠前的房源（约前 5 家）检查它是否同时在 Booking、Airbnb 上架，以及有没有自己的官网（小旅馆、Pension、Gasthof、chambre d'hôte 常有）。官网直订常常更便宜或含早餐，三个价格都写上，标出最便宜的渠道。
 - 评分、价格明显异常的房源（例如 1€、1000€、刚上架的）跳过。
-- 遇到验证码、要登录或被拦截：不要绕过，不要在页面里批量调用平台接口，标记「未能查到」并给出搜索链接让用户自己看。
+- 遇到验证码、要登录或被拦截：不要绕过，标记「未能查到」并给出搜索链接让用户自己看。Booking 和 Airbnb 只用页面上的搜索界面，不要在页面里调用它们的接口。
 - **绝不下单，不填写个人或支付信息。**
 - 控制工作量：每个村镇每个平台看前 5–10 个符合条件的结果就够。
 - **每个村镇最多推荐 7 家住宿**：符合条件的结果多于 7 家时，按「预算内优先、评分高优先、离车站近优先」排序取前 7，其余的不列（不用放进「差点入选」，除非它本身差在某一条、值得单独说明）。
@@ -176,11 +181,12 @@ python3 scripts/render.py path/to/garmisch-2027-01.json    # 只用标准库
 
 ### JSON 字段
 
-自动计算的不用自己写：预算区间（预算内 ×0.9–1.1、浮动 ×0.8–0.9 / ×1.1–1.2）和每家住宿的「预算内 / 超预算 X%」标签、每家的最低价渠道、总览表里的最低价标绿、住宿编号（按 `stays` 顺序 1、2、3…，所以**按推荐顺序排好**）。因为「超预算 X%」会自动显示，`tag` 不要再写百分比，写这家的特点。标「html」的字段可以用 `<b>`、`<a href=… target="_blank" rel="noopener">`、`<br>`，其他字段是纯文本。
+自动计算的不用自己写：预算区间（预算内 ×0.9–1.1、浮动 ×0.8–0.9 / ×1.1–1.2）和每家住宿的「预算内 / 超预算 X%」标签、每家的最低价渠道、总览表里的最低价标绿、住宿编号（按 `stays` 顺序 1、2、3…，所以**按推荐顺序排好**）。因为「超预算 X%」会自动显示，`tag` 不要再写百分比，写这家的特点。标「html」的字段可以用 `<b>`、`<i>`、`<a href=…>`、`<br>`，其他字段是纯文本；页面只保留这几种行内标签，链接只允许 http(s)。文本字段按「语言」一节写成双语对象（或者单语字符串）。
 
 | 字段 | 说明 |
 |---|---|
-| `title` / `version` | 页面标题（和外壳 `<title>` 一致）/ 版本号 |
+| `languages` / `lang` | 内容包含的语言 / 默认先显示哪种，见「语言」一节 |
+| `title` / `version` | 页面标题 / 版本号 |
 | `town` / `dateLabel` / `nights` | 核心小镇、日期文字（如「2 月 12–15 日」）、晚数；`heading`、`eyebrow` 可覆盖默认标题 |
 | `budget` | `{perNight: 90, currency: "€"}` |
 | `queriedAt` | 查询时间；页脚自动加「价格是查询时的快照，以平台为准」 |
@@ -189,7 +195,7 @@ python3 scripts/render.py path/to/garmisch-2027-01.json    # 只用标准库
 | `towns[]` | 公交 1 小时圈：`{name, core, mode, time, transfers, freq, lastBack, fare, guestCard(html), cityTax, lat, lng}`；核心小镇写 `"core": true`；`lat`/`lng` 可选，用于住宿地图标点 |
 | `townsNote` | html，表格脚注 |
 | `stays[]` | 住宿，按推荐顺序：`{name, town, type, tag, walk, toCore, breakfast, cancel, summary(html), prices[], notes(html 数组), lat, lng}`；`lat`/`lng` 可选，没有就用村镇坐标 |
-| `stays[].prices[]` | 每个渠道一项：`{channel, perNight(数字), total(数字), rating, url, note(html)}`；rating 写成「8.9 (212)」。Booking 的 note 写「公开价，登录 Genius 后可能更低」；Airbnb 写「已含清洁费和服务费」 |
+| `stays[].prices[]` | 每个渠道一项：`{channel, perNight(数字), total(数字), rating, url, note(html)}`；rating 写成「8.9 (212)」。`profile.md` 写了 Booking 会员时，Booking 的 note 写「公开价，登录后可能更低」；Airbnb 写「已含清洁费和服务费」 |
 | `staysNote` | html，总览表脚注 |
 | `nearMiss[]` | 差点入选：`{name, town, price, url, why(html)}` |
 | `activities[]` | 按运动分组：`{sport, note(html), items:[{name, kind, where, level, price, season, lang, how(html), url, lat, lng}]}`；`lat`/`lng` 可选，用于运动地图 |
@@ -198,7 +204,7 @@ python3 scripts/render.py path/to/garmisch-2027-01.json    # 只用标准库
 | `excluded[]` | 排除的村镇：`{name, why(html)}` |
 | `footer.paragraphs` / `footer.links` | html 数组：假设、补充搜索、没查到的来源 / 链接行，每行 `[{text, url}, …]` |
 
-内容要求不变：
+内容要求：
 
 1. **顶部结论**：推荐住哪个村、哪几家（最便宜、评分最高、交通最方便），为什么；符合条件的总共几家，有没有用到第 3 步的补充搜索。
 2. **公交 1 小时圈**、**住宿**（同一房源的多个渠道放在同一家的 `prices` 里）、**差点入选**、**户外运动**、**komoot 路线**、**排除的村镇**都按上面的字段填。
