@@ -4,31 +4,97 @@
   "title": "小镇住宿对比页数据",
   "description": "europe-town-stay-finder 输出的数据。住宿编号按 stays 的顺序自动生成 1、2、3…；预算区间、每家最低价渠道、最低价标绿都由模板自动计算。标注 html 的字段允许 <b> <a> <br> 等行内标签。",
   "type": "object",
-  "required": ["title", "town", "queriedAt", "stays"],
+  "required": [
+    "title",
+    "town",
+    "queriedAt",
+    "stays"
+  ],
   "properties": {
-    "title": { "type": "string", "description": "页面标题，两到四个词，例如「Garmisch 周边住宿」" },
-    "version": { "type": "integer", "minimum": 1, "description": "版本号，每次改版加 1" },
-    "town": { "type": "string", "description": "核心小镇" },
-    "dateLabel": { "type": "string", "description": "例如「2027 年 1 月 15–18 日（周五–周一）」" },
-    "nights": { "type": "integer", "minimum": 1 },
-    "eyebrow": { "type": "string", "description": "可选，覆盖页头小字" },
-    "heading": { "type": "string", "description": "可选，覆盖大标题" },
+    "lang": {
+      "enum": [
+        "zh",
+        "en"
+      ],
+      "description": "Language shown first. 默认显示的语言。"
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "zh",
+          "en"
+        ]
+      },
+      "description": "Languages the content is written in; the page shows a switch when there are two. 内容包含的语言，两种时页面显示切换按钮。"
+    },
+    "title": {
+      "$ref": "#/$defs/text",
+      "description": "页面标题，两到四个词，例如「Garmisch 周边住宿」"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "版本号，每次改版加 1"
+    },
+    "town": {
+      "$ref": "#/$defs/text",
+      "description": "核心小镇"
+    },
+    "dateLabel": {
+      "$ref": "#/$defs/text",
+      "description": "例如「2027 年 1 月 15–18 日（周五–周一）」"
+    },
+    "nights": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "eyebrow": {
+      "$ref": "#/$defs/text",
+      "description": "可选，覆盖页头小字"
+    },
+    "heading": {
+      "$ref": "#/$defs/text",
+      "description": "可选，覆盖大标题"
+    },
     "budget": {
       "type": "object",
-      "required": ["perNight"],
+      "required": [
+        "perNight"
+      ],
       "properties": {
-        "perNight": { "type": "number", "description": "每晚预算（含所有费用）" },
-        "currency": { "type": "string", "default": "€" }
+        "perNight": {
+          "type": "number",
+          "description": "每晚预算（含所有费用）"
+        },
+        "currency": {
+          "$ref": "#/$defs/text"
+        }
       }
     },
-    "queriedAt": { "type": "string", "description": "查询时间；页脚自动加「价格是查询时的快照，以平台为准」" },
-    "intro": { "type": "string", "description": "html：条件和思路" },
+    "queriedAt": {
+      "$ref": "#/$defs/text",
+      "description": "查询时间；页脚自动加「价格是查询时的快照，以平台为准」"
+    },
+    "intro": {
+      "$ref": "#/$defs/text",
+      "description": "html：条件和思路"
+    },
     "verdict": {
       "type": "object",
       "properties": {
-        "items": { "type": "array", "items": { "type": "string" }, "description": "html：顶部结论" },
-        "alert": { "type": "string", "description": "html：单个提示框" },
-        "alerts": { "type": "array", "items": { "type": "string" }, "description": "html：多个提示框" }
+        "items": {
+          "$ref": "#/$defs/texts",
+          "description": "html：顶部结论"
+        },
+        "alert": {
+          "$ref": "#/$defs/text",
+          "description": "html：单个提示框"
+        },
+        "alerts": {
+          "$ref": "#/$defs/texts",
+          "description": "html：多个提示框"
+        }
       }
     },
     "towns": {
@@ -36,73 +102,183 @@
       "description": "公交 1 小时圈",
       "items": {
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
-          "name": { "type": "string" },
-          "core": { "type": "boolean", "description": "核心小镇写 true" },
-          "mode": { "type": "string", "description": "车型，例如「RB 区域火车」「329 路公交」" },
-          "time": { "type": "string", "description": "单程时长" },
-          "transfers": { "type": ["integer", "string"] },
-          "freq": { "type": "string" },
-          "lastBack": { "type": "string", "description": "晚上从核心小镇回村的末班车" },
-          "fare": { "type": "string" },
-          "guestCard": { "type": "string", "description": "html：游客卡包含的交通和活动" },
-          "cityTax": { "type": "string" },
-          "lat": { "type": "number", "description": "村镇中心纬度，用于地图标点；查不到就不写这两个字段" },
-          "lng": { "type": "number", "description": "村镇中心经度" }
+          "name": {
+            "$ref": "#/$defs/text"
+          },
+          "core": {
+            "type": "boolean",
+            "description": "核心小镇写 true"
+          },
+          "mode": {
+            "$ref": "#/$defs/text",
+            "description": "车型，例如「RB 区域火车」「329 路公交」"
+          },
+          "time": {
+            "$ref": "#/$defs/text",
+            "description": "单程时长"
+          },
+          "transfers": {
+            "type": [
+              "integer",
+              "string"
+            ]
+          },
+          "freq": {
+            "$ref": "#/$defs/text"
+          },
+          "lastBack": {
+            "$ref": "#/$defs/text",
+            "description": "晚上从核心小镇回村的末班车"
+          },
+          "fare": {
+            "$ref": "#/$defs/text"
+          },
+          "guestCard": {
+            "$ref": "#/$defs/text",
+            "description": "html：游客卡包含的交通和活动"
+          },
+          "cityTax": {
+            "$ref": "#/$defs/text"
+          },
+          "lat": {
+            "type": "number",
+            "description": "村镇中心纬度，用于地图标点；查不到就不写这两个字段"
+          },
+          "lng": {
+            "type": "number",
+            "description": "村镇中心经度"
+          }
         }
       }
     },
-    "townsNote": { "type": "string", "description": "html" },
+    "townsNote": {
+      "$ref": "#/$defs/text",
+      "description": "html"
+    },
     "stays": {
       "type": "array",
       "description": "住宿，按推荐顺序排",
       "items": {
         "type": "object",
-        "required": ["name", "town"],
+        "required": [
+          "name",
+          "town"
+        ],
         "properties": {
-          "name": { "type": "string" },
-          "town": { "type": "string" },
-          "type": { "type": "string", "description": "房型" },
-          "tag": { "type": "string", "description": "卡片小标签，例如「最接近」「整套公寓」" },
-          "walk": { "type": "string", "description": "到车站的步行距离" },
-          "toCore": { "type": "string", "description": "到核心小镇的时间" },
-          "breakfast": { "type": "string" },
-          "cancel": { "type": "string" },
-          "summary": { "type": "string", "description": "html" },
+          "name": {
+            "$ref": "#/$defs/text"
+          },
+          "town": {
+            "$ref": "#/$defs/text"
+          },
+          "type": {
+            "$ref": "#/$defs/text",
+            "description": "房型"
+          },
+          "tag": {
+            "$ref": "#/$defs/text",
+            "description": "卡片小标签，例如「最接近」「整套公寓」"
+          },
+          "walk": {
+            "$ref": "#/$defs/text",
+            "description": "到车站的步行距离"
+          },
+          "toCore": {
+            "$ref": "#/$defs/text",
+            "description": "到核心小镇的时间"
+          },
+          "breakfast": {
+            "$ref": "#/$defs/text"
+          },
+          "cancel": {
+            "$ref": "#/$defs/text"
+          },
+          "summary": {
+            "$ref": "#/$defs/text",
+            "description": "html"
+          },
           "prices": {
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["channel", "perNight"],
+              "required": [
+                "channel",
+                "perNight"
+              ],
               "properties": {
-                "channel": { "type": "string", "description": "Booking / Airbnb / 官网 / …" },
-                "perNight": { "type": "number", "description": "全程总价 ÷ 晚数" },
-                "total": { "type": "number" },
-                "rating": { "type": "string", "description": "例如「8.9 (212)」" },
-                "url": { "type": "string" },
-                "note": { "type": "string", "description": "html" }
+                "channel": {
+                  "$ref": "#/$defs/text",
+                  "description": "Booking / Airbnb / 官网 / …"
+                },
+                "perNight": {
+                  "type": "number",
+                  "description": "全程总价 ÷ 晚数"
+                },
+                "total": {
+                  "type": "number"
+                },
+                "rating": {
+                  "$ref": "#/$defs/text",
+                  "description": "例如「8.9 (212)」"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "note": {
+                  "$ref": "#/$defs/text",
+                  "description": "html"
+                }
               }
             }
           },
-          "notes": { "type": "array", "items": { "type": "string" }, "description": "html" },
-          "lat": { "type": "number", "description": "住宿纬度（Booking/Airbnb 房源页地图上能看到大致坐标），用于地图标点；查不到就不写，地图会退回用村镇坐标" },
-          "lng": { "type": "number", "description": "住宿经度" }
+          "notes": {
+            "$ref": "#/$defs/texts",
+            "description": "html"
+          },
+          "lat": {
+            "type": "number",
+            "description": "住宿纬度（Booking/Airbnb 房源页地图上能看到大致坐标），用于地图标点；查不到就不写，地图会退回用村镇坐标"
+          },
+          "lng": {
+            "type": "number",
+            "description": "住宿经度"
+          }
         }
       }
     },
-    "staysNote": { "type": "string", "description": "html" },
+    "staysNote": {
+      "$ref": "#/$defs/text",
+      "description": "html"
+    },
     "nearMiss": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["name", "why"],
+        "required": [
+          "name",
+          "why"
+        ],
         "properties": {
-          "name": { "type": "string" },
-          "town": { "type": "string" },
-          "price": { "type": "string" },
-          "url": { "type": "string" },
-          "why": { "type": "string", "description": "html：差在哪一条" }
+          "name": {
+            "$ref": "#/$defs/text"
+          },
+          "town": {
+            "$ref": "#/$defs/text"
+          },
+          "price": {
+            "$ref": "#/$defs/text"
+          },
+          "url": {
+            "type": "string"
+          },
+          "why": {
+            "$ref": "#/$defs/text",
+            "description": "html：差在哪一条"
+          }
         }
       }
     },
@@ -110,27 +286,61 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["sport"],
+        "required": [
+          "sport"
+        ],
         "properties": {
-          "sport": { "type": "string" },
-          "note": { "type": "string", "description": "html" },
+          "sport": {
+            "$ref": "#/$defs/text"
+          },
+          "note": {
+            "$ref": "#/$defs/text",
+            "description": "html"
+          },
           "items": {
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["name"],
+              "required": [
+                "name"
+              ],
               "properties": {
-                "name": { "type": "string" },
-                "kind": { "type": "string" },
-                "where": { "type": "string" },
-                "level": { "type": "string" },
-                "price": { "type": "string" },
-                "season": { "type": "string" },
-                "lang": { "type": "string" },
-                "how": { "type": "string", "description": "html" },
-                "url": { "type": "string" },
-                "lat": { "type": "number", "description": "活动地点/集合点纬度，用于地图标点，查不到就不写" },
-                "lng": { "type": "number", "description": "活动地点/集合点经度" }
+                "name": {
+                  "$ref": "#/$defs/text"
+                },
+                "kind": {
+                  "$ref": "#/$defs/text"
+                },
+                "where": {
+                  "$ref": "#/$defs/text"
+                },
+                "level": {
+                  "$ref": "#/$defs/text"
+                },
+                "price": {
+                  "$ref": "#/$defs/text"
+                },
+                "season": {
+                  "$ref": "#/$defs/text"
+                },
+                "lang": {
+                  "$ref": "#/$defs/text"
+                },
+                "how": {
+                  "$ref": "#/$defs/text",
+                  "description": "html"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "lat": {
+                  "type": "number",
+                  "description": "活动地点/集合点纬度，用于地图标点，查不到就不写"
+                },
+                "lng": {
+                  "type": "number",
+                  "description": "活动地点/集合点经度"
+                }
               }
             }
           }
@@ -141,38 +351,163 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
-          "name": { "type": "string" },
-          "area": { "type": "string" },
-          "rating": { "type": "string" },
-          "count": { "type": "string" },
-          "difficulty": { "enum": ["easy", "moderate", "hard"] },
-          "distance": { "type": "string" },
-          "duration": { "type": "string" },
-          "ascent": { "type": "string" },
-          "start": { "type": "string", "description": "html：起点和公交怎么去" },
-          "season": { "type": "string", "description": "html" },
-          "url": { "type": "string" },
-          "lat": { "type": "number", "description": "起点纬度（komoot 路线页地图能看到），用于地图标点，查不到就不写" },
-          "lng": { "type": "number", "description": "起点经度" }
+          "name": {
+            "$ref": "#/$defs/text"
+          },
+          "area": {
+            "$ref": "#/$defs/text"
+          },
+          "rating": {
+            "$ref": "#/$defs/text"
+          },
+          "count": {
+            "$ref": "#/$defs/text"
+          },
+          "difficulty": {
+            "enum": [
+              "easy",
+              "moderate",
+              "hard"
+            ]
+          },
+          "distance": {
+            "$ref": "#/$defs/text"
+          },
+          "duration": {
+            "$ref": "#/$defs/text"
+          },
+          "ascent": {
+            "$ref": "#/$defs/text"
+          },
+          "start": {
+            "$ref": "#/$defs/text",
+            "description": "html：起点和公交怎么去"
+          },
+          "season": {
+            "$ref": "#/$defs/text",
+            "description": "html"
+          },
+          "url": {
+            "type": "string"
+          },
+          "lat": {
+            "type": "number",
+            "description": "起点纬度（komoot 路线页地图能看到），用于地图标点，查不到就不写"
+          },
+          "lng": {
+            "type": "number",
+            "description": "起点经度"
+          }
         }
       }
     },
-    "hikesNote": { "type": "string", "description": "html" },
+    "hikesNote": {
+      "$ref": "#/$defs/text",
+      "description": "html"
+    },
     "excluded": {
       "type": "array",
-      "items": { "type": "object", "required": ["name", "why"], "properties": { "name": { "type": "string" }, "why": { "type": "string" } } }
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "why"
+        ],
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/text"
+          },
+          "why": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
     },
     "footer": {
       "type": "object",
       "properties": {
-        "paragraphs": { "type": "array", "items": { "type": "string" } },
+        "paragraphs": {
+          "$ref": "#/$defs/texts"
+        },
         "links": {
           "type": "array",
-          "items": { "type": "array", "items": { "type": "object", "required": ["text", "url"], "properties": { "text": { "type": "string" }, "url": { "type": "string" } } } }
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "text",
+                "url"
+              ],
+              "properties": {
+                "text": {
+                  "$ref": "#/$defs/text"
+                },
+                "url": {
+                  "type": "string"
+                }
+              }
+            }
+          }
         }
       }
+    }
+  },
+  "$defs": {
+    "text": {
+      "description": "Text, or the same text in both languages: {\"zh\": \"…\", \"en\": \"…\"}. 文本，或者中英双语对象。",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "zh": {
+              "type": "string"
+            },
+            "en": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "minProperties": 1
+        }
+      ]
+    },
+    "texts": {
+      "description": "A list of texts, or one list per language. 文本数组，或者每种语言一个数组。",
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "zh": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "en": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "minProperties": 1
+        }
+      ]
     }
   }
 }

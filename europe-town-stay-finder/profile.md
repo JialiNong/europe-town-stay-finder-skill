@@ -6,3 +6,4 @@
 - 持有 **Deutschlandticket**：德国境内的区域车（RE / RB / S-Bahn / 公交）免费，所以在德国，住在周边村子每天往返核心小镇通常是 0 元。缆车、登山齿轨（如 Zugspitzbahn）不包含。跨境段是否有效要单独核实（例如 Garmisch → Ehrwald、Lermoos、Reutte 的 Außerfernbahn 有效，Mittenwald → Scharnitz、Seefeld 不在列表里）。
 - 持有 **BahnCard 25**。
 - 是 **Booking 最高等级 Genius 会员**，她登录后看到的 Booking 价格通常比你查到的公开价低。报价时写「Booking 公开价 X€，你登录后可能更低」。
+- **页面语言**：中英双语，默认先显示中文。

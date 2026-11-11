@@ -1,74 +1,87 @@
-# Europe Town Stay Finder · 欧洲小镇住宿与周边玩法 skill
+# Europe Town Stay Finder
 
-**让 AI agent 帮你在欧洲小镇找住宿**：不只搜你想去的那个小镇，而是把公交 1 小时内直达（最多换乘 1 次）的周边村镇一起搜，按你的每晚预算对比 Booking 和 Airbnb，不够再查度假屋平台和当地民宿；顺便整理小镇周边的户外运动（滑雪、攀岩、滑翔伞、雪鞋徒步……）的教练和团体，以及 komoot 上评分高、评价多的徒步路线。最后输出一张可以直接打开的对比页。
+**English** · [中文](README.zh-CN.md)
 
-适用于 Claude、Claude Code、Cursor、Codex、ChatGPT、Gemini 等能上网的 AI agent。它和 [europe-route-finder](https://github.com/JialiNong/europe-route-finder-skill)（查怎么去）是一对：那个管路上，这个管到了以后住哪、玩什么。
+**An AI-agent skill that finds somewhere to stay in a small European town, plus the villages around it.** Small towns often have few beds, or none in budget. Villages 10–20 minutes away by train or bus usually have plenty. The skill maps every village within 1 hour by public transport (direct, or at most 1 change) and searches each one on Booking and Airbnb against your nightly budget and rating thresholds. If too few places qualify, it falls back to holiday-flat sites and local guesthouses. It also lists outdoor sports near the town (ski schools, climbing, paragliding, snowshoeing…) with instructors and groups, and the best-rated komoot hikes you can reach by bus. The result is one bilingual (中文 / English) comparison page.
+
+It works with any AI agent that can browse the web: Claude, Claude Code, Cursor, Codex, ChatGPT, Gemini.
 
 <p>
-  <img src="docs/screenshot-desktop.png" alt="对比页示例：Garmisch 及周边住宿" width="560">
-  <img src="docs/screenshot-mobile-dark.png" alt="手机深色模式" width="200">
+  <img src="docs/screenshot-desktop.png" alt="Comparison page: stays in and around Garmisch" width="560">
+  <img src="docs/screenshot-mobile-dark.png" alt="Same page on a phone in dark mode" width="200">
 </p>
 
-示例：[`europe-town-stay-finder/examples/garmisch-2027-01.html`](europe-town-stay-finder/examples/garmisch-2027-01.html)（下载后用浏览器打开）
+**Live example:** [Garmisch-Partenkirchen and around](https://htmlpreview.github.io/?https://github.com/JialiNong/europe-town-stay-finder-skill/blob/main/europe-town-stay-finder/examples/garmisch-2027-01.html) (the toggle at the top right switches between 中文 and English) · source data: [`garmisch-2027-01.json`](europe-town-stay-finder/examples/garmisch-2027-01.json)
 
 ---
 
-## 为什么需要它
+## Why
 
-想去的小镇常常住宿少、或者超预算，但它周边坐火车或公交十几分钟的村子也有很多住宿。平时要在 Booking、Airbnb、Google 地图和各家官网之间来回对比，还要自己查每个村子的车有多少班、末班车几点。
+Normally you'd flip between Booking, Airbnb, Google Maps and guesthouse sites, then check how often each village's train runs and when the last one leaves. Here's what one run found for Garmisch-Partenkirchen (15–18 January 2027, €50 a night, kitchen required):
 
-以 Garmisch-Partenkirchen 为例（2027 年 1 月 15–18 日，每晚 50€、必须有厨房）：
+- **12 villages within an hour**, including Ehrwald and Lermoos across the border in Austria, where the Deutschlandticket is still valid.
+- **Last connections back:** Murnau and Uffing until 23:07, Klais and Mittenwald until 00:02, but Wallgau's last bus is 20:35.
+- **The real market floor.** Booking, Airbnb and traum-ferienwohnungen.de all agreed that nothing well-rated with a kitchen went below about €62 a night. The closest was a private room in Murnau. The only in-budget place, a lakeside cabin in Uffing at €42, had just 12 reviews.
+- **January activities:** ski schools, a beginner ski-touring course, cross-country skiing, snowshoe hikes, bouldering and tandem paragliding. Gorges closed in winter (Höllentalklamm, Geisterklamm) are flagged in the hike list.
 
-- 圈出了 12 个周边村镇：Farchant、Grainau、Murnau、Uffing、Klais、Mittenwald、Wallgau，连奥地利的 Ehrwald、Lermoos（Deutschlandticket 在这段有效）都在 1 小时内。
-- 查了每个村子到 Garmisch 的车型、时长、末班车：Murnau、Uffing 的 RB 末班 23:07，Klais、Mittenwald 到 00:02，Wallgau 的公交 20:35 就停了。
-- Booking、Airbnb、traum-ferienwohnungen.de 都说明同一件事：这几天有厨房、评分达标的住宿最低约 62€/晚。最接近的是 Murnau 的独立房间（62€，可用房东厨房）；唯一在预算内的是 Uffing 湖边小屋（42€），但只有 12 条评价。
-- 1 月能做的运动：滑雪学校、滑雪登山入门课、越野滑雪、雪鞋徒步、抱石馆、滑翔伞双人飞行。komoot 高分路线里标出了冬季关闭的峡谷（Höllentalklamm、Geisterklamm）。
+## What it does
 
-## 它会做什么
+1. **Maps the 1-hour transit radius.** It lists villages on the same valley, rail line and bus routes, and checks travel time, changes, frequency, last ride back and fare for each. It also checks what the local guest card includes for free.
+2. **Searches each village on Booking and Airbnb.** Thresholds: Booking ≥ 8.0, Airbnb ≥ 4.5, at least 15 reviews, and an all-in nightly price within ±20% of budget. A kitchen can be required.
+3. **Falls back when fewer than 5 qualify:** Google Maps, tourist-office listings, holiday-flat platforms, local guesthouses and hostels.
+4. **Outdoor sports** for the season: schools, guides, clubs and groups, with prices and how to book.
+5. **komoot hikes**, picked by rating and number of ratings, checked for bus access to the start and for seasonal closures.
+6. **Writes JSON** and renders it with a fixed template into a self-contained, bilingual HTML page. When coordinates are present it draws three maps (stays, sports, hikes).
 
-1. **画出公交 1 小时圈**：列出同一山谷、同一铁路线和公交线上的村镇，逐个查时长、换乘、班次、末班车、票价，以及游客卡包含哪些免费交通和活动。
-2. **逐村搜 Booking 和 Airbnb**：Booking ≥8.0、Airbnb ≥4.5，评价都 ≥15 条，每晚总价（含所有费用）在预算 ±20% 内；可以要求必须有厨房。
-3. **不够 5 家就补充搜索**：Google 地图、旅游局住宿目录、度假屋平台、当地民宿和青旅。
-4. **户外运动**：按季节列出滑雪、攀岩、滑翔伞、徒步等，找到教练、学校和团体，附价格和预约方式。
-5. **komoot 徒步路线**：按评分和评分人数挑，检查起点能不能坐公交到，标出季节限制。
-6. **输出对比页**：agent 只写一份 JSON，由固定模板渲染成页面，省 token，页面每次都一样整齐。有坐标数据时页面会自动画住宿、户外运动、komoot 路线三张地图；页面右上角还有「导出 / 打印 PDF」按钮，用浏览器自带的打印功能存成 PDF。
+## Design decisions
 
-## 项目结构
+| Decision | Why |
+|---|---|
+| **The agent writes data, a fixed template renders the page** | The model only outputs JSON (validated against [`schema/stay.schema.json`](europe-town-stay-finder/schema/stay.schema.json)). [`template/render.js`](europe-town-stay-finder/template/render.js) computes the budget bands, "in budget / X% over" labels, the cheapest channel per stay and the cheapest in the table, so the model can't get the arithmetic wrong. |
+| **Bilingual data model** | Any text field can be `"…"` or `{"zh": "…", "en": "…"}`. The toggle appears only when both languages exist, the choice persists, and `?lang=en` deep-links. |
+| **Allowlisted HTML in text fields** | Listing descriptions and reviews come from the web. Only `<b> <i> <a> <br>`-style inline tags survive, links must be `http(s)`, and attributes are stripped. |
+| **Self-drawn SVG maps** | Stay, activity and hike maps are drawn from coordinates in plain JS. They use an equirectangular projection with latitude correction, a scale bar and a north arrow, need no map library or tiles, and work offline and in print. |
+| **Caps against noise** | At most 7 villages, 7 stays per village and 7 hikes, ranked by explicit rules, so the page stays readable. |
+| **Preferences in `profile.md`** | "No car", rail passes and booking-platform membership change the answer (Booking member rates, walking distance to stations), so they're kept separate from the generic workflow. |
+
+## Project structure
 
 ```
-europe-town-stay-finder/        ← skill 本体（可以整个文件夹打包上传到 Claude）
-├── SKILL.md                    ← 完整流程：第 0–6 步
-├── profile.md                  ← 你的个人设置（有没有车、车票、订房会员），先改这个
-├── schema/stay.schema.json     ← JSON 的格式
-├── template/                   ← 固定页面模板
+europe-town-stay-finder/        ← the skill itself (zip this folder to upload to Claude)
+├── SKILL.md                    ← the workflow, steps 0–6 (written in Chinese; agents follow it in any language)
+├── profile.md                  ← car or not, rail passes, booking memberships; edit this first
+├── schema/stay.schema.json     ← JSON format, including bilingual text fields
+├── template/
 │   ├── shell.html
-│   ├── style.css               ← 浅色/深色主题、手机适配
-│   └── render.js               ← 在浏览器里把 JSON 渲染成对比页
+│   ├── style.css               ← light/dark themes, phone layout, print styles
+│   └── render.js               ← renders the JSON in the browser (i18n, sanitiser, maps)
 ├── scripts/
-│   ├── render.mjs              ← JSON → 独立 HTML（Node 18+，无依赖）
-│   └── render.py               ← 同上（Python 3，只用标准库）
+│   ├── render.mjs              ← JSON → standalone HTML (Node 18+, no dependencies)
+│   └── render.py               ← same, Python 3 standard library only
 └── examples/
-    ├── garmisch-2027-01.json   ← 真实查询的结果
-    └── garmisch-2027-01.html
+    ├── garmisch-2027-01.json   ← a real search, bilingual
+    ├── garmisch-2027-01.html
+    ├── demo-caps-mock.json     ← made-up data showing the per-section caps
+    └── demo-caps-mock.html
 
-AGENTS.md                       ← Cursor / Codex / Gemini CLI 等会自动读的入口
-CLAUDE.md                       ← Claude Code 的入口（引用 AGENTS.md）
-GEMINI.md                       ← Gemini CLI 的入口
-.cursor/rules/                  ← Cursor 规则
-.claude/skills/                 ← Claude Code 项目 skill（链接到 europe-town-stay-finder/）
+AGENTS.md                       ← entry point for Cursor / Codex / Gemini CLI
+CLAUDE.md                       ← entry point for Claude Code (imports AGENTS.md)
+GEMINI.md                       ← entry point for Gemini CLI
+.cursor/rules/                  ← Cursor rule
+.claude/skills/                 ← Claude Code project skill (symlink to europe-town-stay-finder/)
 ```
 
-## 先改个人设置
+## Set up your profile
 
-打开 [`europe-town-stay-finder/profile.md`](europe-town-stay-finder/profile.md)，换成你自己的情况。现在里面是作者的设置：没有车、有 Deutschlandticket 和 BahnCard 25、Booking 最高等级 Genius 会员。agent 每次查之前都会先读这个文件。
+Open [`europe-town-stay-finder/profile.md`](europe-town-stay-finder/profile.md) and replace it with your own situation. It currently holds the author's: no car, a Deutschlandticket and BahnCard 25, and top-tier Booking Genius. The agent reads this file before every search.
 
-## 怎么用
+## Usage
 
-### Claude（claude.ai / 桌面端）
+### Claude (claude.ai / desktop)
 
-1. 下载仓库，把 `europe-town-stay-finder/` 文件夹打成 zip（或运行 `npm run package`）。
-2. 在 Claude 的 **设置 → Skills（技能）** 里上传这个 zip。
-3. 对 Claude 说：「我想去 Garmisch，1 月 15–18 日，每晚 50 欧，要有厨房」。Claude 查完会把页面发布成 Artifact。
+1. Zip the `europe-town-stay-finder/` folder (or run `npm run package`).
+2. Upload the zip under **Settings → Skills**.
+3. Say something like "Garmisch, 15–18 January, €50 a night, needs a kitchen". Claude does the research and publishes the page as an Artifact.
 
 ### Claude Code
 
@@ -78,38 +91,37 @@ cd europe-town-stay-finder-skill
 claude
 ```
 
-仓库里的 `.claude/skills/europe-town-stay-finder` 会被识别为项目 skill。想在所有项目里都能用，把 `europe-town-stay-finder/` 复制到 `~/.claude/skills/`。
+`.claude/skills/europe-town-stay-finder` is picked up as a project skill. To use it everywhere, copy `europe-town-stay-finder/` to `~/.claude/skills/`.
 
 ### Cursor / Codex / Gemini CLI
 
-用这个仓库打开项目即可：它们会自动读 `AGENTS.md`（Cursor 还会读 `.cursor/rules/`，Gemini CLI 读 `GEMINI.md`）。结果存到 `stays/<小镇>-<日期>.json` 和 `.html`。这些 agent 需要能上网，最好有浏览器工具（Booking 和 Airbnb 的价格要在页面上看）。
+Open the repo: these agents read `AGENTS.md` automatically. Cursor also reads `.cursor/rules/`, and Gemini CLI reads `GEMINI.md`. Results go to `stays/<town>-<date>.json` and `.html`. The agent needs web access, ideally with a browser tool, because Booking and Airbnb prices have to be read on the page.
 
-### ChatGPT / Gemini（网页版）
+### ChatGPT / Gemini (web)
 
-1. 把 `SKILL.md`、`profile.md`、`schema/stay.schema.json`、`examples/garmisch-2027-01.json` 上传到对话（或放进 GPT / Gem 的知识库）。
-2. 打开联网搜索，让它查完后按 schema 输出 JSON。
-3. 有代码解释器时，再上传 `scripts/render.py` 和 `template/` 里的三个文件，让它运行 `python3 render.py stay.json` 生成 HTML；没有的话把 JSON 存下来在本地渲染：
+1. Upload `SKILL.md`, `profile.md`, `schema/stay.schema.json` and `examples/garmisch-2027-01.json`, or add them to a GPT or Gem as knowledge.
+2. Turn on web search and ask it to output JSON that follows the schema.
+3. With a code interpreter, also upload `scripts/render.py` and the three `template/` files, then run `python3 render.py stay.json`. Without one, render locally:
 
 ```bash
 node europe-town-stay-finder/scripts/render.mjs stay.json
-# 或
+# or
 python3 europe-town-stay-finder/scripts/render.py stay.json
 ```
 
-## 页面模板
+## Notes
 
-- 住宿编号按 `stays` 的顺序自动生成。
-- 预算区间（预算内 ±10%、浮动 ±20%）、每家的「预算内 / 超预算 X%」标签、每家最便宜的渠道、总览表里的最低价都自动计算。
-- 浅色/深色主题跟随系统，手机上表格可以左右滑动。
-- 生成的 HTML 是单个文件，可以直接发给别人。
+- Prices, ratings and timetables are a snapshot from when the search ran. Platforms and operators are authoritative.
+- The agent never books anything or fills in personal or payment details.
+- `stays/` is git-ignored because your searches may contain personal details.
 
-想改样式时改 `template/style.css` 或 `template/render.js`，然后运行 `npm run example` 检查一遍。
+## Related skills
 
-## 注意
-
-- 价格、评分、时刻都是查询时的快照，以平台和运营方为准。
-- agent 不会替你下单，也不会填写任何个人或支付信息。
-- `stays/` 默认不提交到 git，里面可能有你的行程信息。
+| Skill | What it answers |
+|---|---|
+| [europe-route-finder](https://github.com/JialiNong/europe-route-finder-skill) | How do I get there cheaply? Hub expansion, hidden direct trains and night trains, real fares compared across operators. |
+| **europe-town-stay-finder** | Where do I stay around a small town, and what can I do outdoors? |
+| [europe-city-culture-planner](https://github.com/JialiNong/europe-city-culture-planner-skill) | What do I do with my days in a big city: art, markets, architecture, viewpoints, walking tours, concerts and stand-up? |
 
 ## License
 
